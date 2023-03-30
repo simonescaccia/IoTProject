@@ -9,4 +9,10 @@ Riccardo Gobbato: https://www.linkedin.com/in/riccardo-gobbato-380674251/
 
 # Description
 # Links
+Concept: https://github.com/simonescaccia/IoTProject/blob/main/Concept.md
+
+Design: https://github.com/simonescaccia/IoTProject/blob/main/Design.md
+
+Evaluation: https://github.com/simonescaccia/IoTProject/blob/main/Evaluation.md
+
 # Video
