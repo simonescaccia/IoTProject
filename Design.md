@@ -2,12 +2,12 @@
 
 
 # Components
-Esp32
-LoRa gateway to comunicate with the Cloud system (AWS) 
-Cloud system (AWS) to collect and store tracking data
-Electrovalve
-Water flow sensor
-Temperature humidity sensor
+Esp32 <br/>
+LoRa gateway to comunicate with the Cloud system (AWS) <br/>
+Cloud system (AWS) to collect and store tracking data <br/>
+Electrovalve <br/>
+Water flow sensor <br/>
+Temperature humidity sensor <br/>
 
 
 
