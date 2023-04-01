@@ -12,3 +12,11 @@ Concept: https://github.com/simonescaccia/IoTProject/blob/main/Concept.md <br />
 Design: https://github.com/simonescaccia/IoTProject/blob/main/Design.md <br />
 Evaluation: https://github.com/simonescaccia/IoTProject/blob/main/Evaluation.md <br />
 # Video
+
+
+| People | Linkedin | Github |
+|--- |--- |--- |
+| Riccardo Gobbato | [Linkedin](https://www.linkedin.com/in/riccardo-gobbato-380674251/) | [Github](https://github.com/RicGobs) |
+| Simone Scaccia | [Linkedin](https://www.linkedin.com/in/riccardo-gobbato-380674251/) | [Github](https://www.linkedin.com/in/riccardo-gobbato-380674251/) |
+| Simone Scaccia | [Linkedin](https://www.linkedin.com/in/riccardo-gobbato-380674251/) | [Github](https://github.com/simonescaccia) |
+| Pasquale Mocerino | [Linkedin](https://www.linkedin.com/in/pasquale-mocerino-29088b1a2/) | [Github](https://www.linkedin.com/in/riccardo-gobbato-380674251/) |
