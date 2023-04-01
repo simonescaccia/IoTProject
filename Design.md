@@ -1,1 +1,1 @@
-
+Details on the technical aspects of the service, including a high-level presentation of the conceptual architecture of the software and hardware components that make up the service, a description of the main software/hardware components (e.g., 1 paragraph for each component), the core algorithms that will be required, how these components interact (e.g., algorithms, network protocols, APIs used), a network architecture clearly depicting the IoT elements, Edge components, Cloud components, End-user components.
