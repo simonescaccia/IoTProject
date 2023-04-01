@@ -10,3 +10,9 @@ Concept: https://github.com/simonescaccia/IoTProject/blob/main/Concept.md <br />
 Design: https://github.com/simonescaccia/IoTProject/blob/main/Design.md <br />
 Evaluation: https://github.com/simonescaccia/IoTProject/blob/main/Evaluation.md <br />
 # Video
+
+
+| People | Linkedin | Github |
+|--- |--- |--- |
+| row 1 | column 2 | column 3 |
+| row 2 | row 2 column 2 | row 2 column 3 |
