@@ -14,7 +14,7 @@ Temperature humidity sensor <br/>
 # Algorithms and protocols 
 
 
-# Network arrchitecture 
+# Network architecture 
 
 
 
