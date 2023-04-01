@@ -14,5 +14,6 @@ Evaluation: https://github.com/simonescaccia/IoTProject/blob/main/Evaluation.md 
 
 | People | Linkedin | Github |
 |--- |--- |--- |
-| row 1 | column 2 | column 3 |
-| row 2 | row 2 column 2 | row 2 column 3 |
+| Riccardo Gobbato | column 2 | column 3 |
+| Simone Scaccia | row 2 column 2 | row 2 column 3 |
+| Pasquale Mocerino | row 2 column 2 | row 2 column 3 |
