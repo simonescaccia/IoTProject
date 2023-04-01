@@ -1,4 +1,4 @@
-# Smart Agriculture System
+# Smart Irrigation System
 
 # Partecipations
 Simone Scaccia: https://www.linkedin.com/in/simone-scaccia-40b631210/ <br />
