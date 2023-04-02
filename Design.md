@@ -25,7 +25,7 @@ The transmission period will be determined through experimentation in order to p
 The tagged and aggregated data is stored on AWS for long term storage. This data can then be queried by farmers in order to gain insights on the usage of water and to select a particular crop for a field.
 
 ## Algorithms and protocols 
-![Field](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/field.png)
+![Field](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/Field.png)
 
 ## Network architecture 
 ![network](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/network.png)
