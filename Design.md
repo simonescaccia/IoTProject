@@ -1,5 +1,5 @@
 # High-level architecture 
-![screen](https://github.com/simonescaccia/Smart-Irrigation-System/edit/main/architecture.png)
+![screen](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/architecture.png)
 
 # Components
 ---
