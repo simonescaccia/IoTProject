@@ -16,23 +16,29 @@ Our system is composed of 3 different pieces:
 ## Components
 Our infrastructure is composed of:
 * Esp32 
-* LoRa gateway to comunicate with the Cloud system (AWS) 
-* Cloud system (AWS) to collect and store data 
+* LoRa to comunicate between controllers and to comunicate with the Cloud system (AWS) 
 * Solenoid valve 
 * Water flow sensor
 * Temperature humidity sensor 
+* Cloud system (AWS) to collect and store data 
 
 ### Esp 32
-The Esp32 manages the different sensors in the infrastructure and exchanges messages with the other microcontrollers and with the Cloud.
+The Esp32 manages the different sensors in the infrastructure and exchanges messages with the other microcontrollers and with the Cloud. The main technical issue is that the device will be attached to every object of interest and should thus be battery powered:
+* CHIEF is connected to the cable and does not have energy problems (could be a LoRa Gateway and not a Thing???)
+* BRANCH gets up rarely and only when a test is needed, small duty cicle
+* SENSOR gets up every time the humidity sensor causes an event
 
-Te
+### LoRa
+???????
 
 ### Cloud storage
 The tagged and aggregated data is stored on AWS for long term storage. This data can then be queried by farmers in order to gain insights on the usage of water and to select a particular crop for a field.
 
+### Frontend
+An interactive dashboard will provide a way to visualize the data.
+
 ## Algorithms and protocols 
+![network](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/network.png)
+This is the communication between IoT elements, Edge components, and Cloud components. Building the system we will test this communication algorithm.
 
 ## Network architecture 
-![network](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/network.png)
-
-
