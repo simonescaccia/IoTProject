@@ -38,7 +38,7 @@ The tagged and aggregated data is stored on AWS for long term storage. This data
 An interactive dashboard will provide a way to visualize the data.
 
 ## Algorithms and protocols 
-![network](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/network.png)
-This is the communication between IoT elements, Edge components, and Cloud components. Building the system we will test this communication algorithm.
+![network](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/network.png) <br/>
+This is the communication between IoT elements, Edge components, and Cloud components. Building the system we will test this communication algorithm. 
 
 ## Network architecture 
