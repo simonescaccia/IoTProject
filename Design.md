@@ -3,22 +3,22 @@
 ## Architecture 
 
 ### Architecture in the real world
-![Field](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/Field.png)
+![Field](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/Field.png) <br/>
 Our architecture is scalable and can be used to control the water until a small field, if there is the same crop, or can be used to control different colture in the same field. For every field is needed a controller plus a controller for the pipeline branch.
 
 ### High level diagram
-![architecture](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/architecture.png)
+![architecture](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/architecture.png) <br/>
 Our system is composed of 3 different pieces:
 * Controller near the water source
 * Controller near the pipeline branch
-* Controller for humidity sensor and electrovalve
+* Controller for humidity sensor and solenoid valve
 
 ## Components
 Our infrastructure is composed of:
 * Esp32 
 * LoRa gateway to comunicate with the Cloud system (AWS) 
 * Cloud system (AWS) to collect and store data 
-* Electrovalve 
+* Solenoid valve 
 * Water flow sensor
 * Temperature humidity sensor 
 
