@@ -1,5 +1,10 @@
-# High-level architecture 
-![screen](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/architecture.png)
+# Technology
+---
+## High-level architecture 
+---
+![architecture](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/architecture.png)
+
+##
 
 # Components
 ---
@@ -12,9 +17,11 @@ Our infrastructure is composed of:
 * Temperature humidity sensor <br/>
 
 # Algorithms and protocols 
-
+---
+![Field](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/field.png)
 
 # Network architecture 
-
+---
+![network](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/network.png)
 
 
