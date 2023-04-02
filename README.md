@@ -8,7 +8,7 @@
 | Pasquale Mocerino | [Linkedin](https://www.linkedin.com/in/pasquale-mocerino-29088b1a2/) | [Github](https://github.com/pasqualemocerino) |
 
 # Description
-Our project is designed in order to offer some smart functionalities to an irrigation system, in particular to measure the humidity of the soil, to provide a proper water flow to plantations through the opening of a water tap and to detect possible water leaks through pipes. 
+Our project is designed in order to offer some smart functionalities to an irrigation system, in particular to measure the humidity of the soil, to provide a proper water flow to specific crops through the opening of an electrovalve and to detect possible water leakages through irrigation pipes. 
 
 # Links
 Concept: https://github.com/simonescaccia/IoTProject/blob/main/Concept.md <br />
