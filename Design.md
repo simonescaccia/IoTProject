@@ -1,18 +1,26 @@
 # Technology
 
-## High-level architecture 
+## Architecture 
 
+### Architecture in the real world
+![Field](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/Field.png)
+Our architecture is scalable and can be used to control the water until a small field, if there is the same crop, or can be used to control different colture in the same field. For every field is needed a controller plus a controller for the pipeline branch.
+
+### High level diagram
 ![architecture](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/architecture.png)
-
+Our system is composed of 3 different pieces:
+* Controller near the water source
+* Controller near the pipeline branch
+* Controller for humidity sensor and electrovalve
 
 ## Components
 Our infrastructure is composed of:
-* Esp32 <br/>
-* LoRa gateway to comunicate with the Cloud system (AWS) <br/>
-* Cloud system (AWS) to collect and store data <br/>
-* Electrovalve <br/>
-* Water flow sensor <br/>
-* Temperature humidity sensor <br/>
+* Esp32 
+* LoRa gateway to comunicate with the Cloud system (AWS) 
+* Cloud system (AWS) to collect and store data 
+* Electrovalve 
+* Water flow sensor
+* Temperature humidity sensor 
 
 ### Esp 32
 The Esp32 manages the different sensors in the infrastructure and exchanges messages with the other microcontrollers and with the Cloud.
