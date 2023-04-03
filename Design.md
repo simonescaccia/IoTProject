@@ -48,9 +48,11 @@ The tagged and aggregated data are stored on AWS for long term storage. These da
 ### Frontend
 An interactive dashboard will provide a way to visualize the data.
 
-## Algorithms and protocols 
+## Network architecture 
 ![network](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/network.png) <br/>
+The network architecture is focused on checking the actual state of the irrigation system, with a communication between devices based on LoRaWAN and MQTT. We use substantially a tree topology in order to properly check the irrigation parameters and the presence of possible water leakages. We will also make some considerations about the scalability of such network scheme, proposing adequate improvements.
+
+## Algorithms 
+![messages](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/messages.png) <br/>
 This is the communication scheme for IoT elements, Edge components, and Cloud components. Building the system we will test this communication algorithm. We have thought about a top-down approach. 
 
-## Network architecture 
-The network architecture is focused on checking the actual state of the irrigation system, with a communication between devices based on LoRaWAN and MQTT. We use substantially a tree topology in order to properly check the irrigation parameters and the presence of possible water leakages. We will also make some considerations about the scalability of such network scheme, proposing adequate improvements.
