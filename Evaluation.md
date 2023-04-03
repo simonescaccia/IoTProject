@@ -29,7 +29,7 @@ We wish to evaluate the power consumption of MCUs that are not attached to a pow
 
 ## Algorithms Performances
 
-Water leak detection Algorithm:
+### Water leak detection Algorithm:
 
 1. Test progration phase:
 
@@ -48,6 +48,23 @@ Water leak detection Algorithm:
 + One message from the CHIEF to the FORK childs
 + One message from the FORK to the FORK childs
 + One message from the FORK to the BRANCH childs
+
+4. If a leak is detected, the system will send a message to the cloud to notify the user
+
+### Irrigation Algorithm:
+
+1. Check if the soil is dry:
+2. If the soil is dry, open the solenoid valve
+3. Check if the soil is wet:
+4. If the soil is wet, close the solenoid valve
+
+### Management of the water flow Algorithm:
+
+1. From the cloud, send a message to the BRANCH MCUs to close the solenoid valves
+
+### Monitoring of the water flow Algorithm:
+
+1. From the CHIEF MCUs, send periodically a message to the cloud to update the water flow consumed
 
 ## Embedded Devices Performances
 
