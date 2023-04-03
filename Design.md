@@ -1,8 +1,10 @@
 # Design
 
 ## Architecture 
-![Field](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/Field.png) <br/>
-Our architecture is scalable and can be used to control the water within a small field, if there is the same crop, or can be used to control different types of crop in the same field. For every field a MCU at the fork site (that can be at different depth levels) is needed, plus a MCU for each pipeline branch.
+![Field](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/field.png) <br/>
+![Field](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/field_alternative.png) <br/>
+Our architecture is scalable and can be used to control the water within a small field, if there is the same crop, or can be used to control different types of crop in the same field. For every field a MCU at the fork site (that can be at different depth levels) is needed, plus a MCU for each pipeline branch.</br>
+We have proposed two different possibilities of set of fields (we will analyse which one is the better or if there are other possible architecture).
 
 ## High level diagram
 ![architecture](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/architecture.png) <br/>
