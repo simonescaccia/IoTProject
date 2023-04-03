@@ -43,7 +43,7 @@ Soil humidity sensors are fork-shaped probes inserted into the soil, with two ex
 Solenoid valves are electromechanically operated valves converting electric energy into mechanical energy. The main purpose is to automatically regulate the movement of water, removing the need of manual control. The actuator consists of a solenoid (or electromagnet) and a valve. The electromagnetic coil within the solenoid (activated with energy supply) is employed to either open or close the valve orifice through a plunger.
 
 ### Cloud system
-Data are stored on AWS for long term storage. These data can then be queried by farmers in order to gain insights on the usage of water and to select a particular crop for a field.
+Data are stored on AWS for long term storage. These data can then be queried by farmers in order to gain insights about water usage and pipeline leakages. The farmer can also select a particular crop for a field.
 
 ## Network architecture 
 ![network](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/network.png) <br/>
