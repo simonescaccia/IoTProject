@@ -31,19 +31,19 @@ We wish to evaluate the power consumption of MCUs that are not attached to a pow
 
 ### Water leak detection Algorithm:
 
-1. Test progration phase:
+1. Test propagation phase: Close all the solenoid valves
 
 + One message from the CHIEF to the FORK childs
 + One message from the FORK to the FORK childs
 + One message from the FORK to the BRANCH childs
 
-2. Detection phase:
+2. Detection phase: Check if the FORK recognize a water flow
 
 + One message from the BRACH to the FORK parent
 + One message from the FORK to the FORK parent
 + One message from the FORK to the CHIEF parent
 
-3. Continue working phase:
+3. Continue working phase: Test ended, continue working as usual
 
 + One message from the CHIEF to the FORK childs
 + One message from the FORK to the FORK childs
