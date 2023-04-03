@@ -4,14 +4,14 @@
 
 ### Architecture in the real world
 ![Field](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/Field.png) <br/>
-Our architecture is scalable and can be used to control the water until a small field, if there is the same crop, or can be used to control different colture in the same field. For every field is needed a controller plus a controller for the pipeline branch.
+Our architecture is scalable and can be used to control the water within a small field, if there is the same crop, or can be used to control different types of crop in the same field. For every field a MCU at the fork site (that can be at different depth levels) is needed, plus a MCU for each pipeline branch.
 
 ### High level diagram
 ![architecture](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/architecture.png) <br/>
 Our system is composed of 3 different pieces:
-* Controller near the water source (connected by cable) called CHIEF
-* Controller near the pipeline branch (using a battery) called BRANCH and with and ID for the branch and a NUMBER for each solenoid valve
-* Controller for humidity sensor and solenoid valve (using a battery) called SENSOR and with and NUMBER (equal to the relevant valve)
+* MCU near the water source (connected through a power cord) called CHIEF
+* MCU near the pipeline branch (using a battery) called BRANCH and with and ID for the branch and a NUMBER for each solenoid valve
+* MCU for humidity sensor and solenoid valve (using a battery) called SENSOR and with and NUMBER (equal to the relevant valve)
 
 ## Components
 Our infrastructure is composed of:
