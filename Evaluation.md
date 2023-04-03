@@ -18,7 +18,7 @@ We will want to detect if a water leak occur within 24h, in order to be able to 
 
 1. Leak is dectected within 24h
 2. The pipe is correctly identified
-3. The quantity of water leaked with an accuracy of 95% (sensor precision error)
+3. The quantity of water leaked per second with an accuracy of 95% (sensor precision error)
 
 ## Evaluation methodology: Individual Components
 
@@ -28,6 +28,26 @@ We wish to evaluate the power consumption of MCUs that are not attached to a pow
 ## Network Technologies Performances
 
 ## Algorithms Performances
+
+Water leak detection Algorithm:
+
+1. Test progration phase:
+
++ One message from the CHIEF to the FORK childs
++ One message from the FORK to the FORK childs
++ One message from the FORK to the BRANCH childs
+
+2. Detection phase:
+
++ One message from the BRACH to the FORK parent
++ One message from the FORK to the FORK parent
++ One message from the FORK to the CHIEF parent
+
+3. Continue working phase:
+
++ One message from the CHIEF to the FORK childs
++ One message from the FORK to the FORK childs
++ One message from the FORK to the BRANCH childs
 
 ## Embedded Devices Performances
 
