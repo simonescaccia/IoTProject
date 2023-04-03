@@ -27,8 +27,7 @@ The ESP32 manages the different sensors and actuators in the infrastructure and 
 * BRANCH wakes up periodically in order to check the humidity of the soil and possibly irrigate crop
 
 ### LoRa
-???????
-
+LoRa is a physical radio communication protocol, based on spread spectrum modulation techniques derived from chirp spread spectrum (CSS) technology. The protocol is supported by our chosen ESP32 MCUs, allowing a low power and long range communication between microcontrollers in order to accomplish distributed tasks.
 
 ### Sensors
 #### Water flow sensors
@@ -37,8 +36,9 @@ Water flow sensors are installed at the water source or pipes to measure the flo
 #### Soil humidity sensors
 Soil humidity sensors are fork-shaped probes inserted into the soil, with two exposed conductors, hence acting as a variable resistor. The resistance varies inversely with soil humidity. In fact capacitance is used in order to measure dielectric permittivity of the soil, which is a function of the water content. The sensor produces an output voltage proportional to the dielectric permittivity (so inversely proportional to resistance), and therefore the water content of the soil (soil moisture level). Only four pins are required to connect: AO (Analog Output), generating analog output voltage, DO (Digital Output) indicating whether the soil moisture level is within the limit, VCC for power supply (from 3.3 V to 5 V) and GND for the ground.
 
-### Actuator
-#### Solenoid valve
+### Actuators
+#### Solenoid valves
+Solenoid valves are electromechanically operated valves converting electric energy into mechanical energy. The main purpose is to automatically regulate the movement of water, removing the need of manual control. The actuator consists of a solenoid (or electromagnet) and a valve. The electromagnetic coil within the solenoid (activated with energy supply) is employed to either open or close the valve orifice through a plunger.
 
 ### Cloud storage
 The tagged and aggregated data are stored on AWS for long term storage. These data can then be queried by farmers in order to gain insights on the usage of water and to select a particular crop for a field.
@@ -51,3 +51,4 @@ An interactive dashboard will provide a way to visualize the data.
 This is the communication scheme for IoT elements, Edge components, and Cloud components. Building the system we will test this communication algorithm. 
 
 ## Network architecture 
+The network architecture is focused on checking the actual state of the irrigation system, with a communication between devices based on LoRaWAN and MQTT. We use substantially a tree topology in order to properly check the irrigation parameters and the presence of possible water leakages. We will also make some considerations about the scalability of such network scheme, proposing adequate improvements.
