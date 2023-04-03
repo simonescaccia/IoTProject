@@ -50,6 +50,22 @@ Data are stored on AWS for long term storage. These data can then be queried by 
 The network architecture is focused on checking the actual state of the irrigation system, with a communication between devices based on LoRaWAN and MQTT. We will also make some considerations about the scalability of different possible network schemes.
 
 ## Algorithms 
+### Water leakage detection algorithm
 ![messages](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/messages.png) <br/>
 This is the communication scheme between IoT elements, Edge components, and Cloud components, related to the algorithm for the leakage detection.
 
+### Automated irrigation algorithm
+We provide a pseudocode sketch of the automated mechanism of irrigation:
+
+def automated_irrigation(humidity_threshold):
+
+  humidity_level = get_humidity() // From soil humidity sensor
+  
+  if (humidity_level < humidity_threshold):
+    open()  // Open signal to solenoid valve
+  
+    while (humidity_level < humidity_threshold):
+      wait(time_interval) // Wait some time to make humidity change
+      humidity_level = get_humidity()
+      
+    close()  // Close signal to solenoid valve
