@@ -1,6 +1,6 @@
 # Evaluation
 
-## Performance evaluation
+## Evaluation methodology: Overall System
 
 ### During the development of the project
 
@@ -20,13 +20,10 @@ We will want to detect if a water leak occur within 24h, in order to be able to 
 2. The pipe is correctly identified
 3. The quantity of water leaked with an accuracy of 95% (sensor precision error)
 
-## Evaluation methodology
+## Evaluation methodology: Individual Components
 
-### Individual Components
 (CHIEF, FORK, BRANCH)
 We wish to evaluate the power consumption of MCUs that are not attached to a power cord, so for the FORK and the BRANCH MCUs. Our goal is to make the batteries last for 1 year. For the CHIEF MCUs, we want to evaluate the balancing of load of requests, in particular when scaling the system. Needed metrics will be respectively the number of Wh and the average number of requests per hour.
-
-### Overall System
 
 ## Network Technologies Performances
 
