@@ -45,9 +45,6 @@ Solenoid valves are electromechanically operated valves converting electric ener
 ### Cloud storage
 The tagged and aggregated data are stored on AWS for long term storage. These data can then be queried by farmers in order to gain insights on the usage of water and to select a particular crop for a field.
 
-### Frontend
-An interactive dashboard will provide a way to visualize the data.
-
 ## Network architecture 
 ![network](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/network.png) <br/>
 The network architecture is focused on checking the actual state of the irrigation system, with a communication between devices based on LoRaWAN and MQTT. We use substantially a tree topology in order to properly check the irrigation parameters and the presence of possible water leakages. We will also make some considerations about the scalability of such network scheme, proposing adequate improvements.
