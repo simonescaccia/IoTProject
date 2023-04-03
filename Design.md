@@ -24,7 +24,7 @@ Our infrastructure is composed of:
 
 ### ESP32
 The ESP32 manages the different sensors and actuators in the infrastructure and exchanges messages with the other microcontrollers and with the cloud. The main technical issue is that the device will be attached to every object of interest and thus should be battery powered:
-* CHIEF is connected to a power cord and does not have energy problems (could be a LoRa Gateway and not a Thing???)
+* CHIEF is connected to a power cord and does not have energy problems
 * FORK wakes up rarely and only when a test is needed, so it has a small duty cicle
 * BRANCH wakes up periodically in order to check the humidity of the soil and possibly irrigate crop
 
