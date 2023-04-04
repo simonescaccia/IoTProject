@@ -20,4 +20,4 @@ Our project is designed in order to offer some smart functionalities to an irrig
 
 ## Video
 
-[Video]
+It will be uploaded soon
