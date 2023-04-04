@@ -57,11 +57,15 @@ This is the communication scheme between IoT elements, Edge components, and Clou
 ### Automated irrigation algorithm
 We provide a pseudocode sketch of the automated mechanism of irrigation:
 
-def automated_irrigation(humidity_threshold):
-  humidity_level = get_humidity() // From soil humidity sensor
-  if (humidity_level < humidity_threshold):
-    open()  // Open signal to solenoid valve
-    while (humidity_level < humidity_threshold):
-      wait(time_interval) // Wait some time to make humidity change
-      humidity_level = get_humidity() 
-    close()  // Close signal to solenoid valve
+    def automated_irrigation(humidity_threshold):
+
+        humidity_level = get_humidity() // From soil humidity sensor
+    
+        if (humidity_level < humidity_threshold):
+            open()  // Open signal to solenoid valve
+        
+            while (humidity_level < humidity_threshold):
+                wait(time_interval) // Wait some time to make humidity change
+                humidity_level = get_humidity()
+            
+            close()  // Close signal to solenoid valve

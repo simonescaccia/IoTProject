@@ -62,14 +62,18 @@ The complexity will change depending on the number of FORKs, and we will compare
 
 ### Irrigation Algorithm:
 
-def automated_irrigation(humidity_threshold):
-  humidity_level = get_humidity() // From soil humidity sensor
-  if (humidity_level < humidity_threshold):
-    open()  // Open signal to solenoid valve
-    while (humidity_level < humidity_threshold):
-      wait(time_interval) // Wait some time to make humidity change
-      humidity_level = get_humidity()
-    close()  // Close signal to solenoid valve
+    def automated_irrigation(humidity_threshold):
+
+        humidity_level = get_humidity() // From soil humidity sensor
+    
+        if (humidity_level < humidity_threshold):
+            open()  // Open signal to solenoid valve
+        
+            while (humidity_level < humidity_threshold):
+                wait(time_interval) // Wait some time to make humidity change
+                humidity_level = get_humidity()
+            
+            close()  // Close signal to solenoid valve
 
 The algorithm perfomance depends on the capacity of the soil to absorb water, and on the responsivness of the humidity sensor. 
 
