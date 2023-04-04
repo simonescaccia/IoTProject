@@ -51,7 +51,7 @@ The network architecture is focused on checking the actual state of the irrigati
 
 ## Algorithms 
 ### Water leakage detection algorithm
-![messages](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/messages.png) <br/>
+![messages](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/messages.jpg) <br/>
 This is the communication scheme between IoT elements, Edge components, and Cloud components, related to the algorithm for the leakage detection.
 
 ### Automated irrigation algorithm
