@@ -5,7 +5,7 @@
 ### During the development of the project
 
 General performance evaluation of the system:
-We want to detect if a water leak occur within 24h, in order to be able to repair it the next working day so that we can reduce water loss. Also, we want to know wich pipe is leaking.
+We want to detect if a water leak occur within 24h, in order to detect water leakages without tolerating more than one day of water losses. We want also to know wich pipe is leaking.
 
 We will use the following metrics to evaluate the performance of the system:
 
@@ -14,7 +14,7 @@ We will use the following metrics to evaluate the performance of the system:
 
 ### When the first complete version of the system will be ready for use
 
-We will want to detect if a water leak occur within 24h, in order to be able to repair it the next working day so that we can reduce water loss. Also, we want to know wich pipe is leaking, providing information about the quantity of water leakage in a second.
+We want to detect if a water leak occur within 24h, in order to detect water leakages without tolerating more than one day of water losses. We want also to know wich pipe is leaking, providing information about the quantity of water leakage in a second.
 
 1. Leak is dectected within 24h
 2. The pipe is correctly identified
@@ -22,10 +22,16 @@ We will want to detect if a water leak occur within 24h, in order to be able to 
 
 ## Evaluation methodology: Individual Components
 
-(CHIEF, FORK, BRANCH)
-We wish to evaluate the power consumption of MCUs that are not attached to a power cord, so for the FORK and the BRANCH MCUs. Our goal is to make the batteries last for 1 year. For the CHIEF MCUs, we want to evaluate the balancing of load of requests, in particular when scaling the system. Needed metrics will be respectively the number of Wh and the average number of requests per hour.
+We wish to evaluate the power consumption of MCUs that are not attached to a power cord, so for the FORK and the BRANCH MCUs.
+
++ Power supply of source site MCU is provided by a power cord, hence there are no specific constraints on power consumption.
++ MCUs at fork sites, due to the limited workload, we wish to obtain a battery life equal to the total period of irrigation.
++ For crop site MCUs we may obtain a battery life at least equal to the growing period of the related crop.
 
 ## Network Technologies Performances
+
++ Latency (s)
++ Throughput (bit/s)
 
 ## Algorithms Performances
 
@@ -39,7 +45,7 @@ We wish to evaluate the power consumption of MCUs that are not attached to a pow
 
 2. Detection phase: Check if the FORK recognize a water flow
 
-+ One message from the BRACH to the FORK parent
++ One message from the BRANCH to the FORK parent
 + One message from the FORK to the FORK parent
 + One message from the FORK to the CHIEF parent
 
@@ -51,21 +57,38 @@ We wish to evaluate the power consumption of MCUs that are not attached to a pow
 
 4. If a leak is detected, the system will send a message to the cloud to notify the user
 
+We will evaluate the number of messages sent by the protocol and the time needed to complete the algorithm.
+The complexity will change depending on the number of FORKs, and we will compare variuous topologies in order to find the best one.
+
 ### Irrigation Algorithm:
 
-1. Check if the soil is dry:
-2. If the soil is dry, open the solenoid valve
-3. Check if the soil is wet:
-4. If the soil is wet, close the solenoid valve
+def automated_irrigation(humidity_threshold):
+
+  humidity_level = get_humidity() // From soil humidity sensor
+  
+  if (humidity_level < humidity_threshold):
+    open()  // Open signal to solenoid valve
+  
+    while (humidity_level < humidity_threshold):
+      wait(time_interval) // Wait some time to make humidity change
+      humidity_level = get_humidity()
+      
+    close()  // Close signal to solenoid valve
+
+The algorithm perfomance depends on the capacity of the soil to absorb water, and on the responsivness of the humidity sensor. 
 
 ### Management of the water flow Algorithm:
 
-1. From the cloud, send a message to the BRANCH MCUs to close the solenoid valves
+From the cloud, send a message to the BRANCH MCUs to close the solenoid valves
+
+Performances depends on the latency between the cloud and the MCUs.
 
 ### Monitoring of the water flow Algorithm:
 
-1. From the CHIEF MCUs, send periodically a message to the cloud to update the water flow consumed
+From the CHIEF MCUs, send periodically a message to the cloud to update the water flow consumed
 
-## Embedded Devices Performances
+Performances depends on the latency between the cloud and the MCUs.
 
 ## Response Time Performances
+
+The response time between CHIEF, FORKs and BRANCHEs depends on the distance between the MCUs, so it depends on the topology of the irrigation system.
