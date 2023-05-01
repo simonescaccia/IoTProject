@@ -34,7 +34,7 @@ We wish to evaluate the power consumption of MCUs that are not attached to a pow
 
 ## Algorithms Performances
 
-### Water leak detection Algorithm:
+### Water leak detection Algorithm
 
 1. Test propagation phase
 
@@ -59,7 +59,7 @@ We wish to evaluate the power consumption of MCUs that are not attached to a pow
 We will evaluate the number of messages sent by the protocol and the time needed to complete the algorithm.
 The complexity will change depending on the number of FORKs, and we will compare variuous topologies in order to find the best one.
 
-### Monitoring of the water flow Algorithm:
+### Monitoring of the water flow Algorithm
 
 From the CHIEF MCUs, send periodically a message to the cloud to update the water flow consumed.
 
