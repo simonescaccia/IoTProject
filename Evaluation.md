@@ -42,19 +42,7 @@ We wish to evaluate the power consumption of MCUs that are not attached to a pow
 + One message from the FORK to the FORK childs
 + One message from the FORK to the BRANCH childs
 
-2. Detection phase: Check if the FORK recognize a water flow
-
-+ One message from the BRANCH to the FORK parent
-+ One message from the FORK to the FORK parent
-+ One message from the FORK to the CHIEF parent
-
-3. Continue working phase: Test ended, continue working as usual
-
-+ One message from the CHIEF to the FORK childs
-+ One message from the FORK to the FORK childs
-+ One message from the FORK to the BRANCH childs
-
-4. If a leak is detected, the system will send a message to the cloud to notify the user
+2. If a leak is detected, the MCU that computes the check, will send a message to the cloud to notify the user
 
 We will evaluate the number of messages sent by the protocol and the time needed to complete the algorithm.
 The complexity will change depending on the number of FORKs, and we will compare variuous topologies in order to find the best one.
