@@ -25,8 +25,7 @@ We want to detect if a water leak occur within 24h, in order to detect water lea
 We wish to evaluate the power consumption of MCUs that are not attached to a power cord, so for the FORK and the BRANCH MCUs.
 
 + Power supply of source site MCU is provided by a power cord, hence there are no specific constraints on power consumption.
-+ MCUs at fork sites, due to the limited workload, we wish to obtain a battery life equal to the total period of irrigation.
-+ For crop site MCUs we may obtain a battery life at least equal to the growing period of the related crop.
++ MCUs at fork sites and crop site, due to the limited workload, we wish to obtain a battery life equal to the total period of irrigation.
 
 ## Network Technologies Performances
 
@@ -37,7 +36,7 @@ We wish to evaluate the power consumption of MCUs that are not attached to a pow
 
 ### Water leak detection Algorithm:
 
-1. Test propagation phase: Close all the solenoid valves
+1. Test propagation phase
 
 + One message from the CHIEF to the FORK childs
 + One message from the FORK to the FORK childs
@@ -60,32 +59,9 @@ We wish to evaluate the power consumption of MCUs that are not attached to a pow
 We will evaluate the number of messages sent by the protocol and the time needed to complete the algorithm.
 The complexity will change depending on the number of FORKs, and we will compare variuous topologies in order to find the best one.
 
-### Irrigation Algorithm:
-
-    def automated_irrigation(humidity_threshold):
-
-        humidity_level = get_humidity() // From soil humidity sensor
-    
-        if (humidity_level < humidity_threshold):
-            open()  // Open signal to solenoid valve
-        
-            while (humidity_level < humidity_threshold):
-                wait(time_interval) // Wait some time to make humidity change
-                humidity_level = get_humidity()
-            
-            close()  // Close signal to solenoid valve
-
-The algorithm perfomance depends on the capacity of the soil to absorb water, and on the responsivness of the humidity sensor. 
-
-### Management of the water flow Algorithm:
-
-From the cloud, send a message to the BRANCH MCUs to close the solenoid valves
-
-Performances depends on the latency between the cloud and the MCUs.
-
 ### Monitoring of the water flow Algorithm:
 
-From the CHIEF MCUs, send periodically a message to the cloud to update the water flow consumed
+From the CHIEF MCUs, send periodically a message to the cloud to update the water flow consumed.
 
 Performances depends on the latency between the cloud and the MCUs.
 
