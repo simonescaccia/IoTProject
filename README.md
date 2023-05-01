@@ -10,7 +10,7 @@
 
 ## Description
 
-Our project is designed in order to offer some smart functionalities to an irrigation system to keep track of water usage and leakages, in order to avoid the waste of water. In particular the system measures the humidity of the soil, provides a proper water flow to specific crop through the selective opening of solenoid valves and detects possible water leakages through irrigation pipes.
+Our project is designed in order to offer some smart functionalities to an irrigation system to keep track of water usage and leakages, in order to avoid the waste of water. In particular the system detects possible water leakages through irrigation pipes.
 
 ## Links
 
