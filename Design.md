@@ -1,13 +1,13 @@
 # Design
 
 ## Architecture 
-![Field1](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/field.png) <br/>
-![Field2](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/field_alternative.png) <br/>
+![Field1](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/field.jpg) <br/>
+![Field2](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/field_alternative.jpg) <br/>
 Our architecture is scalable and can be used to control water leakages within a small field, if there is the same crop, or can be used to control different types of crop in the same field. For every field a MCU at the fork site (that can be at different depth levels) is needed, plus a MCU for each pipeline branch.</br>
 We have proposed two different possibilities of set of fields (we will analyse which one is the better or if there are other possible architecture).
 
 ## High level diagram
-![architecture](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/architecture.png) <br/>
+![architecture](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/architecture.jpg) <br/>
 Our system is composed of 3 different pieces:
 * MCU near the water source (connected through a power cord) called CHIEF
 * MCU near the pipeline fork (using a battery) called FORK, with an ID for the fork and a NUMBER for each branch water flow sensor
@@ -43,7 +43,7 @@ Water flow sensors are installed at the water source or pipes to measure the flo
 Data are stored on AWS for long term storage. These data can then be queried by farmers in order to gain insights about water usage and pipeline leakages.
 
 ## Network architecture 
-![network](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/network.png) <br/>
+![network](https://github.com/simonescaccia/Smart-Irrigation-System/blob/main/images/network.jpg) <br/>
 The network architecture is focused on checking the actual state of the irrigation system, with a communication between devices based on LoRaWAN and MQTT. We will also make some considerations about the scalability of different possible network schemes.
 
 ## Algorithms 
