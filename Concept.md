@@ -17,7 +17,7 @@ Our system allows to do the following tasks:
 * Water usage monitoring
 
 # User requirements
-* Detect water leakeage: how? Accuracy? FP/FN?
+* Detect water leakages: how? Accuracy? FP/FN?
 * Promptly: at most in 24 hours
 * Alarm system: actuators
 * Events: water movement (change of flow)
