@@ -4,7 +4,6 @@
 int main(void)
 {
 
-    xtimer_sleep(1);
     puts("Hello World!");
 
     printf("You are running RIOT on a(n) %s board.\n", RIOT_BOARD);
