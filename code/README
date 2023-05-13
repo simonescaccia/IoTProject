@@ -1,0 +1,11 @@
+# Irrigation Water Leakage System RIOT code
+
+RIOT-OS version: 2023.04
+
+Clone RIOT-OS repository:
+
+    git clone https://github.com/RIOT-OS/RIOT.git -b 2023.04
+
+Clone this repository:
+
+    git clone https://github.com/simonescaccia/Irrigation-Water-Leakage-System.git
