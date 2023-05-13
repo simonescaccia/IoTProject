@@ -2,7 +2,7 @@
 APPLICATION = irrigation-water-leakage-detection
 
 # If no BOARD is found in the environment, use this default:
-BOARD ?= native
+BOARD ?= b-l072z-lrwan1
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/../..
