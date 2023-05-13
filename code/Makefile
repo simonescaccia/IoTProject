@@ -15,6 +15,12 @@ DEVELHELP ?= 1
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1
 
+# Timer
 USEMODULE += xtimer
+
+# Shell
+USEMODULE += shell
+USEMODULE += shell_cmds_default
+USEMODULE += ps
 
 include $(RIOTBASE)/Makefile.include
