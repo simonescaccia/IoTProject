@@ -38,8 +38,15 @@ CFLAGS += -DCONFIG_LORAMAC_APP_KEY_DEFAULT=\"$(APPKEY)\"
 CFLAGS += -DCONFIG_LORAMAC_APP_EUI_DEFAULT=\"$(APPEUI)\"
 CFLAGS += -DCONFIG_LORAMAC_DEV_EUI_DEFAULT=\"$(DEVEUI)\"
 
+# Pass these enviroment variables to docker
+DOCKER_ENV_VARS += DEVEUI
+DOCKER_ENV_VARS += APPEUI
+DOCKER_ENV_VARS += APPKEY
+
 # Send a message every 20s after joining the network
 SEND_PERIOD_S ?= 20
+
+CFLAGS += -DSEND_PERIOD_S=$(SEND_PERIOD_S)
 
 # Default region is Europe and default band is 868MHz
 LORA_REGION ?= EU868
@@ -50,6 +57,18 @@ USEMODULE += auto_init_loramac
 
 USEMODULE += fmt
 FEATURES_OPTIONAL += periph_rtc
+
+# Default IotLab Config to run the test
+ifneq (,$(filter iotlab%,$(MAKECMDGOALS)))
+  IOTLAB_NODES ?= 1
+  IOTLAB_TYPE  ?= st-lrwan1:sx1276
+  IOTLAB_SITE  ?= saclay
+  include $(RIOTBASE)/dist/testbed-support/Makefile.iotlab
+endif
+
+ifneq (,$(filter test,$(MAKECMDGOALS)))
+  DEFAULT_MODULE += test_utils_interactive_sync
+endif
 # end lorawan ----------------------------
 
 
