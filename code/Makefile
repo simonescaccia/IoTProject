@@ -23,4 +23,7 @@ USEMODULE += shell
 USEMODULE += shell_cmds_default
 USEMODULE += ps
 
+# driver sx127x
+USEMODULE += od
+
 include $(RIOTBASE)/Makefile.include
