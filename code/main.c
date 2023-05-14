@@ -86,12 +86,12 @@ int node_config(int argc, char **argv)
         
         printf("Line #%d -> Father: %s\t Child: %s\n", line_count, father, child);
 
-        if (strcmp(child, NODE_NAME) == 0 && node_father == NULL) {
+        if (strcmp(child, argv[1]) == 0 && node_father == NULL) {
         node_father = malloc(strlen(father) + 1);
         strcpy(node_father, father);
         }
 
-        if (strcmp(father, NODE_NAME) == 0) {
+        if (strcmp(father, argv[1]) == 0) {
         children_count++;
         node_children = realloc(node_children, children_count*sizeof(char*));
         node_children[children_count - 1] = malloc(strlen(child) + 1);
@@ -111,7 +111,7 @@ int node_config(int argc, char **argv)
     printf("\n");
 
     /* Display father information */
-    printf("Father of %s: ", NODE_NAME);
+    printf("Father of %s: ", argv[1]);
     if (node_father == NULL) {
         printf("undefined, CHIEF is the root of the tree.\n");
     }
@@ -120,7 +120,7 @@ int node_config(int argc, char **argv)
     }
 
     /* Display children information */
-    printf("Children of %s: ", NODE_NAME);
+    printf("Children of %s: ", argv[1]);
     if (node_children == NULL) {
         printf("undefined, BRANCH is a leaf of the tree.\n");
     }
