@@ -146,7 +146,7 @@ int send_messages_to_ttn(void *arg) {
     fmt_hex_bytes(appkey, CONFIG_LORAMAC_APP_KEY_DEFAULT);
 
     if(DEBUG)
-        printf([main.c]"lorawan appkey: %s\n", appkey);
+        printf("[main.c]lorawan appkey: %s\n", appkey);
 
     semtech_loramac_set_deveui(&loramac, deveui);
     semtech_loramac_set_appeui(&loramac, appeui);
