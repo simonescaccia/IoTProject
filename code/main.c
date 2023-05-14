@@ -440,6 +440,7 @@ int main(void)
     // init driver 127x
     if(init_driver_127x(NULL)){
         return 1;
+    }
 
     // start shell
     char line_buf[SHELL_DEFAULT_BUFSIZE];
