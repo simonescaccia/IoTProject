@@ -4,6 +4,7 @@
 #include "xtimer.h"
 
 // driver 127x
+/**
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,7 +36,7 @@ static kernel_pid_t _recv_pid;
 
 static char message[32];
 static sx127x_t sx127x;
-
+*/
 // lorawan
 #include <time.h>
 
@@ -441,8 +442,8 @@ int main(void)
     //    return 1;
 
     // start shell
-    char line_buf[SHELL_DEFAULT_BUFSIZE];
-    shell_run(commands, line_buf, SHELL_DEFAULT_BUFSIZE);
+    //char line_buf[SHELL_DEFAULT_BUFSIZE];
+    //shell_run(commands, line_buf, SHELL_DEFAULT_BUFSIZE);
 
     return 0;
 }
