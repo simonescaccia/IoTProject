@@ -432,14 +432,13 @@ int main(void)
 
     puts("Hello World!");
 
-    // init driver 127x
-    if(init_driver_127x(NULL)){
-        return 1;
-    }
-
     if(send_messages_to_ttn(NULL)){
         return 1;
     }
+
+    // init driver 127x
+    //if(init_driver_127x(NULL)){
+    //    return 1;
 
     // start shell
     char line_buf[SHELL_DEFAULT_BUFSIZE];
