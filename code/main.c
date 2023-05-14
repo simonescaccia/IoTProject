@@ -3,9 +3,6 @@
 
 #include "xtimer.h"
 
-#include "debug.h"
-#define ENABLE_DEBUG 1
-
 // driver 127x
 #include <errno.h>
 #include <stdio.h>
@@ -38,6 +35,10 @@ static kernel_pid_t _recv_pid;
 
 static char message[32];
 static sx127x_t sx127x;
+
+// debug
+
+#define DEBUG 1
 
 int lora_setup_cmd(int argc, char **argv)
 {
@@ -243,11 +244,12 @@ void *_recv_thread(void *arg)
     }
 }
 
-void init_driver_127x(void *arg) {
+int init_driver_127x(void *arg) {
 
     (void)arg;
 
-    DEBUG("[init_driver_127x] starting driver_127x init");
+    if(DEBUG) 
+        puts("[init_driver_127x] starting driver_127x init");
 
     sx127x.params = sx127x_params[0];
     netdev_t *netdev = &sx127x.netdev;
@@ -270,7 +272,10 @@ void init_driver_127x(void *arg) {
         return 1;
     }
 
-    DEBUG("[init_driver_127x] driver_127x init done");
+    if(DEBUG) 
+        puts("[init_driver_127x] driver_127x init done");
+
+    return 0;
 }
 
 int main(void)
@@ -279,7 +284,9 @@ int main(void)
     puts("Hello World!");
 
     // init driver 127x
-    init_driver_127x(NULL);
+    if(init_driver_127x(NULL)){
+        return 1;
+    }
 
     // start shell
     char line_buf[SHELL_DEFAULT_BUFSIZE];

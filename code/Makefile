@@ -25,5 +25,6 @@ USEMODULE += ps
 
 # driver sx127x
 USEMODULE += od
+USEMODULE += sx1276
 
 include $(RIOTBASE)/Makefile.include
