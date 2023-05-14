@@ -1,5 +1,10 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "thread.h"
+#include "fmt.h"
 
 #include "xtimer.h"
 
@@ -7,11 +12,8 @@
 /**
 #include <errno.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <inttypes.h>
 
-#include "thread.h"
 #include "shell.h"
 
 #include "net/netdev.h"
@@ -23,8 +25,6 @@
 #include "sx127x_internal.h"
 #include "sx127x_params.h"
 #include "sx127x_netdev.h"
-
-#include "fmt.h"
 
 #define SX127X_LORA_MSG_QUEUE   (16U)
 #define SX127X_STACKSIZE        (THREAD_STACKSIZE_DEFAULT)
@@ -111,7 +111,7 @@ static void _send_message(void)
     uint8_t ret = semtech_loramac_send(&loramac,
                                        (uint8_t *)message_ttn, strlen(message_ttn));
     if (ret != SEMTECH_LORAMAC_TX_DONE) {
-        printf("Cannot send message '%s', ret code: %d\n", message, ret);
+        printf("Cannot send message '%s', ret code: %d\n", message_ttn, ret);
         return;
     }
 }
@@ -188,6 +188,8 @@ int send_messages_to_ttn(void *arg) {
 
 // driver 127x
 
+/**
+
 int lora_setup_cmd(int argc, char **argv)
 {
 
@@ -199,7 +201,7 @@ int lora_setup_cmd(int argc, char **argv)
         return -1;
     }
 
-    /* Check bandwidth value */
+    // Check bandwidth value 
     int bw = atoi(argv[1]);
     uint8_t lora_bw;
 
@@ -225,7 +227,7 @@ int lora_setup_cmd(int argc, char **argv)
         return -1;
     }
 
-    /* Check spreading factor value */
+    // Check spreading factor value
     uint8_t lora_sf = atoi(argv[2]);
 
     if (lora_sf < 7 || lora_sf > 12) {
@@ -233,7 +235,7 @@ int lora_setup_cmd(int argc, char **argv)
         return -1;
     }
 
-    /* Check coding rate value */
+    // Check coding rate value
     int cr = atoi(argv[3]);
 
     if (cr < 5 || cr > 8) {
@@ -242,7 +244,7 @@ int lora_setup_cmd(int argc, char **argv)
     }
     uint8_t lora_cr = (uint8_t)(cr - 4);
 
-    /* Configure radio device */
+    // Configure radio device
     netdev_t *netdev = &sx127x.netdev;
 
     netdev->driver->set(netdev, NETOPT_BANDWIDTH,
@@ -297,7 +299,7 @@ int listen_cmd(int argc, char **argv)
     (void)argv;
 
     netdev_t *netdev = &sx127x.netdev;
-    /* Switch to continuous listen mode */
+    // Switch to continuous listen mode
     const netopt_enable_t single = false;
 
     netdev->driver->set(netdev, NETOPT_SINGLE_RECEIVE, &single, sizeof(single));
@@ -305,7 +307,7 @@ int listen_cmd(int argc, char **argv)
 
     netdev->driver->set(netdev, NETOPT_RX_TIMEOUT, &timeout, sizeof(timeout));
 
-    /* Switch to RX state */
+    // Switch to RX state
     netopt_state_t state = NETOPT_STATE_RX;
 
     netdev->driver->set(netdev, NETOPT_STATE, &state, sizeof(state));
@@ -425,6 +427,8 @@ int init_driver_127x(void *arg) {
 
     return 0;
 }
+
+*/
 
 int main(void)
 {
