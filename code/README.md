@@ -31,7 +31,7 @@ To flash the firmware:
 
     <login>@saclay:~/Irrigation-Water-Leakage-System/code$ iotlab-node --flash bin/b-l072z-lrwan1/irrigation-water-leakage-detection.elf -l saclay,st-lrwan1,<node-id> -i <experiment-id>
       
-The values <node-id> and <experiment-id> can be easily retrieved from IoT-Lab dashboard.
+The values node-id and experiment-id can be easily retrieved from IoT-Lab dashboard.
     
 Now it is possible to access to the RIOT shell running on the node using netcat:
     
