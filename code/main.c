@@ -9,7 +9,7 @@
 #include "xtimer.h"
 
 // driver 127x
-/**
+
 #include <errno.h>
 #include <stdio.h>
 #include <inttypes.h>
@@ -36,7 +36,7 @@ static kernel_pid_t _recv_pid;
 
 static char message[32];
 static sx127x_t sx127x;
-*/
+
 // lorawan
 #include <time.h>
 
@@ -186,9 +186,7 @@ int send_messages_to_ttn(void *arg) {
 }
 
 
-// driver 127x
-
-/**
+// driver 127xs
 
 int lora_setup_cmd(int argc, char **argv)
 {
@@ -428,8 +426,6 @@ int init_driver_127x(void *arg) {
     return 0;
 }
 
-*/
-
 int main(void)
 {
 
@@ -442,12 +438,12 @@ int main(void)
     }
 
     // init driver 127x
-    //if(init_driver_127x(NULL)){
-    //    return 1;
+    if(init_driver_127x(NULL)){
+        return 1;
 
     // start shell
-    //char line_buf[SHELL_DEFAULT_BUFSIZE];
-    //shell_run(commands, line_buf, SHELL_DEFAULT_BUFSIZE);
+    char line_buf[SHELL_DEFAULT_BUFSIZE];
+    shell_run(commands, line_buf, SHELL_DEFAULT_BUFSIZE);
 
     return 0;
 }
