@@ -144,6 +144,10 @@ int send_messages_to_ttn(void *arg) {
     fmt_hex_bytes(deveui, CONFIG_LORAMAC_DEV_EUI_DEFAULT);
     fmt_hex_bytes(appeui, CONFIG_LORAMAC_APP_EUI_DEFAULT);
     fmt_hex_bytes(appkey, CONFIG_LORAMAC_APP_KEY_DEFAULT);
+
+    if(DEBUG)
+        puts("appkey: %s", appkey);
+
     semtech_loramac_set_deveui(&loramac, deveui);
     semtech_loramac_set_appeui(&loramac, appeui);
     semtech_loramac_set_appkey(&loramac, appkey);
