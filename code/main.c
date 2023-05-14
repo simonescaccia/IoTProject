@@ -110,24 +110,34 @@ int node_config(int argc, char **argv)
 
     printf("\n");
 
+    /* Defining node type: 0 for CHIEF, 1 for FORK, 2 for BRANCH */
+    int node_type = 1;
+
     /* Display father information */
-    printf("Father of %s: ", argv[1]);
+    printf("Father of %s: ", NODE_NAME);
     if (node_father == NULL) {
-        printf("undefined, CHIEF is the root of the tree.\n");
+    node_type = 0;
+    printf("undefined, CHIEF is the root of the tree.\n");
     }
     else {
-        printf("%s\n", node_father);
+    printf("%s\n", node_father);
     }
 
     /* Display children information */
-    printf("Children of %s: ", argv[1]);
+    printf("Children of %s: ", NODE_NAME);
     if (node_children == NULL) {
-        printf("undefined, BRANCH is a leaf of the tree.\n");
+    node_type = 2;
+    printf("undefined, BRANCH is a leaf of the tree.\n");
     }
     else {
-        for (int i = 0; i < children_count; i++) printf("%s ", node_children[i]);
-        printf("\n");
+    for (int i = 0; i < children_count; i++) printf("%s ", node_children[i]);
+    printf("\n");
     }
+
+    printf("Node type: ");
+    if (node_type == 0) printf("CHIEF\n");
+    else if (node_type == 1) printf("FORK\n");
+    else printf("BRANCH\n");
 
     /* Free allocated memory */
     free(line_buf);
