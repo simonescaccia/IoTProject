@@ -8,7 +8,7 @@
 
 #include "xtimer.h"
 
-// #include "drivers_sx127x.h"
+#include "drivers_sx127x.h"
 #include "lorawan.h"
 
 int setup_infra(int argc, char **argv)
