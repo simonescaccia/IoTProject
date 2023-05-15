@@ -8,8 +8,10 @@
 
 #include "xtimer.h"
 
+#include "shell.h"
+
 #include "drivers_sx127x.h"
-#include "lorawan.h"
+#include "semtech-loramac.h"
 
 int setup_infra(int argc, char **argv)
 {
@@ -20,14 +22,14 @@ int setup_infra(int argc, char **argv)
 
     return 0;
 }
-/*
+
 static const shell_command_t commands[] = {
     { "setup_infra",    "Setup the infrastructure",             setup_infra },
     { "setup",          "Initialize LoRa modulation settings",  lora_setup_cmd },
     { "send",           "Send raw payload string",              send_cmd },
-    { "listen",         "Start raw payload listener",           listen_cmd },
+    { "listen",         "Start raw payload listener",           listen_cmd }
 };
-*/
+
 int main(void)
 {
 
@@ -35,18 +37,19 @@ int main(void)
 
     puts("Hello World!");
 
-    if(send_messages_to_ttn(NULL)){
+    // init driver 127x
+    if(init_driver_127x()){
         return 1;
     }
 
-    // init driver 127x
-    if(init_driver_127x(NULL)){
+    // init semtech-loramac
+    if(semtech_init()){
         return 1;
     }
 
     // start shell
-    //char line_buf[SHELL_DEFAULT_BUFSIZE];
-    //shell_run(commands, line_buf, SHELL_DEFAULT_BUFSIZE);
+    char line_buf[SHELL_DEFAULT_BUFSIZE];
+    shell_run(commands, line_buf, SHELL_DEFAULT_BUFSIZE);
 
     return 0;
 }

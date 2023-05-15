@@ -1,3 +1,19 @@
+#include <errno.h>
+#include <stdio.h>
+#include <inttypes.h>
+
+#include "shell.h"
+
+#include "net/netdev.h"
+#include "net/netdev/lora.h"
+#include "net/lora.h"
+
+#include "board.h"
+
+#include "sx127x_internal.h"
+#include "sx127x_params.h"
+#include "sx127x_netdev.h"
+
 #include "drivers_sx127x.h"
 
 #define SX127X_LORA_MSG_QUEUE   (16U)
@@ -201,11 +217,8 @@ void *_recv_thread(void *arg)
     }
 }
 
-int init_driver_127x(void *arg)
+int init_driver_127x(void)
 {
-
-    (void)arg;
-
     if(DEBUG) 
         puts("[init_driver_127x] starting driver_127x init");
 

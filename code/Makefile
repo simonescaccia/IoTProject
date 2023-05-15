@@ -29,34 +29,22 @@ USEMODULE += od
 USEMODULE += sx1276
 # end driver sx127x
 
-# lorawan ------------------------------
+# semtech-lorawan ------------------------------
 DEVEUI ?= 70B3D57ED005D1E7
 APPEUI ?= 0000000000000000
 APPKEY ?= 272E779C396D1E51E94B9BDD39558EB0
-# OTAA compile time configuration keys
-CFLAGS += -DCONFIG_LORAMAC_APP_KEY_DEFAULT=\"$(APPKEY)\"
-CFLAGS += -DCONFIG_LORAMAC_APP_EUI_DEFAULT=\"$(APPEUI)\"
-CFLAGS += -DCONFIG_LORAMAC_DEV_EUI_DEFAULT=\"$(DEVEUI)\"
 
-# Pass these enviroment variables to docker
-DOCKER_ENV_VARS += DEVEUI
-DOCKER_ENV_VARS += APPEUI
-DOCKER_ENV_VARS += APPKEY
-
-# Send a message every 20s after joining the network
-SEND_PERIOD_S ?= 20
-
-CFLAGS += -DSEND_PERIOD_S=$(SEND_PERIOD_S)
-
-# Default region is Europe and default band is 868MHz
+LORA_DRIVER ?= sx1276
 LORA_REGION ?= EU868
 
-# Include the Semtech-loramac package
 USEPKG += semtech-loramac
-USEMODULE += auto_init_loramac
 
+USEMODULE += semtech_loramac_rx
+
+USEMODULE += auto_init_loramac
 USEMODULE += fmt
-FEATURES_OPTIONAL += periph_rtc
+
+FEATURES_OPTIONAL += periph_eeprom
 
 # Default IotLab Config to run the test
 ifneq (,$(filter iotlab%,$(MAKECMDGOALS)))
@@ -65,14 +53,12 @@ ifneq (,$(filter iotlab%,$(MAKECMDGOALS)))
   IOTLAB_SITE  ?= saclay
   include $(RIOTBASE)/dist/testbed-support/Makefile.iotlab
 endif
+# --------------------------------------
 
-ifneq (,$(filter test,$(MAKECMDGOALS)))
-  DEFAULT_MODULE += test_utils_interactive_sync
-endif
-# end lorawan ----------------------------
-
+# modules directory --------------------
 USEMODULE += modules
 INCLUDES += -I$(CURDIR)/include
 DIRS += $(CURDIR)/modules
+# ----------------------------------------
 
 include $(RIOTBASE)/Makefile.include
