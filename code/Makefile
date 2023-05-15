@@ -71,5 +71,8 @@ ifneq (,$(filter test,$(MAKECMDGOALS)))
 endif
 # end lorawan ----------------------------
 
+USEMODULE += modules
+INCLUDES += -I$(CURDIR)/include
+DIRS += $(CURDIR)/modules
 
 include $(RIOTBASE)/Makefile.include
