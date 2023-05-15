@@ -44,8 +44,6 @@ USEMODULE += semtech_loramac_rx
 USEMODULE += auto_init_loramac
 USEMODULE += fmt
 
-FEATURES_OPTIONAL += periph_eeprom
-
 # Default IotLab Config to run the test
 ifneq (,$(filter iotlab%,$(MAKECMDGOALS)))
   IOTLAB_NODES ?= 1
