@@ -10,7 +10,9 @@
 
 ## Description
 
-Our project is designed in order to offer some smart functionalities to an irrigation system to keep track of water usage and leakages, in order to avoid the waste of water. In particular the system detects possible water leakages through irrigation pipes.
+Our project is designed to offer some smart functionalities to an irrigation system. Our main goal is to keep track of water usage and leakages, in order to avoid the waste of water. In detail, the system provides measurements about water flow in different locations and it detects possible water leakages through irrigation pipes, triggering a proper alarm.
+
+[Concept](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/Concept.md) provides details from the user perspective, while [Design](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/Design.md) provides technical details about the project. Finally, [Evaluation](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/Evaluation.md) focuses on performance issues.
 
 ## Links
 
@@ -20,4 +22,4 @@ Our project is designed in order to offer some smart functionalities to an irrig
 
 ## Video
 
-It will be uploaded soon
+It will be uploaded soon.
