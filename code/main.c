@@ -19,6 +19,9 @@
 /* Configuration file */
 #define FILENAME "config.txt"
 
+int lora_ttn = 0;
+int lora_p2p = 0;
+
 
 int node_config(int argc, char **argv)
 {
@@ -143,13 +146,17 @@ int main(void)
     puts("Hello World!");
 
     // init driver 127x
-    if(init_driver_127x()){
-        return 1;
+    if (lora_p2p) {
+        if(init_driver_127x()){
+            return 1;
+        }   
     }
 
     /* semtech-loramac init */
-    if(semtech_init()) {
+    if (lora_ttn) {
+        if(semtech_init()) {
         return 1;
+        }
     }
 
     // start shell
