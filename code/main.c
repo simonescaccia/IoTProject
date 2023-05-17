@@ -11,6 +11,7 @@
 
 #include "drivers_sx127x.h"
 #include "semtech-loramac.h"
+#include "behaviors.h"
 
 /* Debug */
 #define DEBUG 1
@@ -129,8 +130,50 @@ int node_config(int argc, char **argv)
     return 0;
 }
 
+int check_configuration() {
+    return 0;
+}
+
+int start(int argc, char **argv)
+{
+    /* Check configuration done*/
+    if (check_configuration()) {
+        return 1;
+    }
+
+    /* Remove and use configuration variables*/
+    const int SOURCE = 0;
+    const int TTN = 0;
+    const int FORK = 0;
+    const int BRANCH = 0;
+
+    /* Define behaviours */
+    if(SOURCE) {
+        if(TTN) {
+            if (source_lora_ttn()){
+                return 1;
+            }
+        } else {
+            if (source_lora_p2p()){
+                return 1;
+            }            
+        }
+    } elif (FORK) {
+        if (fork_lora_p2p()) {
+            return 1;
+        }  
+    } else {
+        if (branch_lora_p2p()) {
+            return 1;
+        } 
+    }
+
+    return 0;
+}
+
 static const shell_command_t commands[] = {
     { "config",         "Configure node location in the tree",  node_config },
+    { "start",          "Start the normal mode",                start },
     { "setup",          "Initialize LoRa modulation settings",  lora_setup_cmd },
     { "send",           "Send raw payload string",              send_cmd },
     { "listen",         "Start raw payload listener",           listen_cmd },
