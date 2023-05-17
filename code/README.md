@@ -42,3 +42,12 @@ If the console is empty, using:
     setup
     
 the output will print out.
+
+## Node configuration
+
+Input: node architecture file, self id
+Output: how I am (source_lora_ttn node, source_lora_p2p node, fork node, branch node), 
+
+## Node behavior
+
+
