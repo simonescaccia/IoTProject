@@ -149,12 +149,15 @@ int node_config(int argc, char **argv)
     return 0;
 }
 
-int check_configuration() {
+int check_configuration(void) {
     return 0;
 }
 
 int start(int argc, char **argv)
 {
+    (void)argc;
+    (void)argv;
+
     /* Check configuration done*/
     if (check_configuration()) {
         return 1;
@@ -164,7 +167,6 @@ int start(int argc, char **argv)
     const int SOURCE = 0;
     const int TTN = 0;
     const int FORK = 0;
-    const int BRANCH = 0;
 
     /* Define behaviours */
     if(SOURCE) {
@@ -177,7 +179,7 @@ int start(int argc, char **argv)
                 return 1;
             }            
         }
-    } elif (FORK) {
+    } else if (FORK) {
         if (fork_lora_p2p()) {
             return 1;
         }  
