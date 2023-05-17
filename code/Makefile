@@ -22,9 +22,41 @@ USEMODULE += xtimer
 USEMODULE += shell
 USEMODULE += shell_cmds_default
 USEMODULE += ps
+# end shell
 
 # driver sx127x
 USEMODULE += od
 USEMODULE += sx1276
+# end driver sx127x
+
+# semtech-lorawan ------------------------------
+DEVEUI ?= 70B3D57ED005D1E7
+APPEUI ?= 0000000000000000
+APPKEY ?= 272E779C396D1E51E94B9BDD39558EB0
+
+LORA_DRIVER ?= sx1276
+LORA_REGION ?= EU868
+
+USEPKG += semtech-loramac
+
+USEMODULE += semtech_loramac_rx
+
+USEMODULE += auto_init_loramac
+USEMODULE += fmt
+
+# Default IotLab Config to run the test
+ifneq (,$(filter iotlab%,$(MAKECMDGOALS)))
+  IOTLAB_NODES ?= 1
+  IOTLAB_TYPE  ?= st-lrwan1:sx1276
+  IOTLAB_SITE  ?= saclay
+  include $(RIOTBASE)/dist/testbed-support/Makefile.iotlab
+endif
+# --------------------------------------
+
+# modules directory --------------------
+USEMODULE += modules
+INCLUDES += -I$(CURDIR)/include
+DIRS += $(CURDIR)/modules
+# ----------------------------------------
 
 include $(RIOTBASE)/Makefile.include
