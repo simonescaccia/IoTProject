@@ -33,15 +33,15 @@ int my_node_config(int argc, char **argv) {
         return -1;
     }
 
-    if(strcmp("", argv[2]) == 0) {
+    if(strcmp("NULL", argv[2]) == 0) {
         node_father = NULL;
     } else {
         node_father = argv[1];
     }
-    if(strcmp("", argv[3]) == 0) {
+    if(strcmp("NULL", argv[3]) == 0) {
         node_children = NULL;
     } else {
-        node_children = &argv[3]; 
+        *node_children = argv[3]; 
     }
     node_self = argv[1];
 
