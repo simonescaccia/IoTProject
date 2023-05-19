@@ -36,10 +36,10 @@ int my_node_config(int argc, char **argv) {
     if(strcmp("NULL", argv[2]) == 0) {
         node_father = NULL;
     } else {
-        node_father = argv[1];
+        node_father = argv[2];
     }
     if(strcmp("NULL", argv[3]) == 0) {
-        node_children = NULL;
+        *node_children = NULL;
     } else {
         *node_children = argv[3]; 
     }
