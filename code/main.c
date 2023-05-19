@@ -22,6 +22,9 @@
 /* Defining node type: 0 for CHIEF, 1 for FORK, 2 for BRANCH */
 static int node_type;
 
+/* Replace with configuration variables */
+static int IS_TTN = 0;
+
 /* Node father and children */
 static char* node_father;
 static char* node_self;
@@ -29,7 +32,7 @@ static char** node_children;
 
 int my_node_config(int argc, char **argv) {
     if (argc <= 3) {
-        puts("usage: myconfig <self node-name with node format st-lrwan1-x> <parent node-name with node format st-lrwan1-x> <children node-name with node format st-lrwan1-x>\n");
+        puts("usage: myconfig <self node-name st-lrwan1-x> <parent node-name st-lrwan1-x> <children node-name st-lrwan1-x>");
         return -1;
     }
 
@@ -39,10 +42,6 @@ int my_node_config(int argc, char **argv) {
         node_father = argv[2];
     }
 
-    printf("Node_father: %s\n", node_father);
-
-    xtimer_sleep(5);
-
     static char* children_list = NULL;
     node_children = &children_list;
 
@@ -50,15 +49,7 @@ int my_node_config(int argc, char **argv) {
         node_children = &argv[3]; 
     }
 
-    printf("Node_children: %s\n", node_children[0]);
-
-    xtimer_sleep(5);
-
     node_self = argv[1];
-
-    printf("Node_self: %s\n", node_self);
-    
-    xtimer_sleep(5);
 
     return 0;
 }
@@ -184,6 +175,15 @@ int node_config(int argc, char **argv)
 }
 
 int check_configuration(void) {
+    /* node_self should always be set, also one between node_father and node_children */
+    if (!node_self) {
+        puts("Configuration error: node_self is NULL");
+        return 1;
+    } 
+    if (!node_children && !node_father && !IS_TTN) {
+        puts("Configuration error: at least one between node_children and node_father ");
+        return 1;
+    }
     return 0;
 }
 
@@ -196,9 +196,6 @@ int start(int argc, char **argv)
     if (check_configuration()) {
         return 1;
     }
-
-    /* Replace with configuration variables */
-    const int IS_TTN = 0;
 
     /* Init drivers */
     if(node_type == 0 && IS_TTN) {
