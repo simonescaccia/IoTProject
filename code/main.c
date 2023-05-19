@@ -19,9 +19,6 @@
 /* Configuration file */
 #define FILENAME "config.txt"
 
-int lora_ttn = 0;
-int lora_p2p = 0;
-
 /* Defining node type: 0 for CHIEF, 1 for FORK, 2 for BRANCH */
 static int node_type;
 
@@ -163,23 +160,34 @@ int start(int argc, char **argv)
         return 1;
     }
 
-    /* Remove and use configuration variables*/
-    const int SOURCE = 0;
-    const int TTN = 0;
-    const int FORK = 0;
+    /* Replace with configuration variables */
+    const int IS_TTN = 0;
+
+    /* Init drivers */
+    if(node_type == 0 && IS_TTN) {
+        /* semtech-loramac  drivers to connect to ttn */
+        if(semtech_init()) {
+            puts("Unable to init semtech-loramac drivers");
+            return 1;
+        }
+    } else {
+        if(init_driver_127x()) {
+            puts("Inable to init 127x drivers for lora p2p");
+            return 1;
+        }
+    }
 
     /* Define behaviours */
-    if(SOURCE) {
-        if(TTN) {
-            if (source_lora_ttn()){
+    if(node_type == 0) {
+        /* CHIEF node */
+        if(IS_TTN) {
+            if (source_lora_ttn())
                 return 1;
-            }
         } else {
-            if (source_lora_p2p()){
-                return 1;
-            }            
+            if (source_lora_p2p())
+                return 1;         
         }
-    } else if (FORK) {
+    } else if (node_type == 1) {
         if (fork_lora_p2p()) {
             return 1;
         }  
@@ -207,20 +215,6 @@ int main(void)
     xtimer_sleep(1);
 
     puts("Hello World!");
-
-    // init driver 127x
-    if (lora_p2p) {
-        if(init_driver_127x()){
-            return 1;
-        }   
-    }
-
-    /* semtech-loramac init */
-    if (lora_ttn) {
-        if(semtech_init()) {
-        return 1;
-        }
-    }
 
     // start shell
     char line_buf[SHELL_DEFAULT_BUFSIZE];
