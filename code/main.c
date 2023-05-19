@@ -41,6 +41,8 @@ int my_node_config(int argc, char **argv) {
 
     printf("Node_father: %s\n", node_father);
 
+    xtimer_sleep(5);
+
     static char* children_list = NULL;
     node_children = &children_list;
 
@@ -50,10 +52,14 @@ int my_node_config(int argc, char **argv) {
 
     printf("Node_children: %s\n", node_children[0]);
 
+    xtimer_sleep(5);
+
     node_self = argv[1];
 
     printf("Node_self: %s\n", node_self);
     
+    xtimer_sleep(5);
+
     return 0;
 }
 
