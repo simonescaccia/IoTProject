@@ -28,7 +28,6 @@ static int IS_TTN = 0;
 /* Node father and children */
 static char* node_father;
 static char* node_self;
-static char* children_str;
 static char** node_children;
 
 int my_node_config(int argc, char **argv) {
@@ -59,6 +58,8 @@ int my_node_config(int argc, char **argv) {
         node_children = NULL;
     } else {
         length = strlen(argv[3]);
+        /* static modifier since we want the variable last during the runtime */
+        static char* children_str;
         children_str = malloc(++length);
         strncpy(children_str, argv[3], ++length);
         node_children = &children_str; 
