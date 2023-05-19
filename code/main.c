@@ -42,11 +42,8 @@ int my_node_config(int argc, char **argv) {
         node_father = argv[2];
     }
 
-    static char* children_list = NULL;
-    node_children = &children_list;
-
     if(!strcmp("NULL", argv[3]) == 0) {
-        node_children = argv[3]; 
+        node_children = &argv[3]; 
     }
 
     node_self = argv[1];
@@ -188,7 +185,7 @@ int check_configuration(void) {
     if (node_children == NULL) {
         printf("node_children is NULL\n");
     } else {
-        printf("node_children: %s\n", node_children[0]);
+        printf("node_children: %s\n", *node_children);
     }
 
     /* node_self should always be set, also one between node_father and node_children */
