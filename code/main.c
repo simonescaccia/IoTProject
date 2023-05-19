@@ -175,6 +175,22 @@ int node_config(int argc, char **argv)
 }
 
 int check_configuration(void) {
+    if (node_self == NULL) {
+        printf("node_self is NULL\n");
+    } else {
+        printf("node_self: %s", node_self);
+    }
+    if (node_father == NULL) {
+        printf("node_father is NULL\n");
+    } else {
+        printf("node_father: %s", node_father);
+    }
+    if (node_children == NULL) {
+        printf("node_children is NULL\n");
+    } else {
+        printf("node__children: %s", node_children[0]);
+    }
+
     /* node_self should always be set, also one between node_father and node_children */
     if (!node_self) {
         puts("Configuration error: node_self is NULL");
