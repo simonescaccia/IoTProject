@@ -36,19 +36,32 @@ int my_node_config(int argc, char **argv) {
         return -1;
     }
 
+    int length;
+
+    if(strcmp("NULL", argv[1]) == 0) {
+        node_self = NULL;
+    } else {
+        length = strlen(argv[1]);
+        node_self = malloc(++length);
+        strncpy(node_self, argv[1], ++length);
+    }
+
     if(strcmp("NULL", argv[2]) == 0) {
         node_father = NULL;
     } else {
-        node_father = argv[2];
+        length = strlen(argv[2]);
+        node_father = malloc(++length);
+        strncpy(node_father, argv[2], ++length);
     }
 
     if(strcmp("NULL", argv[3]) == 0) {
         node_children = NULL;
     } else {
-        node_children = &argv[3]; 
+        length = strlen(argv[3]);
+        char* str = malloc(++length);
+        strncpy(str, argv[3], ++length);
+        node_children = &str; 
     }
-
-    node_self = argv[1];
 
     return 0;
 }
