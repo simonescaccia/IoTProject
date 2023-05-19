@@ -28,8 +28,8 @@ static char* node_self;
 static char** node_children;
 
 int my_node_config(int argc, char **argv) {
-    if (argc < 3) {
-        puts("usage: myconfig <self node-name with node format st-lrwan1-x> <parent node-name with node format st-lrwan1-x> <children node-name with node format st-lrwan1-x>");
+    if (argc <= 3) {
+        puts("usage: myconfig <self node-name with node format st-lrwan1-x> <parent node-name with node format st-lrwan1-x> <children node-name with node format st-lrwan1-x>\n");
         return -1;
     }
 
@@ -38,15 +38,22 @@ int my_node_config(int argc, char **argv) {
     } else {
         node_father = argv[2];
     }
-    if(strcmp("NULL", argv[3]) == 0) {
-        *node_children = NULL;
-    } else {
-        *node_children = argv[3]; 
+
+    printf("Node_father: %s\n", node_father);
+
+    static char* children_list = NULL;
+    node_children = &children_list;
+
+    if(!strcmp("NULL", argv[3]) == 0) {
+        node_children = &argv[3]; 
     }
+
+    printf("Node_children: %s\n", node_children[0]);
+
     node_self = argv[1];
 
-    printf("configuration done: self:%s parent:%s childrens:%s", node_self, node_father, node_children[0]);
-
+    printf("Node_self: %s\n", node_self);
+    
     return 0;
 }
 
