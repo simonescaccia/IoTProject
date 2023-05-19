@@ -42,7 +42,9 @@ int my_node_config(int argc, char **argv) {
         node_father = argv[2];
     }
 
-    if(!strcmp("NULL", argv[3]) == 0) {
+    if(strcmp("NULL", argv[3]) == 0) {
+        node_children = NULL;
+    } else {
         node_children = &argv[3]; 
     }
 
