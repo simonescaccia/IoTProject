@@ -2,10 +2,13 @@
 
 ## Architecture
 
-![Field1](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/field.jpg) <br/>
-![Field2](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/field_alternative.jpg) <br/>
-Our architecture is scalable and can be used to control water leakages within a small field, if there is the same crop, or can be used to control different types of crop in the same field. For every field a MCU at the fork site (that can be at different depth levels) is needed, plus a MCU for each pipeline branch.</br>
-We have proposed two different possibilities of set of fields (we will analyse which one is the better or if there are other possible architecture).
+![field](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/field.jpg) <br/>
+
+We propose a tree architecture with a MCU at source site connected to a water flow sensor, a LED and a buzzer. A fork is defined as a site where a single pipe divides itself in two or more output pipes. We place a water flow sensor for each of these diramations, all connected to a single MCU. So. a MCU at each fork site, which can be at different depth levels, is needed. Furthermore, we place a MCU for each pipeline branch, more precisely in correspondence of each irrigation valve, where we place a single water flow sensor connected to the MCU. Our architecture is scalable, so it can be used to control water leakages within a small field with the same crop or to control leakages from pipes irrigating different types of crop in the same field. </br>
+
+Since in the simulation we used a node for each MCU, our tree architecture can be represented in a more understandable way as follows.
+
+![tree](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/tree.jpg) <br/>
 
 ## High level diagram
 
@@ -31,7 +34,7 @@ Our infrastructure is composed of:
 The ESP32 manages the different sensors and actuators in the infrastructure and exchanges messages with the other microcontrollers and with the cloud. The main technical issue is that the device will be attached to every object of interest and thus should be battery powered:
 
 * CHIEF is connected to a power cord and does not have energy problems
-* FORK and BRANCH wakes up rarely and only when a test is needed, so it has a small duty cicle
+* FORK and BRANCH wakes up only when a test is needed, so we modulated a proper duty cicle in order to provide a longer battery lifetime
 
 ### LoRa
 
@@ -41,17 +44,33 @@ LoRa is a physical radio communication protocol, based on spread spectrum modula
 
 #### Water flow sensors
 
-Water flow sensors are installed at the water source or pipes to measure the flow rate of water. The relative metric is as liters per hour or cubic meters, to be scaled in our context. The structure of the sensor consists of a plastic valve (from which water can pass) and a water rotor along with a Hall effect (a voltage difference is induced in the conductor due to the rotation of the rotor) sensor, measuring the sense and the intensity of the flow. When water flows through the valve, it causes a change of speed of the rotor, calculated as output as a pulse signal. The sensor contains three wires, one for supply voltage (5 V of DC), one for the ground and one to collect output from Hall effect sensor.
+Water flow sensors are installed at the water source or pipes to measure the flow rate of water. The relative metric is as liters per hour or cubic meters, to be scaled in our context. The structure of the sensor consists of a plastic valve (from which water can pass) and a water rotor along with a Hall effect sensor (a voltage difference is induced in the conductor due to the rotation of the rotor), measuring the sense and the intensity of the flow. When water flows through the valve, it causes a change of speed of the rotor, calculated as output as a pulse signal. The sensor is powered with a 5 V supply voltage of DC.
 
 ### Actuators
 
 #### LED
+A LED is used to provide a visual alarm indication through blinking. 
 
 #### Buzzer
+A buzzer is used to provide an acoustic alarm indication through intermitting activation.
 
 ### Cloud system
 
 Data are stored on AWS for long term storage. These data can then be queried by farmers in order to gain insights about water usage and pipeline leakages.
+
+## Prototype architecture
+For our prototype, we used the fllowing objects:
+* A 1,5 meters long garden hose (20-25 mm ⌀)
+* A 1/2 inch garden tap
+* A 1/2 inch T-adapter
+* 6 metal adjustable hose clamps (16-25 mm)
+* 2 water flow sensors 
+* 2 ESP32 LoRa MCUs  
+
+We started from a 1,5 meters long garden hose with an inner diameter of 20 mm and an outer one of 25 mm. We cut the garden hose into 4 main segments approximately 35 cm long and a smaller one around 10 cm long. We placed two segments at the endpoints of each water flow sensor and we joined them using the T-adapter. We connected the tap to the last free endpoint of the T-adapter and the smallest pipe segment to the tap dispenser. So we connected the water flow sensors to the MCUs. 
+The tap is used to simulate a leakage and it is initially closed. We did not use clamps at first, but we experienced water leaks in correspondence of joints. Therefore we placed 2 clamps at the endpoints of each water flow sensor and other 2 for the endpoints of the T-adapter not connected to the tap. 
+
+The final protoype architecture is the following.
 
 ## Network architecture 
 
