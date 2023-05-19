@@ -24,7 +24,29 @@ static int node_type;
 
 /* Node father and children */
 static char* node_father;
+static char* node_self;
 static char** node_children;
+
+int my_node_config(int argc, char **argv) {
+    if (argc < 3) {
+        puts("usage: config <self node-name with node format st-lrwan1-x> <parent node-name with node format st-lrwan1-x> <children node-name with node format st-lrwan1-x>");
+        return -1;
+    }
+
+    if(strcmp("", argv[2]) == 0) {
+        node_father = NULL;
+    } else {
+        node_father = argv[1];
+    }
+    if(strcmp("", argv[3]) == 0) {
+        node_children = NULL;
+    } else {
+        node_children = &argv[3]; 
+    }
+    node_self = argv[1];
+
+    return 0;
+}
 
 int node_config(int argc, char **argv)
 {
@@ -202,6 +224,7 @@ int start(int argc, char **argv)
 
 static const shell_command_t commands[] = {
     { "config",         "Configure node location in the tree",  node_config },
+    { "myconfig",       "Configure node parent and children",   my_node_config},
     { "start",          "Start the normal mode",                start },
     { "setup",          "Initialize LoRa modulation settings",  lora_setup_cmd },
     { "send",           "Send raw payload string",              send_cmd },
