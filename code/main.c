@@ -29,7 +29,7 @@ static char** node_children;
 int node_config(int argc, char **argv)
 {
     if (argc <= 1) {
-        puts("usage: config <node-name> with node format <st-lrwan1-x>");
+        puts("usage: config <node-name with node format st-lrwan1-x>");
         return -1;
     }
 
