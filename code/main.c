@@ -189,20 +189,23 @@ int node_config(int argc, char **argv)
 }
 
 int check_configuration(void) {
-    if (node_self == NULL) {
-        printf("node_self is NULL\n");
-    } else {
-        printf("node_self: %s\n", node_self);
-    }
-    if (node_father == NULL) {
-        printf("node_father is NULL\n");
-    } else {
-        printf("node_father: %s\n", node_father);
-    }
-    if (node_children == NULL) {
-        printf("node_children is NULL\n");
-    } else {
-        printf("node_children: %s\n", *node_children);
+
+    if (DEBUG) {
+        if (node_self == NULL) {
+            printf("node_self is NULL\n");
+        } else {
+            printf("node_self: %s\n", node_self);
+        }
+        if (node_father == NULL) {
+            printf("node_father is NULL\n");
+        } else {
+            printf("node_father: %s\n", node_father);
+        }
+        if (node_children == NULL) {
+            printf("node_children is NULL\n");
+        } else {
+            printf("node_children: %s\n", *node_children);
+        }
     }
 
     /* node_self should always be set, also one between node_father and node_children */
@@ -226,6 +229,8 @@ int start(int argc, char **argv)
     if (check_configuration()) {
         return 1;
     }
+
+    
 
     /* Init drivers */
     if(node_type == 0 && IS_TTN) {
