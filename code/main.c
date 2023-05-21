@@ -19,16 +19,6 @@
 /* Configuration file */
 #define FILENAME "config.txt"
 
-typedef struct {
-    /* Defining node type: 0 for CHIEF, 1 for FORK, 2 for BRANCH */
-    int node_type;
-
-    /* Node father and children */
-    char* node_father;
-    char* node_self;
-    char** node_children;
-} node_t;
-
 /* Replace with configuration variables */
 int IS_TTN = 0;
     
@@ -132,18 +122,18 @@ int start(int argc, char **argv)
     if(node.node_type == 0) {
         /* CHIEF node */
         if(IS_TTN) {
-            if (source_lora_ttn())
+            if (source_lora_ttn(node))
                 return 1;
         } else {
-            if (source_lora_p2p())
+            if (source_lora_p2p(node))
                 return 1;         
         }
     } else if (node.node_type == 1) {
-        if (fork_lora_p2p()) {
+        if (fork_lora_p2p(node)) {
             return 1;
         }  
     } else {
-        if (branch_lora_p2p()) {
+        if (branch_lora_p2p(node)) {
             return 1;
         } 
     }
