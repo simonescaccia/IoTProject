@@ -9,7 +9,7 @@
  * y = 30 L/min for x in [0, 40]
  * y = 0 L/min for x in [41, 60]
  * 
- * BRANCH; self_node_type: 1, self_node: 11
+ * BRANCH; self_node_type: 2, self_node: 11
  * y = 30 L/min for x in [0, 20]
  * y = 20 L/min for x in [21, 40] LEAKAGE
  * y = 0 L/min for x [41, 60]
@@ -25,7 +25,7 @@ int get_water_flow(int self_node_type, char *self_node, int time) {
         if (time >= 41 && time <= 60)
             return 0;
     }
-    if (self_node_type == 1 && strcmp("11", self_node) == 0) {
+    if (self_node_type == 2 && strcmp("11", self_node) == 0) {
         /* BRANCH data */
         if (time >= 0 && time <= 20)
             return 30;

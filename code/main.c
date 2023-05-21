@@ -32,7 +32,7 @@ int my_node_config(int argc, char **argv) {
 
     int length;
 
-    if(strcmp("NULL", argv[1]) == 0) {
+    if (strcmp("NULL", argv[1]) == 0) {
         node.node_self = NULL;
     } else {
         length = strlen(argv[1]);
@@ -40,16 +40,18 @@ int my_node_config(int argc, char **argv) {
         strncpy(node.node_self, argv[1], ++length);
     }
 
-    if(strcmp("NULL", argv[2]) == 0) {
+    if (strcmp("NULL", argv[2]) == 0) {
         node.node_father = NULL;
+        node.node_type = 0;
     } else {
         length = strlen(argv[2]);
         node.node_father = malloc(++length);
         strncpy(node.node_father, argv[2], ++length);
     }
 
-    if(strcmp("NULL", argv[3]) == 0) {
+    if (strcmp("NULL", argv[3]) == 0) {
         node.node_children = NULL;
+        node.node_type = 2;
     } else {
         length = strlen(argv[3]);
         /* static modifier since we want the variable last during the runtime */
