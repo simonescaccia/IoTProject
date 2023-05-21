@@ -17,9 +17,6 @@
 /* Debug */
 #define DEBUG 1
 
-/* Defining node type: 0 for CHIEF, 1 for FORK, 2 for BRANCH */
-static int node_type;
-
 /* Replace with configuration variables */
 int IS_TTN = 0;
     
@@ -72,13 +69,11 @@ int node_config(int argc, char **argv)
         return -1;
     }
 
-    node_father = NULL;
-    node_children = NULL;
-    node_type = 1;
+    node.node_father = NULL;
+    node.node_children = NULL;
+    node.node_type = 1;
     
-    char* node_father = NULL;
     int children_count = 0;
-    char** node_children = NULL;
 
     /* Extracting configuration information */
     char* buffer = config();
@@ -118,18 +113,18 @@ int node_config(int argc, char **argv)
         
         //printf("#%d Father: st-lrwan1-%s\t Child: st-lrwan1-%s\n", i, father, child);
 
-        if (strcmp(child, argv[1]) == 0 && node_father == NULL) {
+        if (strcmp(child, argv[1]) == 0 && node.node_father == NULL) {
             length = strlen(father);
-            node_father = malloc(length + 1);
-            strncpy(node_father, father, length + 1);
+            node.node_father = malloc(length + 1);
+            strncpy(node.node_father, father, length + 1);
         }
 
         if (strcmp(father, argv[1]) == 0) {
             children_count++;
-            node_children = realloc(node_children, children_count*sizeof(char*));
+            node.node_children = realloc(node.node_children, children_count*sizeof(char*));
             length = strlen(child);
-            node_children[children_count - 1] = malloc(length + 1);
-            strncpy(node_children[children_count - 1], child, length + 1);
+            node.node_children[children_count - 1] = malloc(length + 1);
+            strncpy(node.node_children[children_count - 1], child, length + 1);
         }
         
         /* Free allocated memory */
@@ -142,41 +137,29 @@ int node_config(int argc, char **argv)
 
     /* Display father information */
     printf("Father of %s: ", argv[1]);
-    if (node_father == NULL) {
-        node_type = 0;
+    if (node.node_father == NULL) {
+        node.node_type = 0;
         printf("undefined, CHIEF is the root of the tree.\n");
     }
     else {
-        printf("st-lrwan1-%s\n", node_father);
+        printf("st-lrwan1-%s\n", node.node_father);
     }
 
     /* Display children information */
     printf("Children of %s: ", argv[1]);
-    if (node_children == NULL) {
-        node_type = 2;
+    if (node.node_children == NULL) {
+        node.node_type = 2;
         printf("undefined, BRANCH is a leaf of the tree.\n");
     }
     else {
-        for (int i = 0; i < children_count; i++) printf("st-lrwan1-%s ", node_children[i]);
+        for (int i = 0; i < children_count; i++) printf("st-lrwan1-%s ", node.node_children[i]);
         printf("\n");
     }
 
     printf("Node type: ");
-    if (node_type == 0) printf("CHIEF\n");
-    else if (node_type == 1) printf("FORK\n");
+    if (node.node_type == 0) printf("CHIEF\n");
+    else if (node.node_type == 1) printf("FORK\n");
     else printf("BRANCH\n");
-
-    /* Free allocated memory */
-    free(node_father);
-    node_father = NULL;
-
-    for (int i=0; i < children_count; i++) {
-        free(node_children[i]);
-        node_children[i] = NULL;
-    }
-
-    free(node_children);
-    node_children = NULL;
 
     return 0;
 }
@@ -267,6 +250,7 @@ int start(int argc, char **argv)
 }
 
 static const shell_command_t commands[] = {
+    { "config",         "Configure node location in the tree",  node_config },
     { "myconfig",       "Configure node parent and children",   my_node_config},
     { "start",          "Start the normal mode",                start },
     { "setup",          "Initialize LoRa modulation settings",  lora_setup_cmd },

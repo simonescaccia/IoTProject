@@ -17,6 +17,7 @@
 
 int get_water_flow(int self_node_type, char *self_node, int time) {
     /* time should be in the range [0,10] */
+    (void)self_node;
 
     if (self_node_type == 0) {
         /* CHIEF data */
