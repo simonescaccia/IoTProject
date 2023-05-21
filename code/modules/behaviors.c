@@ -7,15 +7,17 @@
 
 #define MESSAGE_MAXIMUM_LENGTH 50
 
-uint32_t SOURCE_LEAKAGE_PERIOD = US_PER_SEC * 2;
+uint32_t SOURCE_LEAKAGE_PERIOD = US_PER_SEC * 0.5;
 
 static void send_water_flow_to_children(node_t node, int time) {
     /* Check water flow and send a message to its children if any */
     int water_flow = get_water_flow(node.node_type, node.node_self, time);
     if(water_flow) {
+
         /* Convert int to char* */
         char str[MESSAGE_MAXIMUM_LENGTH];
         sprintf(str, "%d", water_flow);
+
         /* Send water flow to the child */
         char* list[2] = {"send_cmd", str};
         char** argv = (char**)&list;
@@ -57,13 +59,13 @@ int source_lora_p2p(node_t node) {
 int fork_lora_p2p(node_t node) {
     (void)node;
 
-    puts("Beahvior: source_lora_p2p");
+    puts("Beahvior: fork_lora_p2p");
     return 0;
 }
 
 int branch_lora_p2p(node_t node) {
     (void)node;
 
-    puts("Beahvior: source_lora_p2p");
+    puts("Beahvior: branch_lora_p2p");
     return 0;
 }
