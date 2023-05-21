@@ -81,49 +81,56 @@ int node_config(int argc, char **argv)
     int children_count = 0;
     char** node_children = NULL;
 
-    char* buf = config();
+    /* Extracting configuration information */
+    char* buffer = config();
+    int buf_len = strlen(buffer);
+    char buf[buf_len + 1];
+    strncpy(buf, buffer, buf_len + 1);
+
     char** pairs = NULL;
     int pair_count = 0;
  
     /* First pair */
     char* pair = strtok(buf, " ");
+    int length;
 
     /* Extracting pairs */
     while (pair != NULL) {
         pair_count++;
         pairs = realloc(pairs, pair_count*sizeof(char*));
-        pairs[--pair_count] = malloc(strlen(pair) + 1);
-        strncpy(pairs[--pair_count], pair, strlen(pair) + 1);
+        length = strlen(pair);
+        pairs[pair_count - 1] = malloc(length + 1);
+        strncpy(pairs[pair_count - 1], pair, length + 1);
         pair = strtok(NULL, " ");
     }
- 
+
     for (int i=0; i < pair_count; i++) {
 
         /* Separate father from child for current pair */
         char *elem = strtok(pairs[i], "-");
-        int length = strlen(elem);
-        char *father = malloc(++length);
-        strncpy(father, elem, ++length);
+        length = strlen(elem);
+        char *father = malloc(length + 1);
+        strncpy(father, elem, length + 1);
 
         elem = strtok(NULL, "-");
         length = strlen(elem);
-        char *child = malloc(++length);
-        strncpy(child, elem, ++length);
+        char *child = malloc(length + 1);
+        strncpy(child, elem, length + 1);
         
-        printf("#%d Father: %s\t Child: %s\n", pair_count, father, child);
+        printf("#%d Father: st-lrwan1-%s\t Child: st-lrwan1-%s\n", i, father, child);
 
         if (strcmp(child, argv[1]) == 0 && node_father == NULL) {
             length = strlen(father);
-            node_father = malloc(++length);
-            strncpy(node_father, father, ++length);
+            node_father = malloc(length + 1);
+            strncpy(node_father, father, length + 1);
         }
 
         if (strcmp(father, argv[1]) == 0) {
             children_count++;
             node_children = realloc(node_children, children_count*sizeof(char*));
             length = strlen(child);
-            node_children[--children_count] = malloc(++length);
-            strncpy(node_children[--children_count], child, ++length);
+            node_children[children_count - 1] = malloc(length + 1);
+            strncpy(node_children[children_count - 1], child, length + 1);
         }
         
         /* Free allocated memory */
@@ -134,11 +141,6 @@ int node_config(int argc, char **argv)
 
     }
 
-    printf("\n");
-
-    /* Defining node type: 0 for CHIEF, 1 for FORK, 2 for BRANCH */
-    int node_type = 1;
-
     /* Display father information */
     printf("Father of %s: ", argv[1]);
     if (node_father == NULL) {
@@ -146,7 +148,7 @@ int node_config(int argc, char **argv)
         printf("undefined, CHIEF is the root of the tree.\n");
     }
     else {
-        printf("%s\n", node_father);
+        printf("st-lrwan1-%s\n", node_father);
     }
 
     /* Display children information */
@@ -156,7 +158,7 @@ int node_config(int argc, char **argv)
         printf("undefined, BRANCH is a leaf of the tree.\n");
     }
     else {
-        for (int i = 0; i < children_count; i++) printf("%s ", node_children[i]);
+        for (int i = 0; i < children_count; i++) printf("st-lrwan1-%s ", node_children[i]);
         printf("\n");
     }
 
@@ -165,6 +167,7 @@ int node_config(int argc, char **argv)
     else if (node_type == 1) printf("FORK\n");
     else printf("BRANCH\n");
 
+    /* Free allocated memory */
     free(node_father);
     node_father = NULL;
 
@@ -172,6 +175,7 @@ int node_config(int argc, char **argv)
         free(node_children[i]);
         node_children[i] = NULL;
     }
+
     free(node_children);
     node_children = NULL;
 
