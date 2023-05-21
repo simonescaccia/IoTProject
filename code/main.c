@@ -65,7 +65,7 @@ int my_node_config(int argc, char **argv) {
 int node_config(int argc, char **argv)
 {
     if (argc <= 1) {
-        puts("usage: config <node-code> with node format st-lrwan1-<node-code>");
+        puts("usage: config <node-code>");
         return -1;
     }
 
