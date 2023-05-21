@@ -104,21 +104,24 @@ int start(int argc, char **argv)
         return 1;
     }
 
-
-    if(semtech_init()) {
-        puts("Unable to init semtech-loramac drivers");
-        return 1;
-    }
-    if(init_driver_127x()) {
-        puts("Inable to init 127x drivers for lora p2p");
-        return 1;
-    }
     /* Init drivers */
     if(node.node_type == 0 && IS_TTN) {
         /* semtech-loramac  drivers to connect to ttn */
-
+        if(semtech_init()) {
+            puts("Unable to init semtech-loramac drivers");
+            return 1;
+        }
     } else {
-
+        if(init_driver_127x()) {
+            puts("Unable to init 127x drivers for lora p2p");
+            return 1;
+        }
+        /* Setup sx127x drivers */
+        char* list[4] = {"lora_setup_cmd","125","7","5"};
+        char** argv = (char**)&list;
+        if(lora_setup_cmd(4, argv)) {
+            return -1;
+        }
     }
 
     /* Define behaviours */

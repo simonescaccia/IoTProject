@@ -3,8 +3,25 @@
 
 #include "behaviors.h"
 #include "sample_genator.h"
+#include "drivers_sx127x.h"
+
+#define MESSAGE_MAXIMUM_LENGTH 50
 
 uint32_t SOURCE_LEAKAGE_PERIOD = US_PER_SEC * 2;
+
+static void send_water_flow_to_children(node_t node, int time) {
+    /* Check water flow and send a message to its children if any */
+    int water_flow = get_water_flow(node.node_type, node.node_self, time);
+    if(water_flow) {
+        /* Convert int to char* */
+        char str[MESSAGE_MAXIMUM_LENGTH];
+        sprintf(str, "%d", water_flow);
+        /* Send water flow to the child */
+        char* list[2] = {"send_cmd", str};
+        char** argv = (char**)&list;
+        send_cmd(2, argv);
+    }
+}
 
 int source_lora_ttn(node_t node) {
     (void)node;
@@ -24,10 +41,7 @@ int source_lora_p2p(node_t node) {
         /* Set time for sampling: [0, 60] */
         time = (time+1) % 60;
 
-        /* Check water flow and send a message to its children if any */
-        if(get_water_flow(node.node_type, node.node_self, time)) {
-            
-        }
+        send_water_flow_to_children(node, time);
 
         if (!is_last_wakeup) {
             /* set last_wakeup only the first time */
