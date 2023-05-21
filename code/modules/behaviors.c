@@ -22,6 +22,8 @@ int source_lora_p2p(void) {
         /* Set time for sampling: [0, 60] */
         time = (time+1) % 60;
 
+        /* Check water flow and send a message to its children if any */
+
         if (!is_last_wakeup) {
             /* set last_wakeup only the first time */
             is_last_wakeup = true;
