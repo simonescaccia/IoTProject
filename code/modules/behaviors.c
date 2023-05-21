@@ -26,7 +26,7 @@ int source_lora_p2p(node_t node) {
 
         /* Check water flow and send a message to its children if any */
         if(get_water_flow(node.node_type, node.node_self, time)) {
-
+            
         }
 
         if (!is_last_wakeup) {
