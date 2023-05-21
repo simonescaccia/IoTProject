@@ -18,14 +18,14 @@
 int get_water_flow(int self_node_type, char *self_node, int time) {
     /* time should be in the range [0,10] */
 
-    if (self_node_type == 0 && strcmp("10", self_node) == 0) {
+    if (self_node_type == 0) {
         /* CHIEF data */
         if (time >= 0 && time <= 6)
             return 30;
         if (time >= 7 && time <= 10)
             return 0;
     }
-    if (self_node_type == 2 && strcmp("11", self_node) == 0) {
+    if (self_node_type == 2) {
         /* BRANCH data */
         if (time >= 0 && time <= 2)
             return 30;
