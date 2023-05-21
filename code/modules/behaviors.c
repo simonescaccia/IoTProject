@@ -7,7 +7,7 @@
 
 #define MESSAGE_MAXIMUM_LENGTH 50
 
-uint32_t SOURCE_LEAKAGE_PERIOD = US_PER_SEC * 0.5;
+uint32_t SOURCE_LEAKAGE_PERIOD = US_PER_SEC * 2;
 
 static void send_water_flow_to_children(node_t node, int time) {
     /* Check water flow and send a message to its children if any */
@@ -41,7 +41,7 @@ int source_lora_p2p(node_t node) {
 
     while (1) {
         /* Set time for sampling: [0, 60] */
-        time = (time+1) % 60;
+        time = (time+1) % 10;
 
         send_water_flow_to_children(node, time);
 
