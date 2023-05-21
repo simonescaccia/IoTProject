@@ -117,7 +117,7 @@ int node_config(int argc, char **argv)
         char *child = malloc(length + 1);
         strncpy(child, elem, length + 1);
         
-        printf("#%d Father: st-lrwan1-%s\t Child: st-lrwan1-%s\n", i, father, child);
+        //printf("#%d Father: st-lrwan1-%s\t Child: st-lrwan1-%s\n", i, father, child);
 
         if (strcmp(child, argv[1]) == 0 && node_father == NULL) {
             length = strlen(father);
