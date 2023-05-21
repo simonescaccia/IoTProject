@@ -12,12 +12,10 @@
 #include "drivers_sx127x.h"
 #include "semtech-loramac.h"
 #include "behaviors.h"
+#include "config.h"
 
 /* Debug */
 #define DEBUG 1
-
-/* Configuration file */
-#define FILENAME "config.txt"
 
 /* Defining node type: 0 for CHIEF, 1 for FORK, 2 for BRANCH */
 static int node_type;
@@ -71,59 +69,61 @@ int my_node_config(int argc, char **argv) {
 int node_config(int argc, char **argv)
 {
     if (argc <= 1) {
-        puts("usage: config <node-name with node format st-lrwan1-x>");
+        puts("usage: config <node-code> with node format st-lrwan1-<node-code>");
         return -1;
     }
 
     node_father = NULL;
     node_children = NULL;
     node_type = 1;
-
-    /* Open the file for reading */
-    FILE *fp = fopen(FILENAME, "r");
-
-    if (!fp) {
-        fprintf(stderr, "Error while opening file '%s'\n", FILENAME);
-        return EXIT_FAILURE;
-    }
     
     char* node_father = NULL;
     int children_count = 0;
     char** node_children = NULL;
-    
-    int max_line_buf_size = 128;
-    char* line_buf = malloc(max_line_buf_size);
-    int line_count = 0;
-    
-    /* Loop until we are done with the file */
-    while (EOF != fscanf(fp, "%[^\n]\n", line_buf)) {
 
-        /* Increment line count */
-        line_count++;
+    char* buf = config();
+    char** pairs = NULL;
+    int pair_count = 0;
+ 
+    /* First pair */
+    char* pair = strtok(buf, " ");
 
-        /* Separate father from child for current line */
-        char *elem = strtok(line_buf, " ");
+    /* Extracting pairs */
+    while (pair != NULL) {
+        pair_count++;
+        pairs = realloc(pairs, pair_count*sizeof(char*));
+        pairs[--pair_count] = malloc(strlen(pair) + 1);
+        strncpy(pairs[--pair_count], pair, strlen(pair) + 1);
+        pair = strtok(NULL, " ");
+    }
+ 
+    for (int i=0; i < pair_count; i++) {
+
+        /* Separate father from child for current pair */
+        char *elem = strtok(pairs[i], "-");
         int length = strlen(elem);
         char *father = malloc(++length);
         strncpy(father, elem, ++length);
 
-        elem = strtok(NULL, " ");
+        elem = strtok(NULL, "-");
         length = strlen(elem);
         char *child = malloc(++length);
         strncpy(child, elem, ++length);
         
-        printf("Line #%d -> Father: %s\t Child: %s\n", line_count, father, child);
+        printf("#%d Father: %s\t Child: %s\n", pair_count, father, child);
 
         if (strcmp(child, argv[1]) == 0 && node_father == NULL) {
-        node_father = malloc(strlen(father) + 1);
-        strcpy(node_father, father);
+            length = strlen(father);
+            node_father = malloc(++length);
+            strncpy(node_father, father, ++length);
         }
 
         if (strcmp(father, argv[1]) == 0) {
-        children_count++;
-        node_children = realloc(node_children, children_count*sizeof(char*));
-        node_children[children_count - 1] = malloc(strlen(child) + 1);
-        strcpy(node_children[children_count - 1], child);
+            children_count++;
+            node_children = realloc(node_children, children_count*sizeof(char*));
+            length = strlen(child);
+            node_children[--children_count] = malloc(++length);
+            strncpy(node_children[--children_count], child, ++length);
         }
         
         /* Free allocated memory */
@@ -131,9 +131,7 @@ int node_config(int argc, char **argv)
         free(child);
         father = NULL;
         child = NULL;
-        
-        free(line_buf);
-        line_buf = malloc(max_line_buf_size);
+
     }
 
     printf("\n");
@@ -167,10 +165,6 @@ int node_config(int argc, char **argv)
     else if (node_type == 1) printf("FORK\n");
     else printf("BRANCH\n");
 
-    /* Free allocated memory */
-    free(line_buf);
-    line_buf = NULL;
-
     free(node_father);
     node_father = NULL;
 
@@ -180,10 +174,6 @@ int node_config(int argc, char **argv)
     }
     free(node_children);
     node_children = NULL;
-
-    /* Close the file now that we are done with it */
-    fclose(fp);
-
 
     return 0;
 }
