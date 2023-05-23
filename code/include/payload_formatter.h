@@ -4,4 +4,4 @@ typedef struct {
     char* value;
 } payload_t;
 
-char* app_id = "0000";
+char* APP_ID = "0000";
