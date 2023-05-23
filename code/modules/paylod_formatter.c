@@ -25,7 +25,7 @@ char* format_payload (char value[21], char from[3], char to[3]) {
  * @brief from lora message return "node from" "node to" and "value" only if the app_id is the right one 
 */
 payload_t* get_values (char message[32]) {
-    printf("Message: %s, length: %s\n", message, strlen(message));
+    printf("Message: %s, length: %d\n", message, strlen(message));
     /* Check app id, at least 3 comma chars, 2 chars for from and to, 4 chars for the APP_ID */
     if (strlen(message) > 11 && strncmp(message, APP_ID, 4)) 
     {
