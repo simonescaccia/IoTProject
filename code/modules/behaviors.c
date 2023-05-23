@@ -2,7 +2,7 @@
 #include "xtimer.h"
 
 #include "behaviors.h"
-#include "sample_genator.h"
+#include "sample_generator.h"
 #include "drivers_sx127x.h"
 #include "payload_formatter.h"
 #include "semtech-loramac.h"

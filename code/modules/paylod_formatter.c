@@ -1,4 +1,12 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "payload_formatter.h"
+
+const char* APP_ID = "0000";
+
+/* driver sx127x message length */
+const int MESSAGE_LENGTH = 32;
 
 /**
  * @brief Return the message to send by lora p2p, using the following formatting: <0000 app_id>,<node from>,<node to>,<value>
@@ -7,7 +15,9 @@
  * 
 */
 char* format_payload (char value[21], char from[3], char to[3]) {
-    return sprintf("%s,%s,%s,%s", APP_ID, from, to, value);
+    char* payload = malloc(sizeof(char) * MESSAGE_LENGTH); 
+    snprintf(payload, MESSAGE_LENGTH, "%s,%s,%s,%s", APP_ID, from, to, value);
+    return payload;
 }
 
 /**
@@ -15,7 +25,11 @@ char* format_payload (char value[21], char from[3], char to[3]) {
 */
 payload_t get_values (char message[32]) {
     /* Check app id */
-    print("%s", message);
-    payload_t payload;
+    printf("%s", message);
+    payload_t payload = {
+        .from = "2",
+        .to = "1",
+        .value = "10"
+    };
     return payload;
 }
