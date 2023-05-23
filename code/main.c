@@ -29,10 +29,12 @@ int node_config(int argc, char **argv)
         return -1;
     }
 
+    node.node_self = NULL;
     node.node_father = NULL;
     node.node_children = NULL;
     node.node_type = 1;
     
+    int valid_node = 0;
     int children_count = 0;
 
     /* Extracting configuration information */
@@ -73,13 +75,17 @@ int node_config(int argc, char **argv)
         
         //printf("#%d Father: st-lrwan1-%s\t Child: st-lrwan1-%s\n", i, father, child);
 
-        if (strcmp(child, argv[1]) == 0 && node.node_father == NULL) {
-            length = strlen(father);
-            node.node_father = malloc(length + 1);
-            strncpy(node.node_father, father, length + 1);
+        if (strcmp(child, argv[1]) == 0) {
+            valid_node = 1;
+            if (node.node_father == NULL) {
+                length = strlen(father);
+                node.node_father = malloc(length + 1);
+                strncpy(node.node_father, father, length + 1);
+            }
         }
 
         if (strcmp(father, argv[1]) == 0) {
+            valid_node = 1;
             children_count++;
             node.node_children = realloc(node.node_children, children_count*sizeof(char*));
             length = strlen(child);
@@ -94,6 +100,16 @@ int node_config(int argc, char **argv)
         child = NULL;
 
     }
+    
+    /* Check if node is valid */
+    if (!valid_node) {
+        printf("config: node not valid for current topology.\n");
+        return -1;
+    }
+
+    node.node_self = argv[1];
+    /* Display node information */
+    printf("Node: st-lrwan1-%s", argv[1]);
 
     /* Display father information */
     printf("Father of %s: ", argv[1]);
@@ -215,7 +231,8 @@ static const shell_command_t commands[] = {
     { "setup",          "Initialize LoRa modulation settings",  lora_setup_cmd },
     { "send",           "Send raw payload string",              send_cmd },
     { "listen",         "Start raw payload listener",           listen_cmd },
-    { "loramac",        "Control Semtech loramac stack",        loramac_handler }
+    { "loramac",        "Control Semtech loramac stack",        loramac_handler },
+    {      NULL,                                NULL,                   NULL }
 };
 
 int main(void)
