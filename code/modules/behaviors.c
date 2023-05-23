@@ -75,9 +75,13 @@ int source_lora_ttn(node_t node) {
         loramac_handler(3,argv);
 
         /* Send a message */
-        char* send_list[2] = {"send_cmd", json};
+        /*char* send_list[2] = {"send_cmd", json};
         argv = (char**)&send_list;
-        send_cmd(2, argv);
+        send_cmd(2, argv);*/
+
+        char* tx_list[3] = {"loramac", "tx", json};
+        argv = (char**)&tx_list;
+        loramac_handler(3, argv);
 
         /* Sleeping for five seconds */
         xtimer_sleep(5);
