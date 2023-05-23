@@ -76,11 +76,12 @@ kernel_pid_t publish_thread_node;
 char publish_stack_aws[THREAD_STACKSIZE_MAIN];
 kernel_pid_t publish_thread_aws;
 
+/*
 gpio_t LED_PIN = GPIO_PIN(0, 2); //pin2
 #define LED_PIN_NUMBER 2
-
 gpio_t BUZZER_PIN = GPIO_PIN(0, 15); //pin23
 #define BUZZER_PIN_NUMBER 15
+*/
 
 #define WATER_FLOW ADC_LINE(0)
 #define ADC_RES ADC_RES_12BIT
@@ -88,7 +89,7 @@ gpio_t BUZZER_PIN = GPIO_PIN(0, 15); //pin23
 #define SECONDS 1*US_PER_SEC //regulator for water_flow_rate formula
 #define SAMPLING 3*US_PER_SEC //duration time of sampling
 #define DAILY_PERIODIC 15*US_PER_SEC //periodic time of sampling (daily or every 6 hours)
-#define ANSWER_AGAIN_PERIODIC 10*US_PER_SEC //again time if son is sleeping
+#define ANSWER_AGAIN_PERIODIC 15*US_PER_SEC //again time if son is sleeping //better to put equal for sinchronization
 
 xtimer_ticks32_t sample_time_now;
 xtimer_ticks32_t sample_time_end;
@@ -100,6 +101,7 @@ int water_sensor_test(void);
 int ret = -1;
 float water_flow_rate_other=0.0;
 float water_flow_rate=0.0;
+float water_flow_diff=0.0;
 
 int answer=0;
 int work=0;
@@ -111,30 +113,6 @@ char* mex;
 //sudo BOARD=esp32-heltec-lora32-v2 BUILD_IN_DOCKER=1 DOCKER="sudo docker" PORT=/dev/ttyUSB0 make flash term
 
 /*
-We are in the same situation of YF-S201 water flow sensor - 30L/min
-
-l_hour = (flow_frequency * 60 / 7.5)
-every liter of water that flows, the Hall Sensor outputs 450 pulses. 
-
-V_total(L) = N* 1/450(L) 
-
-the total volume of fluid flowing through the water flow sensor is equal to the water flow rate(Q - unit L/s) multiplied by time t(unit s) .
-V_total(L) = Q(L/s)*t(s) 
-
-N* 1/450 = Q(L/s)*t(s) 
-N/t = 450 * Q(L/s) 
-
-f = 450*Q(L/s); 
-Q(L/s) = f/450; 
-Q(L/min) = f*60/450 = f/7.5 
-Q(L/hour) = f*60*60/450 = f*60 /7.5 
-
-l_hour = (flow_frequency * 60 / 7.5)
-
-
-LEGGERE: https://wiki.seeedstudio.com/Water-Flow-Sensor/#:~:text=Water%20flow%20sensor%20consists%20of,outputs%20the%20corresponding%20pulse%20signal.
-
-
 SU AMAZON ->  1L = 596 impulsi ----- https://www.amazon.it/dp/B079QYRQT5?psc=1&ref=ppx_yo2ov_dt_b_product_details
 K=541,3307 [Impulsi/Litro] con errore di +-1% ma anche così 
 USIAMO QUESTA
@@ -298,27 +276,28 @@ static void _on_msg_received(MessageData *data)
     }
 
     else{
-        //thread_wakeup(thread_buzzer);
-        //thread_wakeup(thread_led);
             periodic_time = xtimer_now(); 
             if(board!=0){
-                message_on_node="answr";
+                message_on_node="answr"; //provare ad usare funzione publish normale
                 thread_wakeup(publish_thread_node);
 
                 if(board!=0 || water_sensor_test()==1){
                     water_flow_rate_other = atof(mex);
-                    if(water_flow_rate-water_flow_rate_other > 3 || water_flow_rate_other-water_flow_rate > 3){
-
-                        printf("LEAKEGE DETECTED\n");                
-                        water_flow_rate=abs(water_flow_rate-water_flow_rate_other);
-                        sprintf(message, "LEAKAGE: %f L/min", water_flow_rate);
-                        printf("%s\n",message);
-
+                    if(water_flow_rate-water_flow_rate_other > 5 || water_flow_rate_other-water_flow_rate > 5){
+                        water_flow_diff=abs(water_flow_rate-water_flow_rate_other);
+                        printf("LEAKEGE DETECTED \t -> \t My flow:%f \t Other: %f \t difference: %f\n",water_flow_rate,water_flow_rate_other,water_flow_diff);            
+                        sprintf(message_on_aws, "{\"id\": \"%d\", \"flow\": \"%f\"}",
+                        board, water_flow_diff); //message on aws with id(son) and flow(leakage quantity of this test)
+           
                         message_on_aws=message;
                         thread_wakeup(publish_thread_aws);
+
+                        //thread_wakeup(thread_buzzer);
+                        //thread_wakeup(thread_led);
                     }
                     else{
-                        message_on_aws="NO LEAKEGE";
+                        sprintf(message_on_aws, "{\"id\": \"%d\", \"flow\": \"%d\"}", 
+                        board, 0); //message on aws with id(son) and flow(leakage quantity of this test EQUAL TO ZERO                //This is only for debug
                         thread_wakeup(publish_thread_aws);
                         printf("NO LEAKEGE\n");
                     }
@@ -393,7 +372,7 @@ int water_sensor_test(void){
             return 0;
         }
         if(sample_time_diff > SAMPLING && number_turn!=0.0){
-            printf("water flow detected\n");
+            printf("Water flow detected\n");
             break;
         }
     }
@@ -401,25 +380,23 @@ int water_sensor_test(void){
     if(remain!=0){
         number_turn=number_turn+remain;
     }
-        
-    printf("time: %d microseconds\t turns: %f\n",sample_time_diff,number_turn);
-            
+           
     //Q(L/s) = f/impulsi; -> Q(L/min) = f*60/impulsi  
-    //usiamo per ora 541
+    //usiamo per 541 impulsi al minuto
+
     frequency=number_turn/(float)sample_time_diff*SECONDS;
     water_flow_rate=(float)frequency*60/541; 
-    printf("frequency: %f Hz\t water_flow_rate: %f L/min\n",frequency,water_flow_rate);
+    printf("frequency: %f Hz\t water_flow_rate: %f L/min\n",frequency,water_flow_rate); //printf("time: %d microseconds\t turns: %f\n",sample_time_diff,number_turn);   
     printf("water sensor test end\n");
 
     if(board==0){
-        sprintf(message, "%f L/min", water_flow_rate);
+        sprintf(message, "{\"id\": \"%d\", \"flow\": \"%f\"}",
+                        board, water_flow_rate);
 
         publish(message); //for son
-
+        
         message_on_aws=message;
         thread_wakeup(publish_thread_aws); //for aws
-
-        xtimer_sleep(1);
     }
 
     return 1;
@@ -436,17 +413,15 @@ int main(void)
         DEFAULT_TOPIC_PUBLISH = "sub"; //publish
     }
 
-    printf("You are running RIOT on a(n) %s board.\n", RIOT_BOARD);
+    printf("You are running RIOT on a(n) %s board, Running water-sensor\n", RIOT_BOARD);
 
     NetworkInit(&network);
  
-    xtimer_sleep(3);
+    xtimer_sleep(5);
 
     MQTTClientInit(&client, &network, COMMAND_TIMEOUT_MS, buf, BUF_SIZE,
                    readbuf,
                    BUF_SIZE);
-
-    printf("Running water-sensor example.\n");
   
     xtimer_sleep(3);
 
@@ -465,11 +440,7 @@ int main(void)
         printf("Successfully initialized ADC_LINE(%u)\n", WATER_FLOW);
     }
 	
-	/*
-    water_sensor_thread=thread_create(water_sensor_stack, sizeof(water_sensor_stack),
-                  THREAD_PRIORITY_MAIN + 1, THREAD_CREATE_SLEEPING,
-                  water_sensor_sampling, NULL, "water_sensor");
-    */
+    //PROVARE A VEDERE SE CON +1 È MEGLIO, soprattutto per mantenere più costante il duty cicle, aws con +1 mentre node con -1 poichè più importante
     publish_thread_node=thread_create(publish_stack_node, sizeof(publish_stack_node),
                   THREAD_PRIORITY_MAIN - 1, THREAD_CREATE_SLEEPING,
                   publish_on_node, NULL, "publish_on_node");       
@@ -485,9 +456,14 @@ int main(void)
         while(1){
             while(1){  //sistemare questa funzione perchè potrebbe essere terminata l'acqua
                 if(water_sensor_test()==1){
+                        xtimer_sleep(1); //to wait the answer of the son
                         if(answer==0){
                             printf("To do again, no answer from son\n");
                             xtimer_periodic_wakeup(&periodic_time, ANSWER_AGAIN_PERIODIC);
+                            if(ret<0){
+                                connect();
+                                //xtimer_sleep(1);
+                            }
                         }
                         else{
                             printf("Good, answer from son\n");
@@ -497,20 +473,34 @@ int main(void)
                 else{
                     printf("To do again, no water\n");
                     xtimer_periodic_wakeup(&periodic_time, DAILY_PERIODIC);
+                    if(ret<0){
+                        connect();
+                        //xtimer_sleep(1);
+                    }
                 } 
             }
-            answer=0;
+            //source: 3s (sampling of the father) + 1s (wait) + 1s(execution) + 10s (sleep of duty cicle) = 5s of 15s (work)
+            answer=0; 
             xtimer_periodic_wakeup(&periodic_time, DAILY_PERIODIC);
+            if(ret<0){
+                connect();
+                //xtimer_sleep(1);
+            }
         }
     }          
     else{
         while(1){
-        //work=1;
+        xtimer_sleep(3);
+        work=1;
         printf("I am awake again\n");   
-        xtimer_sleep(5);
+        xtimer_sleep(4); //node son: 3s sleep of duty cicle ((sampling of the father)) + 3s (sampling node son) + 1s(execution) + 10s (sleep of duty cicle) = 4s of 15s (work)
         printf("I am asleep now\n");   
-        //work=0;
+        work=0;
         xtimer_periodic_wakeup(&periodic_time, DAILY_PERIODIC);
+        if(ret<0){
+            connect();
+            //xtimer_sleep(1);
+        }
         }
     }  
 
