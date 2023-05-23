@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "payload_formatter.h"
 
@@ -23,13 +24,19 @@ char* format_payload (char value[21], char from[3], char to[3]) {
 /**
  * @brief from lora message return "node from" "node to" and "value" only if the app_id is the right one 
 */
-payload_t get_values (char message[32]) {
-    /* Check app id */
-    printf("%s", message);
-    payload_t payload = {
-        .from = "2",
-        .to = "1",
-        .value = "10"
-    };
-    return payload;
+payload_t* get_values (char message[32]) {
+    printf("Message: %s", message);
+    /* Check app id, at least 3 comma chars, 2 chars for from and to, 4 chars for the APP_ID */
+    if (strlen(message) > 11 && strncmp(message, APP_ID, 4)) 
+    {
+        /*  Parse the string */
+        payload_t *payload = malloc(sizeof(payload_t));
+        memcpy(payload->from, &message[5], 2*sizeof(char));
+        memcpy(payload->to, &message[8], 2*sizeof(char));
+        memcpy(payload->value, &message[11], (strlen(message)-11)*sizeof(char));
+        return payload;
+    } else
+    {
+        return NULL;
+    }
 }
