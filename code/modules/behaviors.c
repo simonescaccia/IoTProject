@@ -8,6 +8,21 @@
 #define MESSAGE_MAXIMUM_LENGTH 50
 
 uint32_t SOURCE_LEAKAGE_PERIOD = US_PER_SEC * 2;
+uint32_t SOURCE_DUTY_CYCLE_PERIOD = US_PER_SEC * 1;
+uint32_t LATENCY_P2P = US_PER_SEC * 0;
+
+int source_lora_ttn(node_t node) {
+    (void)node;
+
+    puts("Beahvior: source_lora_ttn");
+    return 0;
+}
+
+/* source p2p */
+
+void _source_message_received_clb (node_t node) {
+    (void)node;
+}
 
 static void send_water_flow_to_children(node_t node, int time) {
     /* Check water flow and send a message to its children if any */
@@ -25,19 +40,14 @@ static void send_water_flow_to_children(node_t node, int time) {
     }
 }
 
-int source_lora_ttn(node_t node) {
-    (void)node;
-
-    puts("Beahvior: source_lora_ttn");
-    return 0;
-}
-
 int source_lora_p2p(node_t node) {
     puts("Beahvior: source_lora_p2p");
     
     xtimer_ticks32_t last_wakeup;
     bool is_last_wakeup = false;
     int time = 0;
+
+
 
     while (1) {
         /* Set time for sampling: [0, 60] */
@@ -56,6 +66,8 @@ int source_lora_p2p(node_t node) {
     return 0;
 }
 
+/* end source p2p */
+
 int fork_lora_p2p(node_t node) {
     (void)node;
 
@@ -67,5 +79,8 @@ int branch_lora_p2p(node_t node) {
     (void)node;
 
     puts("Beahvior: branch_lora_p2p");
+
+
+
     return 0;
 }
