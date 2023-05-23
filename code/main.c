@@ -116,10 +116,10 @@ int node_config(int argc, char **argv)
 
         if (strcmp(child, argv[1]) == 0) {
             valid_node = 1;
-            if (node_father == NULL) {
+            if (node.node_father == NULL) {
                 length = strlen(father);
-                node_father = malloc(length + 1);
-                strncpy(node_father, father, length + 1);
+                node.node_father = malloc(length + 1);
+                strncpy(node.node_father, father, length + 1);
             }
         }
 
