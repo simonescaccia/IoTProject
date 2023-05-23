@@ -231,7 +231,8 @@ static const shell_command_t commands[] = {
     { "setup",          "Initialize LoRa modulation settings",  lora_setup_cmd },
     { "send",           "Send raw payload string",              send_cmd },
     { "listen",         "Start raw payload listener",           listen_cmd },
-    { "loramac",        "Control Semtech loramac stack",        loramac_handler }
+    { "loramac",        "Control Semtech loramac stack",        loramac_handler },
+    {      NULL,                                NULL,                   NULL }
 };
 
 int main(void)
