@@ -22,46 +22,6 @@ int IS_TTN = 0;
     
 node_t node;
 
-int my_node_config(int argc, char **argv) {
-    if (argc <= 3) {
-        puts("usage: myconfig <self node-name st-lrwan1-x> <parent node-name st-lrwan1-x> <children node-name st-lrwan1-x>");
-        return -1;
-    }
-
-    int length;
-
-    if (strcmp("NULL", argv[1]) == 0) {
-        node.node_self = NULL;
-    } else {
-        length = strlen(argv[1]);
-        node.node_self = malloc(++length);
-        strncpy(node.node_self, argv[1], ++length);
-    }
-
-    if (strcmp("NULL", argv[2]) == 0) {
-        node.node_father = NULL;
-        node.node_type = 0;
-    } else {
-        length = strlen(argv[2]);
-        node.node_father = malloc(++length);
-        strncpy(node.node_father, argv[2], ++length);
-    }
-
-    if (strcmp("NULL", argv[3]) == 0) {
-        node.node_children = NULL;
-        node.node_type = 2;
-    } else {
-        length = strlen(argv[3]);
-        /* static modifier since we want the variable last during the runtime */
-        static char* children_str;
-        children_str = malloc(++length);
-        strncpy(children_str, argv[3], ++length);
-        node.node_children = &children_str; 
-    }
-
-    return 0;
-}
-
 int node_config(int argc, char **argv)
 {
     if (argc <= 1) {
@@ -69,6 +29,7 @@ int node_config(int argc, char **argv)
         return -1;
     }
 
+    node.node_self = NULL;
     node.node_father = NULL;
     node.node_children = NULL;
     node.node_type = 1;
@@ -145,6 +106,10 @@ int node_config(int argc, char **argv)
         printf("config: node not valid for current topology.\n");
         return -1;
     }
+
+    node.node_self = argv[1];
+    /* Display node information */
+    printf("Node: st-lrwan1-%s", argv[1]);
 
     /* Display father information */
     printf("Father of %s: ", argv[1]);
@@ -262,7 +227,6 @@ int start(int argc, char **argv)
 
 static const shell_command_t commands[] = {
     { "config",         "Configure node location in the tree",  node_config },
-    { "myconfig",       "Configure node parent and children",   my_node_config},
     { "start",          "Start the normal mode",                start },
     { "setup",          "Initialize LoRa modulation settings",  lora_setup_cmd },
     { "send",           "Send raw payload string",              send_cmd },
