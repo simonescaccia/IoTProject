@@ -32,11 +32,11 @@ static void send_water_flow_to_children(node_t node, int time) {
     if(water_flow) {
 
         /* Convert int to char* */
-        char str[MESSAGE_MAXIMUM_LENGTH];
-        sprintf(str, "%d", water_flow);
+        char str_water_flow[MESSAGE_MAXIMUM_LENGTH];
+        sprintf(str_water_flow, "%d", water_flow);
 
         /* Send water flow to the child */
-        char* list[2] = {"send_cmd", str};
+        char* list[2] = {"send_cmd", format_payload(str_water_flow, node.node_self, node.node_children)};
         char** argv = (char**)&list;
         send_cmd(2, argv);
     }
