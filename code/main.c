@@ -33,9 +33,9 @@ int node_config(int argc, char **argv)
     node.node_father = NULL;
     node.node_children = NULL;
     node.node_type = 1;
-    
+    node.children_count = 0;
+
     int valid_node = 0;
-    int children_count = 0;
 
     /* Extracting configuration information */
     char* buffer = config();
@@ -232,7 +232,7 @@ static const shell_command_t commands[] = {
     { "send",           "Send raw payload string",              send_cmd },
     { "listen",         "Start raw payload listener",           listen_cmd },
     { "loramac",        "Control Semtech loramac stack",        loramac_handler },
-    {      NULL,                                NULL,                   NULL }
+    { NULL, NULL, NULL }
 };
 
 int main(void)

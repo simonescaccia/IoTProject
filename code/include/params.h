@@ -6,4 +6,7 @@ typedef struct {
     char* node_father;
     char* node_self;
     char** node_children;
+
+    /* Number of children*/
+    int children_count;
 } node_t;

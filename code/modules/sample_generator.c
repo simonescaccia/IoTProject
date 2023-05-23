@@ -1,4 +1,4 @@
-#include "sample_genator.h"
+#include "sample_generator.h"
 #include "string.h"
 
 /* Replace this simulation with data sampled with the prototype */

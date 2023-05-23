@@ -78,26 +78,26 @@ int source_lora_ttn(node_t node) {
     return 0;
 }
 
-/* source p2p */
-
-void _source_message_received_clb (node_t node) {
-    (void)node;
-}
-
 static void send_water_flow_to_children(node_t node, int time) {
     /* Check water flow and send a message to its children if any */
     int water_flow = get_water_flow(node.node_type, node.node_self, time);
     if(water_flow) {
 
-        /* Convert int to char* */
+        /* Convert the water flow int to char* and split it between children */
         char str_water_flow[MESSAGE_MAXIMUM_LENGTH];
-        sprintf(str_water_flow, "%d", water_flow);
+        sprintf(str_water_flow, "%d", water_flow / node.children_count);
 
-        /* Send water flow to the child */
-        char* list[2] = {"send_cmd", format_payload(str_water_flow, node.node_self, node.node_children)};
-        char** argv = (char**)&list;
-        send_cmd(2, argv);
+        /* Send water flow to children */
+        for (int i = 0; i < node.children_count; i++) {
+            char* list[2] = {"send_cmd", format_payload(str_water_flow, node.node_self, node.node_children[i])};
+            char** argv = (char**)&list;
+            send_cmd(2, argv);
+        }
     }
+}
+
+void _source_message_received_clb (node_t node) {
+    (void)node;
 }
 
 int source_lora_p2p(node_t node) {
@@ -106,8 +106,6 @@ int source_lora_p2p(node_t node) {
     xtimer_ticks32_t last_wakeup;
     bool is_last_wakeup = false;
     int time = 0;
-
-
 
     while (1) {
         /* Set time for sampling: [0, 60] */
@@ -125,8 +123,6 @@ int source_lora_p2p(node_t node) {
 
     return 0;
 }
-
-/* end source p2p */
 
 int fork_lora_p2p(node_t node) {
     (void)node;
