@@ -86,11 +86,11 @@ int node_config(int argc, char **argv)
 
         if (strcmp(father, argv[1]) == 0) {
             valid_node = 1;
-            children_count++;
-            node.node_children = realloc(node.node_children, children_count*sizeof(char*));
+            node.children_count++;
+            node.node_children = realloc(node.node_children, node.children_count*sizeof(char*));
             length = strlen(child);
-            node.node_children[children_count - 1] = malloc(length + 1);
-            strncpy(node.node_children[children_count - 1], child, length + 1);
+            node.node_children[node.children_count - 1] = malloc(length + 1);
+            strncpy(node.node_children[node.children_count - 1], child, length + 1);
         }
         
         /* Free allocated memory */
@@ -128,7 +128,7 @@ int node_config(int argc, char **argv)
         printf("undefined, BRANCH is a leaf of the tree.\n");
     }
     else {
-        for (int i = 0; i < children_count; i++) printf("st-lrwan1-%s ", node.node_children[i]);
+        for (int i = 0; i < node.children_count; i++) printf("st-lrwan1-%s ", node.node_children[i]);
         printf("\n");
     }
 
