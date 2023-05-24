@@ -199,7 +199,7 @@ int start(int argc, char **argv)
         set_callback(message_received_clb);
 
         /* Setup sx127x drivers */
-        char* list[4] = {"lora_setup_cmd","256","7","5"};
+        char* list[4] = {"lora_setup_cmd","250","7","5"};
         char** argv = (char**)&list;
         if(lora_setup_cmd(4, argv)) {
             return -1;
