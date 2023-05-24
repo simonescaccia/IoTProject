@@ -28,7 +28,6 @@ char* format_payload (char value[21], char from[3], char to[3]) {
 payload_t* get_values (char message[32]) {
     printf("Message: %s, length: %d\n", message, strlen(message));
     /* Check app id, at least 3 comma chars, 2 chars for from and to, 4 chars for the APP_ID */
-    printf("Here1");
     if (strlen(message) > 11 && strncmp(message, APP_ID, 4) == 0) 
     {
         /*  Parse the string */
@@ -46,7 +45,6 @@ payload_t* get_values (char message[32]) {
         return payload;
     } else
     {
-        printf("Here2");
         return NULL;
     }
 }
