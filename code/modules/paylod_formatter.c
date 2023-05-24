@@ -30,12 +30,16 @@ payload_t* get_values (char message[32]) {
     /* Check app id, at least 3 comma chars, 2 chars for from and to, 4 chars for the APP_ID */
     if (strlen(message) > 11 && strncmp(message, APP_ID, 4) == 0) 
     {
+        printf("Here\n");
         /*  Parse the string */
         payload_t *payload = malloc(sizeof(payload_t));
         memcpy(payload->from, &message[5], 2*sizeof(char));
+        printf("Here\n");
         memcpy(payload->to, &message[8], 2*sizeof(char));
+        printf("Here\n");
         memcpy(payload->value, &message[11], (strlen(message)-11)*sizeof(char));
-
+        printf("Here\n");
+        
         if (APP_DEBUG) {
             printf("from: %s\n",payload->from);
             printf("to: %s\n", payload->to);
