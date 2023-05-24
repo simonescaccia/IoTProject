@@ -30,10 +30,11 @@ payload_t* get_values (char message[32]) {
     /* Check app id, at least 3 comma chars, 2 chars for from and to, 4 chars for the APP_ID */
     if (strlen(message) > 11 && strlen(message) < 32 && strncmp(message, APP_ID, 4) == 0) 
     {
-        printf("Here\n");
+        char msg[32];
+        strncpy(msg, message, strlen(msg) + 1); 
         /*  Parse the string */
         payload_t *payload = (payload_t*)malloc(sizeof(payload_t));
-        char* token = strtok(message, ",");
+        char* token = strtok(msg, ",");
         int i = 0;
         while (token != NULL) {
             switch (i) {
