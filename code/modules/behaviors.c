@@ -10,7 +10,7 @@
 /* Check payload_formatter for more details */
 #define MESSAGE_MAXIMUM_LENGTH 21
 
-uint32_t SOURCE_LEAKAGE_PERIOD = US_PER_SEC * 2;
+uint32_t SOURCE_LEAKAGE_PERIOD = US_PER_SEC * 4;
 uint32_t SOURCE_DUTY_CYCLE_PERIOD = US_PER_SEC * 1;
 uint32_t LATENCY_P2P = US_PER_SEC * 0;
 

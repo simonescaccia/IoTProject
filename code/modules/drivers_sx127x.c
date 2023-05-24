@@ -214,6 +214,8 @@ void *_recv_thread(void *arg)
         else {
             puts("Unexpected msg type");
         }
+        printf("Awake");
+        xtimer_sleep(1);
     }
 }
 
