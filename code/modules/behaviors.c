@@ -78,6 +78,13 @@ int source_lora_ttn(node_t node) {
     return 0;
 }
 
+static void _start_listening (void) {
+    /* listen for lora messages */
+    char* list[1] = {"listen_cmd"};
+    char** argv = (char**)&list;
+    listen_cmd(1, argv);
+}
+
 static void _send_water_flow_to_children(node_t node, int time) {
     /* Check water flow and send a message to its children if any */
     int water_flow = get_water_flow(node.node_type, node.node_self, time);
@@ -97,13 +104,6 @@ static void _send_water_flow_to_children(node_t node, int time) {
             _start_listening();
         }
     }
-}
-
-static void _start_listening (void) {
-    /* listen for lora messages */
-    char* list[1] = {"listen_cmd"};
-    char** argv = (char**)&list;
-    listen_cmd(1, argv);
 }
 
 void _source_message_received_clb (node_t node) {
