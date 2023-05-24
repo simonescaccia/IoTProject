@@ -27,6 +27,10 @@ static kernel_pid_t _recv_pid;
 static char message[32];
 static sx127x_t sx127x;
 
+static void (*callback_on_msg_receive)(node_t, char[32]);
+
+static node_t node;
+
 // debug
 #define DEBUG 1
 
@@ -175,6 +179,8 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
                 message, (int)len,
                 packet_info.rssi, (int)packet_info.snr,
                 sx127x_get_time_on_air((const sx127x_t *)dev, len));
+            /* Callback for message handling */
+            (*callback_on_msg_receive)(node, message);
             break;
 
         case NETDEV_EVENT_TX_COMPLETE:
@@ -217,10 +223,17 @@ void *_recv_thread(void *arg)
     }
 }
 
-int init_driver_127x(void)
+void set_callback (callback ptr_reg_callback)
+{
+    callback_on_msg_receive = ptr_reg_callback;
+}
+
+int init_driver_127x(node_t node)
 {
     if(DEBUG) 
         puts("[init_driver_127x] starting driver_127x init");
+
+    node = node;
 
     sx127x.params = sx127x_params[0];
     netdev_t *netdev = &sx127x.netdev;

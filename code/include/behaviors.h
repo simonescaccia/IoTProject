@@ -1,9 +1,11 @@
 #include "params.h"
 
-extern int source_lora_ttn(node_t node);
+int source_lora_ttn(node_t node);
 
-extern int source_lora_p2p(node_t node);
+int source_lora_p2p(node_t node);
 
-extern int fork_lora_p2p(node_t node);
+int fork_lora_p2p(node_t node);
 
-extern int branch_lora_p2p(node_t node);
+int branch_lora_p2p(node_t node);
+
+void source_message_received_clb (node_t node, char message[32]);

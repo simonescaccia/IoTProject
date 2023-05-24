@@ -190,7 +190,7 @@ int start(int argc, char **argv)
             return 1;
         }
     } else {
-        if(init_driver_127x()) {
+        if(init_driver_127x(node)) {
             puts("Unable to init 127x drivers for lora p2p");
             return 1;
         }
@@ -209,6 +209,7 @@ int start(int argc, char **argv)
             if (source_lora_ttn(node))
                 return 1;
         } else {
+            set_callback(source_message_received_clb);
             if (source_lora_p2p(node))
                 return 1;         
         }

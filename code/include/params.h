@@ -1,3 +1,6 @@
+#ifndef PARAM_H
+#define PARAM_H 
+
 typedef struct {
     /* Defining node type: 0 for CHIEF, 1 for FORK, 2 for BRANCH */
     int node_type;
@@ -10,3 +13,5 @@ typedef struct {
     /* Number of children*/
     int children_count;
 } node_t;
+
+#endif

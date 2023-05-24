@@ -106,8 +106,10 @@ static void _send_water_flow_to_children(node_t node, int time) {
     }
 }
 
-void _source_message_received_clb (node_t node) {
+void source_message_received_clb (node_t node, char message[32]) {
     (void)node;
+    (void)message;
+    puts("Callback invoked\n");
 }
 
 int source_lora_p2p(node_t node) {
