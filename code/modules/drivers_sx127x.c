@@ -180,9 +180,7 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
                 packet_info.rssi, (int)packet_info.snr,
                 sx127x_get_time_on_air((const sx127x_t *)dev, len));
             /* Callback for message handling */
-            printf("Here1");
             (*callback_on_msg_receive)(node, message);
-            printf("Here1");
             break;
 
         case NETDEV_EVENT_TX_COMPLETE:
