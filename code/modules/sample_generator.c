@@ -5,7 +5,7 @@
 
 /**
  * CHIEF; self_node_type: 0, self_node: "10"
- * Water flow function simulation: x: time, y: L/min
+ * Water flow function simulation: x: logic_time, y: L/min
  * y = 30 L/min for x in [0, 6]
  * y = 0 L/min for x in [7, 10]
  * 
@@ -15,24 +15,24 @@
  * y = 0 L/min for x [7, 10]
 */
 
-int get_water_flow(int self_node_type, char *self_node, int time) {
-    /* time should be in the range [0,10] */
+int get_water_flow(int self_node_type, char *self_node, int logic_time) {
+    /* logic_time should be in the range [0,10] */
     (void)self_node;
 
     if (self_node_type == 0) {
         /* CHIEF data */
-        if (time >= 0 && time <= 6)
+        if (logic_time >= 0 && logic_time <= 6)
             return 30;
-        if (time >= 7 && time <= 10)
+        if (logic_time >= 7 && logic_time <= 10)
             return 0;
     }
     if (self_node_type == 2) {
         /* BRANCH data */
-        if (time >= 0 && time <= 2)
+        if (logic_time >= 0 && logic_time <= 2)
             return 30;
-        if (time >= 4 && time <= 6)
+        if (logic_time >= 4 && logic_time <= 6)
             return 20;
-        if (time >= 7 && time <= 10)
+        if (logic_time >= 7 && logic_time <= 10)
             return 0;
     }
 

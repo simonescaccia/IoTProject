@@ -78,7 +78,7 @@ int source_lora_ttn(node_t node) {
     return 0;
 }
 
-static void send_water_flow_to_children(node_t node, int time) {
+static void _send_water_flow_to_children(node_t node, int time) {
     /* Check water flow and send a message to its children if any */
     int water_flow = get_water_flow(node.node_type, node.node_self, time);
     if(water_flow) {
@@ -96,6 +96,13 @@ static void send_water_flow_to_children(node_t node, int time) {
     }
 }
 
+static void _start_listening (void) {
+    /* listen for lora messages */
+    char* list[1] = {"listen_cmd"};
+    char** argv = (char**)&list;
+    listen_cmd(1, argv);
+}
+
 void _source_message_received_clb (node_t node) {
     (void)node;
 }
@@ -107,11 +114,13 @@ int source_lora_p2p(node_t node) {
     bool is_last_wakeup = false;
     int time = 0;
 
+    _start_listening();
+
     while (1) {
         /* Set time for sampling: [0, 60] */
         time = (time+1) % 10;
 
-        send_water_flow_to_children(node, time);
+        _send_water_flow_to_children(node, time);
 
         if (!is_last_wakeup) {
             /* set last_wakeup only the first time */
