@@ -16,6 +16,8 @@
 
 #include "drivers_sx127x.h"
 
+#include "xtimer.h"
+
 #define SX127X_LORA_MSG_QUEUE   (16U)
 #define SX127X_STACKSIZE        (THREAD_STACKSIZE_DEFAULT)
 
