@@ -28,18 +28,28 @@ char* format_payload (char value[21], char from[3], char to[3]) {
 payload_t* get_values (char message[32]) {
     printf("Message: %s, length: %d\n", message, strlen(message));
     /* Check app id, at least 3 comma chars, 2 chars for from and to, 4 chars for the APP_ID */
-    if (strlen(message) > 11 && strncmp(message, APP_ID, 4) == 0) 
+    if (strlen(message) > 11 && strlen(message) < 32 && strncmp(message, APP_ID, 4) == 0) 
     {
         printf("Here\n");
         /*  Parse the string */
         payload_t *payload = malloc(sizeof(payload_t));
-        printf("Here\n");
-        memcpy(payload->from, &message[5], 2*sizeof(char));
-        printf("Here\n");
-        memcpy(payload->to, &message[8], 2*sizeof(char));
-        printf("Here\n");
-        memcpy(payload->value, &message[11], (strlen(message)-11)*sizeof(char));
-        printf("Here\n");
+        char* token = strtok(message, ",");
+        int i = 0;
+        while (token != NULL) {
+            switch (i) {
+                case 1:
+                    strncpy(payload->from, token, strlen(token) + 1); 
+                    break;
+                case 2:
+                    strncpy(payload->to, token, strlen(token) + 1); 
+                    break;
+                case 3:
+                    strncpy(payload->value, token, strlen(token) + 1); 
+                    break;
+            }
+            token = strtok(NULL, ",");
+            i++;
+        }
 
         if (APP_DEBUG) {
             printf("from: %s\n",payload->from);
