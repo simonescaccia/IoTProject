@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <debug.h>
 
 #include "payload_formatter.h"
 
@@ -34,6 +35,11 @@ payload_t* get_values (char message[32]) {
         memcpy(payload->from, &message[5], 2*sizeof(char));
         memcpy(payload->to, &message[8], 2*sizeof(char));
         memcpy(payload->value, &message[11], (strlen(message)-11)*sizeof(char));
+
+        DEBUG("from: %s\n",payload->from);
+        DEBUG("to: %s\n", payload->to);
+        DEBUG("value: %s\n", payload->value);
+
         return payload;
     } else
     {

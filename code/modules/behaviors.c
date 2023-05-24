@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+
 #include "xtimer.h"
 
 #include "behaviors.h"
@@ -100,16 +102,29 @@ static void _send_water_flow_to_children(node_t node, int time) {
             char** argv = (char**)&list;
             send_cmd(2, argv);
 
-            /* Restart listen */
+            /* Restart listening */
             _start_listening();
         }
     }
 }
 
-void source_message_received_clb (node_t node, char message[32]) {
+void message_received_clb (node_t node, char message[32]) {
     (void)node;
-    (void)message;
-    puts("Callback invoked\n");
+    puts("Callback invoked, starting message parsing");
+    
+    /* Message parsing */
+    payload_t* payload = get_values(message);
+    if (!payload) {
+        /* Not a message from our application */
+        return;
+    }
+
+    /* Check destination */
+    if (strcmp(node.node_self, payload->to) != 0) {
+        /* Message not sent to me */
+        return;
+    }
+    
 }
 
 int source_lora_p2p(node_t node) {

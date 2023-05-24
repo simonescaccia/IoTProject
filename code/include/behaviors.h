@@ -8,4 +8,4 @@ int fork_lora_p2p(node_t node);
 
 int branch_lora_p2p(node_t node);
 
-void source_message_received_clb (node_t node, char message[32]);
+void message_received_clb (node_t node, char message[32]);
