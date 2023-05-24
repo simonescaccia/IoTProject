@@ -92,6 +92,9 @@ static void _send_water_flow_to_children(node_t node, int time) {
             char* list[2] = {"send_cmd", format_payload(str_water_flow, node.node_self, node.node_children[i])};
             char** argv = (char**)&list;
             send_cmd(2, argv);
+
+            /* Restart listen */
+            _start_listening();
         }
     }
 }
