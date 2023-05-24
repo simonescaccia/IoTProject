@@ -32,18 +32,21 @@ payload_t* get_values (char message[32]) {
     {
         printf("Here\n");
         /*  Parse the string */
-        payload_t *payload = malloc(sizeof(payload_t));
+        payload_t *payload = (payload_t*)malloc(sizeof(payload_t));
         char* token = strtok(message, ",");
         int i = 0;
         while (token != NULL) {
             switch (i) {
                 case 1:
+                    payload->from = (char*)malloc(sizeof(char)*(strlen(token)+1));
                     strncpy(payload->from, token, strlen(token) + 1); 
                     break;
                 case 2:
+                    payload->to = (char*)malloc(sizeof(char)*(strlen(token)+1));
                     strncpy(payload->to, token, strlen(token) + 1); 
                     break;
                 case 3:
+                    payload->value = (char*)malloc(sizeof(char)*(strlen(token)+1));
                     strncpy(payload->value, token, strlen(token) + 1); 
                     break;
             }
