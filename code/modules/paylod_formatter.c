@@ -36,7 +36,7 @@ payload_t* get_values (char message[32]) {
         memcpy(payload->to, &message[8], 2*sizeof(char));
         memcpy(payload->value, &message[11], (strlen(message)-11)*sizeof(char));
 
-        if (ENABLE_DEBUG) {
+        if (APP_DEBUG) {
             printf("from: %s\n",payload->from);
             printf("to: %s\n", payload->to);
             printf("value: %s\n", payload->value);
