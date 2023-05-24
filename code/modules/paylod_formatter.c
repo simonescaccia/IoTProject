@@ -33,13 +33,14 @@ payload_t* get_values (char message[32]) {
         printf("Here\n");
         /*  Parse the string */
         payload_t *payload = malloc(sizeof(payload_t));
+        printf("Here\n");
         memcpy(payload->from, &message[5], 2*sizeof(char));
         printf("Here\n");
         memcpy(payload->to, &message[8], 2*sizeof(char));
         printf("Here\n");
         memcpy(payload->value, &message[11], (strlen(message)-11)*sizeof(char));
         printf("Here\n");
-        
+
         if (APP_DEBUG) {
             printf("from: %s\n",payload->from);
             printf("to: %s\n", payload->to);
