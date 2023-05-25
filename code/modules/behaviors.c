@@ -18,7 +18,7 @@ uint32_t LATENCY_P2P = US_PER_SEC * 0;
 
 int source_lora_ttn(node_t node) {
 
-    puts("Beahvior: source_lora_ttn");
+    puts("Behavior: source_lora_ttn");
 
     /* json to publish on TTN */
     char json[128];
