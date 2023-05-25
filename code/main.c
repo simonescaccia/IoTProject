@@ -152,7 +152,7 @@ int node_config(int argc, char **argv)
     printf("Node type: ");
     if (node.node_type == 0) {
         printf("Source TTN\n");
-        printf("Known CHIEF (P2P source): %s\n", node.node_alt_self);
+        printf("Known CHIEF (P2P source): st-lrwan1-%s\n", node.node_alt_self);
     }
     else if (node.node_type == 1) {
         printf("CHIEF\n");
