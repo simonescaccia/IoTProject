@@ -123,27 +123,30 @@ int node_config(int argc, char **argv)
 
     node.node_self = argv[1];
     /* Display node information */
-    printf("Node: st-lrwan1-%s", argv[1]);
+    printf("Node: st-lrwan1-%s\n", argv[1]);
 
-    /* Display father information */
-    printf("Father of %s: ", argv[1]);
-    if (node.node_father == NULL) {
-        node.node_type = 1;
-        printf("undefined, CHIEF is the root of the tree.\n");
-    }
-    else {
-        printf("st-lrwan1-%s\n", node.node_father);
-    }
+    if (node.node_type != 0) {
 
-    /* Display children information */
-    printf("Children of %s: ", argv[1]);
-    if (node.node_children == NULL) {
-        node.node_type = 3;
-        printf("undefined, BRANCH is a leaf of the tree.\n");
-    }
-    else {
-        for (int i = 0; i < node.children_count; i++) printf("st-lrwan1-%s ", node.node_children[i]);
-        printf("\n");
+        /* Display father information */
+        printf("Father of %s: ", argv[1]);
+        if (node.node_father == NULL) {
+            node.node_type = 1;
+            printf("undefined, CHIEF is the root of the tree.\n");
+        }
+        else {
+            printf("st-lrwan1-%s\n", node.node_father);
+        }
+
+        /* Display children information */
+        printf("Children of %s: ", argv[1]);
+        if (node.node_children == NULL) {
+            node.node_type = 3;
+            printf("undefined, BRANCH is a leaf of the tree.\n");
+        }
+        else {
+            for (int i = 0; i < node.children_count; i++) printf("st-lrwan1-%s ", node.node_children[i]);
+            printf("\n");
+        }
     }
 
     printf("Node type: ");
