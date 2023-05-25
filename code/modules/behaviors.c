@@ -42,9 +42,9 @@ int source_lora_ttn(node_t node) {
     argv = (char**)&appkey_list;
     loramac_handler(4,argv);
 
-    char* dr_list[3] = {"loramac", "dr", "5"};
+    char* dr_list[4] = {"loramac", "set", "dr", "5"};
     argv = (char**)&dr_list;
-    loramac_handler(3,argv);
+    loramac_handler(4,argv);
 
     char* join_list[3] = {"loramac", "join", "otaa"};
     argv = (char**)&join_list;
