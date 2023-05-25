@@ -240,13 +240,12 @@ int start(int argc, char **argv)
                 return 1; 
     }
     else if (node.node_type == 2) {
-        if (fork_lora_p2p(node)) {
+        if (fork_lora_p2p(node))
             return 1;
-        }  
+    }  
     else {
-        if (branch_lora_p2p(node)) {
+        if (branch_lora_p2p(node))
             return 1;
-        } 
     }
 
     return 0;
