@@ -16,9 +16,6 @@
 
 /* Debug */
 #define DEBUG 1
-
-/* Replace with configuration variables */
-int IS_TTN = 0;
     
 node_t node;
 
@@ -30,9 +27,10 @@ int node_config(int argc, char **argv)
     }
 
     node.node_self = NULL;
+    node.node_alt_self = NULL;
     node.node_father = NULL;
     node.node_children = NULL;
-    node.node_type = 1;
+    node.node_type = 2;
     node.children_count = 0;
 
     int valid_node = 0;
@@ -62,42 +60,58 @@ int node_config(int argc, char **argv)
 
     for (int i=0; i < pair_count; i++) {
 
-        /* Separate father from child for current pair */
+        /* Separate elements for current pair */
         char *elem = strtok(pairs[i], "-");
         length = strlen(elem);
-        char *father = malloc(length + 1);
-        strncpy(father, elem, length + 1);
+        char *elem1 = malloc(length + 1);
+        strncpy(elem1, elem, length + 1);
 
         elem = strtok(NULL, "-");
         length = strlen(elem);
-        char *child = malloc(length + 1);
-        strncpy(child, elem, length + 1);
+        char *elem2 = malloc(length + 1);
+        strncpy(elem2, elem, length + 1);
         
-        //printf("#%d Father: st-lrwan1-%s\t Child: st-lrwan1-%s\n", i, father, child);
-
-        if (strcmp(child, argv[1]) == 0) {
-            valid_node = 1;
-            if (node.node_father == NULL) {
-                length = strlen(father);
-                node.node_father = malloc(length + 1);
-                strncpy(node.node_father, father, length + 1);
+        if (i == 0) {
+            printf("#%d Source TTN: st-lrwan1-%s\t Source P2P: st-lrwan1-%s\n", i, elem1, elem2);
+            if (strcmp(elem1, argv[1]) == 0) {
+                valid_node = 1;
+                /* Source TTN is simply considered as a node without father and without children */
+                node.node_type = 0;
+                length = strlen(elem2);
+                node.node_alt_self = malloc(length + 1);
+                strncpy(node.node_alt_self, elem2, length + 1);
+            }
+            if (strcmp(elem2, argv[1]) == 0) {
+                length = strlen(elem1);
+                node.node_alt_self = malloc(length + 1);
+                strncpy(node.node_alt_self, elem1, length + 1);
             }
         }
+        else {
+            printf("#%d Father: st-lrwan1-%s\t Child: st-lrwan1-%s\n", i, elem1, elem2);
 
-        if (strcmp(father, argv[1]) == 0) {
-            valid_node = 1;
-            node.children_count++;
-            node.node_children = realloc(node.node_children, node.children_count*sizeof(char*));
-            length = strlen(child);
-            node.node_children[node.children_count - 1] = malloc(length + 1);
-            strncpy(node.node_children[node.children_count - 1], child, length + 1);
+            if (strcmp(elem2, argv[1]) == 0) {
+                valid_node = 1;
+                length = strlen(elem1);
+                node.node_father = malloc(length + 1);
+                strncpy(node.node_father, elem1, length + 1);
+            }
+
+            if (strcmp(elem1, argv[1]) == 0) {
+                valid_node = 1;
+                node.children_count++;
+                node.node_children = realloc(node.node_children, node.children_count*sizeof(char*));
+                length = strlen(elem2);
+                node.node_children[node.children_count - 1] = malloc(length + 1);
+                strncpy(node.node_children[node.children_count - 1], elem2, length + 1);
+            }
         }
         
         /* Free allocated memory */
-        free(father);
-        free(child);
-        father = NULL;
-        child = NULL;
+        free(elem1);
+        free(elem2);
+        elem1 = NULL;
+        elem2 = NULL;
 
     }
     
@@ -114,7 +128,7 @@ int node_config(int argc, char **argv)
     /* Display father information */
     printf("Father of %s: ", argv[1]);
     if (node.node_father == NULL) {
-        node.node_type = 0;
+        node.node_type = 1;
         printf("undefined, CHIEF is the root of the tree.\n");
     }
     else {
@@ -124,7 +138,7 @@ int node_config(int argc, char **argv)
     /* Display children information */
     printf("Children of %s: ", argv[1]);
     if (node.node_children == NULL) {
-        node.node_type = 2;
+        node.node_type = 3;
         printf("undefined, BRANCH is a leaf of the tree.\n");
     }
     else {
@@ -133,8 +147,9 @@ int node_config(int argc, char **argv)
     }
 
     printf("Node type: ");
-    if (node.node_type == 0) printf("CHIEF\n");
-    else if (node.node_type == 1) printf("FORK\n");
+    if (node.node_type == 0) printf("Source TTN\n");
+    else if (node.node_type == 1) printf("CHIEF\n");
+    else if (node.node_type == 2) printf("FORK\n");
     else printf("BRANCH\n");
 
     return 0;
@@ -165,7 +180,7 @@ int check_configuration(void) {
         puts("Configuration error: node_self is NULL");
         return 1;
     } 
-    if (!node.node_children && !node.node_father && !IS_TTN) {
+    if (!node.node_children && !node.node_father && node.node != 0) {
         puts("Configuration error: at least one between node_children and node_father ");
         return 1;
     }
@@ -183,8 +198,8 @@ int start(int argc, char **argv)
     }
 
     /* Init drivers */
-    if(node.node_type == 0 && IS_TTN) {
-        /* semtech-loramac  drivers to connect to ttn */
+    if(node.node_type == 0 && node.node_type == 0) {
+        /* semtech-loramac drivers to connect to ttn */
         if(semtech_init()) {
             puts("Unable to init semtech-loramac drivers");
             return 1;
@@ -209,7 +224,7 @@ int start(int argc, char **argv)
     /* Define behaviours */
     if(node.node_type == 0) {
         /* CHIEF node */
-        if(IS_TTN) {
+        if(node.node_type == 0) {
             if (source_lora_ttn(node))
                 return 1;
         } else {
