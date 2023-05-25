@@ -156,7 +156,7 @@ int node_config(int argc, char **argv)
     }
     else if (node.node_type == 1) {
         printf("CHIEF\n");
-        printf("Known TTN source: %s\n", node.node_alt_self);
+        printf("Known TTN source: st-lrwan1-%s\n", node.node_alt_self);
     }
     else if (node.node_type == 2) printf("FORK\n");
     else printf("BRANCH\n");
