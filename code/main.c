@@ -72,7 +72,7 @@ int node_config(int argc, char **argv)
         strncpy(elem2, elem, length + 1);
         
         if (i == 0) {
-            printf("#%d Source TTN: st-lrwan1-%s\t Source P2P: st-lrwan1-%s\n", i, elem1, elem2);
+            //printf("#%d Source TTN: st-lrwan1-%s\t Source P2P: st-lrwan1-%s\n", i, elem1, elem2);
             if (strcmp(elem1, argv[1]) == 0) {
                 valid_node = 1;
                 /* Source TTN is simply considered as a node without father and without children */
@@ -88,7 +88,7 @@ int node_config(int argc, char **argv)
             }
         }
         else {
-            printf("#%d Father: st-lrwan1-%s\t Child: st-lrwan1-%s\n", i, elem1, elem2);
+            //printf("#%d Father: st-lrwan1-%s\t Child: st-lrwan1-%s\n", i, elem1, elem2);
 
             if (strcmp(elem2, argv[1]) == 0) {
                 valid_node = 1;
@@ -150,8 +150,14 @@ int node_config(int argc, char **argv)
     }
 
     printf("Node type: ");
-    if (node.node_type == 0) printf("Source TTN\n");
-    else if (node.node_type == 1) printf("CHIEF\n");
+    if (node.node_type == 0) {
+        printf("Source TTN\n");
+        printf("Known CHIEF (P2P source): %s\n", node.node_alt_self);
+    }
+    else if (node.node_type == 1) {
+        printf("CHIEF\n");
+        printf("Known TTN source: %s\n", node.node_alt_self);
+    }
     else if (node.node_type == 2) printf("FORK\n");
     else printf("BRANCH\n");
 
