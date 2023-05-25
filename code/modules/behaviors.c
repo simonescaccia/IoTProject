@@ -18,7 +18,7 @@ uint32_t LATENCY_P2P = US_PER_SEC * 0;
 
 int source_lora_ttn(node_t node) {
 
-    puts("Behavior: source_lora_ttn");
+    puts("Beahvior: source_lora_ttn");
 
     /* json to publish on TTN */
     char json[128];
@@ -41,6 +41,10 @@ int source_lora_ttn(node_t node) {
     char* appkey_list[4] = {"loramac", "set", "appkey", "31AD5FCDDCD4F37EAC0293F186A9AB72"};
     argv = (char**)&appkey_list;
     loramac_handler(4,argv);
+
+    char* dr_list[3] = {"loramac", "dr", "5"};
+    argv = (char**)&dr_list;
+    loramac_handler(3,argv);
 
     char* join_list[3] = {"loramac", "join", "otaa"};
     argv = (char**)&join_list;
