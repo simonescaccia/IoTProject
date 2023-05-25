@@ -180,7 +180,7 @@ int check_configuration(void) {
         puts("Configuration error: node_self is NULL");
         return 1;
     } 
-    if (!node.node_children && !node.node_father && node.node != 0) {
+    if (!node.node_children && !node.node_father && node.node_type != 0) {
         puts("Configuration error: at least one between node_children and node_father ");
         return 1;
     }
