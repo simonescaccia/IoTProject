@@ -9,6 +9,8 @@
 #include "payload_formatter.h"
 #include "semtech-loramac.h"
 
+#include "app_debug.h"
+
 /* Check payload_formatter for more details */
 #define MESSAGE_MAXIMUM_LENGTH 21
 
@@ -131,17 +133,19 @@ void message_received_clb (node_t node, char message[32]) {
     payload_t* payload = get_values(message);
     if (!payload) {
         /* Not a message from our application */
+        if (APP_DEBUG) puts("Not a message from our application");
         return;
     }
 
     /* Check destination */
     if (strcmp(payload->to, node.node_self) != 0) {
         /* Message not sent to me */
+        if (APP_DEBUG) puts("Message not sent to me");
         return;
     }
     
     /* Compute the sender of the message */
-    if (strcmp(payload->from, node.node_father)) {
+    if (strcmp(payload->from, node.node_father) == 0) {
         /* Message sent from the parent */
         puts("Message from the parent received");
 
@@ -150,7 +154,7 @@ void message_received_clb (node_t node, char message[32]) {
     }
 
     /* The CHIEF receive all the leakage messages */
-    if (node.node_type == 1 && strcmp(payload->is_leak, "L")) {
+    if (node.node_type == 1 && strcmp(payload->is_leak, "L") == 0) {
         puts("Message of leakage received");
 
         /* UART send message so SOURCE TTN*/
