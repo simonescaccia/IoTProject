@@ -138,7 +138,7 @@ void message_received_clb (node_t node, char message[32]) {
     }
 
     xtimer_sleep(2);
-    printf("node.node_self -%s- \n", node.node_self);
+    printf("node.node_self -%c-%c-%c \n", node.node_self[0], node.node_self[1], node.node_self[2]);
 
     xtimer_sleep(2);
     printf("payload->to -%s- \n", payload->to);
