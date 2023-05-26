@@ -121,7 +121,11 @@ int node_config(int argc, char **argv)
         return -1;
     }
 
-    node.node_self = argv[1];
+    /* Assign node_self*/
+    int node_length = strlen(argv[1]);
+    node.node_self = (char*)malloc(sizeof(char)*(node_length+1));
+    strncpy(node.node_self, argv[1], node_length + 1);
+
     /* Display node information */
     printf("Node: st-lrwan1-%s\n", argv[1]);
 
