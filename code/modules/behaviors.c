@@ -137,6 +137,8 @@ void message_received_clb (node_t node, char message[32]) {
         return;
     }
 
+    printf("- %s - %s - %s", payload->to, node.node_self, strcmp(payload->to, node.node_self));
+
     /* Check destination */
     if (strcmp(payload->to, node.node_self) != 0) {
         /* Message not sent to me */
