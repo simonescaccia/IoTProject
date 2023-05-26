@@ -236,20 +236,10 @@ int start(int argc, char **argv)
 
     /* Define behaviours */
     if (node.node_type == 0) {
-        if (source_lora_ttn(node))
-            return 1; 
+        if (source_lora_ttn(node)) return 1; 
     }
-    else if (node.node_type == 1) {
-        if (source_lora_p2p(node))
-                return 1; 
-    }
-    else if (node.node_type == 2) {
-        if (fork_lora_p2p(node))
-            return 1;
-    }  
     else {
-        if (branch_lora_p2p(node))
-            return 1;
+        if (lora_p2p(node)) return 1; 
     }
 
     return 0;

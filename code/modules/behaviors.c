@@ -14,7 +14,7 @@
 /* Check payload_formatter for more details */
 #define MESSAGE_MAXIMUM_LENGTH 21
 
-uint32_t SOURCE_LEAKAGE_PERIOD = US_PER_SEC * 4;
+uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 4;
 uint32_t SOURCE_DUTY_CYCLE_PERIOD = US_PER_SEC * 1;
 uint32_t LATENCY_P2P = US_PER_SEC * 0;
 
@@ -148,7 +148,7 @@ void message_received_clb (node_t node, char message[32]) {
         /* Message sent from the parent */
         puts("Message from the parent received");
 
-        /*  */
+        /* Check leakage */
         return;
     }
 
@@ -156,14 +156,14 @@ void message_received_clb (node_t node, char message[32]) {
     if (node.node_type == 1 && strcmp(payload->is_leak, "L") == 0) {
         puts("Message of leakage received");
 
-        /* UART send message so SOURCE TTN*/
+        /* UART send message to SOURCE TTN*/
         return;        
     }
 
 }
 
-int source_lora_p2p(node_t node) {
-    puts("Beahvior: source_lora_p2p");
+int lora_p2p(node_t node) {
+    puts("Beahvior: lora_p2p");
     
     xtimer_ticks32_t last_wakeup;
     bool is_last_wakeup = false;
@@ -175,32 +175,17 @@ int source_lora_p2p(node_t node) {
         /* Set time for sampling: [0, 60] */
         time = (time+1) % 10;
 
-        _send_water_flow_to_children(node, time);
+        /* BRANCH doesn't have children */
+        if (node.node_type != 3) _send_water_flow_to_children(node, time);
 
+        /* Duty cycle */
         if (!is_last_wakeup) {
             /* set last_wakeup only the first time */
             is_last_wakeup = true;
             last_wakeup = xtimer_now();
         }
-        xtimer_periodic_wakeup(&last_wakeup, SOURCE_LEAKAGE_PERIOD);
+        xtimer_periodic_wakeup(&last_wakeup, LEAKAGE_TEST_PERIOD);
     }
-
-    return 0;
-}
-
-int fork_lora_p2p(node_t node) {
-    (void)node;
-
-    puts("Beahvior: fork_lora_p2p");
-    return 0;
-}
-
-int branch_lora_p2p(node_t node) {
-    (void)node;
-
-    puts("Beahvior: branch_lora_p2p");
-
-
 
     return 0;
 }
