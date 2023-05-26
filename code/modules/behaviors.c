@@ -138,10 +138,13 @@ void message_received_clb (node_t node, char message[32]) {
     }
 
     xtimer_sleep(2);
-    printf("%s\n", node.node_self);
+    printf("node.node_self -%s- \n", node.node_self);
 
     xtimer_sleep(2);
-    printf("%s\n", payload->to);
+    printf("payload->to -%s- \n", payload->to);
+
+    xtimer_sleep(2);
+    printf("strcmp-%d- \n", strcmp(payload->to, node.node_self));
 
     /* Check destination */
     if (strcmp(payload->to, node.node_self) != 0) {
