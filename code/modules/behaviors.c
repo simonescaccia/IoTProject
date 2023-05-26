@@ -113,7 +113,7 @@ static void _send_water_flow_to_children(node_t node, int time) {
 
         /* Send water flow to children */
         for (int i = 0; i < node.children_count; i++) {
-            char* list[2] = {"send_cmd", format_payload(str_water_flow, node.node_self, node.node_children[i])};
+            char* list[2] = {"send_cmd", format_payload(str_water_flow, node.node_self, node.node_children[i], "V")};
             char** argv = (char**)&list;
             send_cmd(2, argv);
 
@@ -143,10 +143,19 @@ void message_received_clb (node_t node, char message[32]) {
     /* Compute the sender of the message */
     if (strcmp(payload->from, node.node_father)) {
         /* Message sent from the parent */
-        puts("Message received from the parent")
+        puts("Message from the parent received");
+
+        /*  */
         return;
     }
 
+    /* The CHIEF receive all the leakage messages */
+    if (node.node_type == 1 && strcmp(payload->is_leak, "L")) {
+        puts("Message of leakage received");
+
+        /* UART send message so SOURCE TTN*/
+        return;        
+    }
 
 }
 
