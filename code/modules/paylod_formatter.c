@@ -65,6 +65,7 @@ payload_t* get_values (char message[32]) {
             printf("from: %s\n",payload->from);
             printf("to: %s\n", payload->to);
             printf("value: %s\n", payload->value);
+            printf("is_leak: %s\n", payload->is_leak);
         }
 
         return payload;
