@@ -17,7 +17,7 @@
 /* Debug */
 #define DEBUG 1
     
-node_t node;
+static node_t node;
 
 int node_config(int argc, char **argv)
 {
