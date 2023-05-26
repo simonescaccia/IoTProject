@@ -126,7 +126,6 @@ static void _send_water_flow_to_children(node_t node, int time) {
 }
 
 void message_received_clb (node_t node, char message[32]) {
-    (void)node;
     puts("Callback invoked, starting message parsing");
     
     /* Message parsing */
