@@ -4,9 +4,10 @@ char* config(void) {
     first pair is <source_ttn>-<source_p2p>, then
     <x>-<y> pairs, with x for father and y for child 
     */
-    char* buffer = "11-12 "
-                   "12-13 "
-                   "13-14";
+    char* buffer = "16-17 "
+                   "17-18 "
+                   "18-19 "
+                   "19-20";
     
     return buffer;
 }
