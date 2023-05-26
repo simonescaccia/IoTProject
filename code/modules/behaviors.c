@@ -120,11 +120,19 @@ void message_received_clb (node_t node, char message[32]) {
     }
 
     /* Check destination */
-    if (strcmp(node.node_self, payload->to) != 0) {
+    if (strcmp(payload->to, node.node_self) != 0) {
         /* Message not sent to me */
         return;
     }
     
+    /* Compute the sender of the message */
+    if (strcmp(payload->from, node.node_father)) {
+        /* Message sent from the parent */
+        puts("Message received from the parent")
+        return;
+    }
+
+
 }
 
 int source_lora_p2p(node_t node) {
