@@ -137,7 +137,11 @@ void message_received_clb (node_t node, char message[32]) {
         return;
     }
 
-    printf("- %s - %s -\n", payload->to, node.node_self);
+    xtimer_sleep(2);
+    printf("%s\n", node.node_self);
+
+    xtimer_sleep(2);
+    printf("%s\n", payload->to);
 
     /* Check destination */
     if (strcmp(payload->to, node.node_self) != 0) {
