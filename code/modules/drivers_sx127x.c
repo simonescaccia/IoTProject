@@ -180,6 +180,7 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
                 packet_info.rssi, (int)packet_info.snr,
                 sx127x_get_time_on_air((const sx127x_t *)dev, len));
             /* Callback for message handling */
+            printf("node.node_self cb -%c-%c-%c \n", node.node_self[0], node.node_self[1], node.node_self[2]);   
             (*callback_on_msg_receive)(node, message);
             break;
 
@@ -228,12 +229,14 @@ void set_callback (callback ptr_reg_callback)
     callback_on_msg_receive = ptr_reg_callback;
 }
 
-int init_driver_127x(node_t node)
+int init_driver_127x(node_t callback_node)
 {
     if(DEBUG) 
         puts("[init_driver_127x] starting driver_127x init");
 
-    node = node;
+    node = callback_node;
+
+    printf("callback_node.node_self -%c-%c-%c \n", callback_node.node_self[0], callback_node.node_self[1], callback_node.node_self[2]);
 
     sx127x.params = sx127x_params[0];
     netdev_t *netdev = &sx127x.netdev;
