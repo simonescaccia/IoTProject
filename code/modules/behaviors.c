@@ -29,6 +29,27 @@ int source_lora_ttn(node_t node) {
     //char datetime[20];
     //time_t current;
 
+     /* Set TTN application parameters */
+    char* deveui_list[4] = {"loramac", "set", "deveui", "70B3D57ED005D65B"};
+    char** argv = (char**)&deveui_list;
+    loramac_handler(4,argv);
+
+    char* appeui_list[4] = {"loramac", "set", "appeui", "0000000000000011"};
+    argv = (char**)&appeui_list;
+    loramac_handler(4,argv);
+
+    char* appkey_list[4] = {"loramac", "set", "appkey", "31AD5FCDDCD4F37EAC0293F186A9AB72"};
+    argv = (char**)&appkey_list;
+    loramac_handler(4,argv);
+
+    char* dr_list[4] = {"loramac", "set", "dr", "5"};
+    argv = (char**)&dr_list;
+    loramac_handler(4,argv);
+
+    char* join_list[3] = {"loramac", "join", "otaa"};
+    argv = (char**)&join_list;
+    loramac_handler(3,argv);
+
     while(1) {
         /*time(&current);
         struct tm* t = localtime(&current);
@@ -37,6 +58,7 @@ int source_lora_ttn(node_t node) {
             printf("Error: invalid format.\n");
             return -1;
         }*/
+
         /* Set time for sampling: [0, 60] */
         s_time = (s_time+1) % 10;
 
@@ -47,25 +69,8 @@ int source_lora_ttn(node_t node) {
         
         puts(json);
 
-        /* Set TTN application parameters */
-        char* deveui_list[4] = {"loramac", "set", "deveui", "70B3D57ED005D65B"};
-        char** argv = (char**)&deveui_list;
-        loramac_handler(4,argv);
-
-        char* appeui_list[4] = {"loramac", "set", "appeui", "0000000000000011"};
-        argv = (char**)&appeui_list;
-        loramac_handler(4,argv);
-
-        char* appkey_list[4] = {"loramac", "set", "appkey", "31AD5FCDDCD4F37EAC0293F186A9AB72"};
-        argv = (char**)&appkey_list;
-        loramac_handler(4,argv);
-
-        char* join_list[3] = {"loramac", "join", "otaa"};
-        argv = (char**)&join_list;
-        loramac_handler(3,argv);
-
-        /* Send a message */
-        /*char* send_list[2] = {"send_cmd", json};
+        /* Send a message 
+        char* send_list[2] = {"send_cmd", json};
         argv = (char**)&send_list;
         send_cmd(2, argv);*/
 
@@ -75,6 +80,16 @@ int source_lora_ttn(node_t node) {
 
         /* Sleeping for five seconds */
         xtimer_sleep(5);
+
+        /* AWS integration */
+        /* TTNClient = mqtt.Client()
+        AWSClient = AWSIoTMQTTClient("TTNbridge")
+
+        // Connect the clients
+        TTNClient.connect("eu.thethings.network", 1883, 60)
+        AWSClient.connect()
+        TTNClient.username_pw_set("<application-id>", "<access-key>")
+        */
     }
 
     return 0;

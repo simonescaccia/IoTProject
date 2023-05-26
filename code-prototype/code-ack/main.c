@@ -88,8 +88,8 @@ gpio_t BUZZER_PIN = GPIO_PIN(0, 15); //pin23
 
 #define SECONDS 1*US_PER_SEC //regulator for water_flow_rate formula
 #define SAMPLING 3*US_PER_SEC //duration time of sampling
-#define DAILY_PERIODIC 15*US_PER_SEC //periodic time of sampling (daily or every 6 hours)
-#define ANSWER_AGAIN_PERIODIC 15*US_PER_SEC //again time if son is sleeping //better to put equal for sinchronization
+#define DAILY_PERIODIC 8*US_PER_SEC //periodic time of sampling (daily or every 6 hours)
+#define ANSWER_AGAIN_PERIODIC 8*US_PER_SEC //again time if son is sleeping //better to put equal for sinchronization
 
 xtimer_ticks32_t sample_time_now;
 xtimer_ticks32_t sample_time_end;
@@ -102,11 +102,12 @@ int ret = -1;
 float water_flow_rate_other=0.0;
 float water_flow_rate=0.0;
 float water_flow_diff=0.0;
+float total_quantity=0.0;
 
 int answer=0;
 int work=0;
 
-char message[50];
+char message_help[100];
 char* message_on_node;
 char* message_on_aws;
 char* mex; 
@@ -270,36 +271,45 @@ static void _on_msg_received(MessageData *data)
            (char *)data->message->payload);
 
     mex = (char *)data->message->payload;
-
+    
     if((strcmp (mex, "answr"))==0){
         answer=1;
     }
 
     else{
-            periodic_time = xtimer_now(); 
+            //periodic_time = xtimer_now(); 
             if(board!=0){
                 message_on_node="answr"; //provare ad usare funzione publish normale
                 thread_wakeup(publish_thread_node);
-
-                if(board!=0 || water_sensor_test()==1){
+                if(water_sensor_test()==1 || board!=0){
                     water_flow_rate_other = atof(mex);
-                    if(water_flow_rate-water_flow_rate_other > 5 || water_flow_rate_other-water_flow_rate > 5){
-                        water_flow_diff=abs(water_flow_rate-water_flow_rate_other);
-                        printf("LEAKEGE DETECTED \t -> \t My flow:%f \t Other: %f \t difference: %f\n",water_flow_rate,water_flow_rate_other,water_flow_diff);            
-                        sprintf(message_on_aws, "{\"id\": \"%d\", \"flow\": \"%f\"}",
-                        board, water_flow_diff); //message on aws with id(son) and flow(leakage quantity of this test)
-           
-                        message_on_aws=message;
-                        thread_wakeup(publish_thread_aws);
+                    if(water_flow_rate-water_flow_rate_other > 3 || water_flow_rate_other-water_flow_rate > 3){
+                        if(water_flow_rate-water_flow_rate_other > 0)
+                        {    water_flow_diff=water_flow_rate-water_flow_rate_other; }
+                        else
+                        {   water_flow_diff=water_flow_rate_other-water_flow_rate;  }
 
+                        printf("LEAKEGE DETECTED \t -> \t My flow:%f \t Other: %f \t difference: %f\n",water_flow_rate,water_flow_rate_other,water_flow_diff);            
+                        
+                        total_quantity=total_quantity+water_flow_diff/60*8;
+                        sprintf(message_help, "{\"id\": \"%d\", \"flow_son\": \"%f\", \"flow_diff\": \"%f\", \"quantity leak\": \"%f\"}", board, water_flow_rate, water_flow_diff, total_quantity);             
+                        message_on_aws=message_help;
+                        thread_wakeup(publish_thread_aws);
                         //thread_wakeup(thread_buzzer);
                         //thread_wakeup(thread_led);
                     }
                     else{
-                        sprintf(message_on_aws, "{\"id\": \"%d\", \"flow\": \"%d\"}", 
-                        board, 0); //message on aws with id(son) and flow(leakage quantity of this test EQUAL TO ZERO                //This is only for debug
-                        thread_wakeup(publish_thread_aws);
+                        if(water_flow_rate-water_flow_rate_other > 0)
+                        {    water_flow_diff=water_flow_rate-water_flow_rate_other; }
+                        else
+                        {   water_flow_diff=water_flow_rate_other-water_flow_rate;  }
+
                         printf("NO LEAKEGE\n");
+
+                        total_quantity=total_quantity+water_flow_diff/60*8;
+                        sprintf(message_help, "{\"id\": \"%d\", \"flow_son\": \"%f\", \"flow_diff\": \"%f\", \"quantity leak\": \"%f\"}", board, water_flow_rate, water_flow_diff, total_quantity);             
+                        message_on_aws=message_help;
+                        thread_wakeup(publish_thread_aws);
                     }
                 }
             }   
@@ -390,12 +400,12 @@ int water_sensor_test(void){
     printf("water sensor test end\n");
 
     if(board==0){
-        sprintf(message, "{\"id\": \"%d\", \"flow\": \"%f\"}",
-                        board, water_flow_rate);
-
-        publish(message); //for son
+        sprintf(message_help, "%f", water_flow_rate);
+        publish(message_help); //for son
         
-        message_on_aws=message;
+        total_quantity=total_quantity+water_flow_rate/60*8;
+        sprintf(message_help, "{\"id\": \"%d\", \"flow source\": \"%f\", \"quantity\": \"%f\"}", board, water_flow_rate, total_quantity);             
+        message_on_aws=message_help;
         thread_wakeup(publish_thread_aws); //for aws
     }
 
@@ -490,12 +500,6 @@ int main(void)
     }          
     else{
         while(1){
-        xtimer_sleep(3);
-        work=1;
-        printf("I am awake again\n");   
-        xtimer_sleep(4); //node son: 3s sleep of duty cicle ((sampling of the father)) + 3s (sampling node son) + 1s(execution) + 10s (sleep of duty cicle) = 4s of 15s (work)
-        printf("I am asleep now\n");   
-        work=0;
         xtimer_periodic_wakeup(&periodic_time, DAILY_PERIODIC);
         if(ret<0){
             connect();
