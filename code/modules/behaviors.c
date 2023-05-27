@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "xtimer.h"
 
@@ -12,7 +13,11 @@
 #include "app_debug.h"
 
 /* Check payload_formatter for more details */
-#define MESSAGE_MAXIMUM_LENGTH 21
+#define VALUE_MAXIMUM_LENGTH 14
+#define LOGIC_TIME_MAXIMUM_LENGTH 5
+
+/* Leakage */
+#define LEAKAGE_CONDITION 0 /* L/min */
 
 uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 4;
 uint32_t SOURCE_DUTY_CYCLE_PERIOD = US_PER_SEC * 1;
@@ -109,19 +114,43 @@ static void _send_water_flow_to_children(node_t node, int time) {
     int water_flow = get_water_flow(node.node_type, node.node_self, time);
     if(water_flow) {
 
-        /* Convert the water flow int to char* and split it between children */
-        char str_water_flow[MESSAGE_MAXIMUM_LENGTH];
+        /* Convert the water flow from int to char* and split it between children */
+        char str_water_flow[VALUE_MAXIMUM_LENGTH];
         sprintf(str_water_flow, "%d", water_flow / node.children_count);
+        /* Convert the time from int to string */
+        char str_time[LOGIC_TIME_MAXIMUM_LENGTH];
+        sprintf(str_time, "%d", time);        
 
         /* Send water flow to children */
         for (int i = 0; i < node.children_count; i++) {
-            char* list[2] = {"send_cmd", format_payload(str_water_flow, node.node_self, node.node_children[i], "V")};
+            char* list[2] = {"send_cmd", format_payload(str_water_flow, node.node_self, node.node_children[i], "V", str_time)};
             char** argv = (char**)&list;
             send_cmd(2, argv);
 
             /* Restart listening */
             _start_listening();
         }
+    }
+}
+
+void _check_leakage (node_t node, payload_t* payload) {
+    /* Sample */
+    int water_flow = get_water_flow(node.node_type, node.node_self, atoi(payload->logic_time));
+
+    /* Compute the difference */
+    int difference = atoi(payload->value) - water_flow;
+
+    if (difference > LEAKAGE_CONDITION) {
+        /* Leakage detected */
+
+        /* Convert the differece from int to char* */
+        char str_difference[VALUE_MAXIMUM_LENGTH];
+        sprintf(str_difference, "%d", difference);
+
+        /* Send a message to the source */
+        char* list[2] = {"send_cmd", format_payload(str_difference, node.node_self, node.node_source_p2p, "L", payload->logic_time)};
+        char** argv = (char**)&list;
+        send_cmd(2, argv);
     }
 }
 
@@ -149,6 +178,7 @@ void message_received_clb (node_t node, char message[32]) {
         puts("Message from the parent received");
 
         /* Check leakage */
+        _check_leakage(node, payload);
         return;
     }
 
@@ -157,6 +187,7 @@ void message_received_clb (node_t node, char message[32]) {
         puts("Message of leakage received");
 
         /* UART send message to SOURCE TTN*/
+
         return;        
     }
 

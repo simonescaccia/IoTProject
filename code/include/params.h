@@ -6,9 +6,10 @@ typedef struct {
     int node_type;
 
     /* Node father and children */
-    char* node_father;
+    char* node_source_p2p;
     char* node_self;
     char* node_alt_self;
+    char* node_father;
     char** node_children;
 
     /* Number of children*/

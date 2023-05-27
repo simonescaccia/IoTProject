@@ -13,12 +13,12 @@ const int MESSAGE_LENGTH = 32;
 /**
  * @brief Return the message to send by lora p2p, using the following formatting: <0000 app_id>,<node from>,<node to>,<L for leakage or V for value>,<value>
  * Maximum lenght of the payload is 31, since the maximum lenght of the lora message is 32
- * 4 comma chars, 2 chars for from and to, 4 chars for the APP_ID, 1 char for leakage info, 18 chars for the value
+ * 5 comma chars, 2 chars for from and to, 4 chars for the APP_ID, 1 char for leakage info, 13 chars for the value, 4 chars for the logic time
  * 
 */
-char* format_payload (char value[21], char from[3], char to[3], char leak[2]) {
+char* format_payload (char value[21], char from[3], char to[3], char leak[2], char logic_time[55]) {
     char* payload = malloc(sizeof(char) * MESSAGE_LENGTH); 
-    snprintf(payload, MESSAGE_LENGTH, "%s,%s,%s,%s,%s", APP_ID, from, to, leak, value);
+    snprintf(payload, MESSAGE_LENGTH, "%s,%s,%s,%s,%s,%s", APP_ID, from, to, leak, value, logic_time);
     return payload;
 }
 
@@ -55,6 +55,10 @@ payload_t* get_values (char message[32]) {
                 case 4:
                     payload->value = (char*)malloc(sizeof(char)*(strlen(token)+1));
                     strncpy(payload->value, token, strlen(token) + 1); 
+                    break;
+                case 5:
+                    payload->logic_time = (char*)malloc(sizeof(char)*(strlen(token)+1));
+                    strncpy(payload->logic_time, token, strlen(token) + 1); 
                     break;
             }
             token = strtok(NULL, ",");

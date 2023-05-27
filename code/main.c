@@ -28,6 +28,7 @@ int node_config(int argc, char **argv)
 
     node.node_self = NULL;
     node.node_alt_self = NULL;
+    node.node_source_p2p = NULL;
     node.node_father = NULL;
     node.node_children = NULL;
     node.node_type = 2;
@@ -72,6 +73,11 @@ int node_config(int argc, char **argv)
         strncpy(elem2, elem, length + 1);
         
         if (i == 0) {
+            /* Store source_p2p */
+            length = strlen(elem2);
+            node.node_source_p2p = (char*)malloc(length + 1);
+            strncpy(node.node_source_p2p, elem2, length + 1);
+            
             //printf("#%d Source TTN: st-lrwan1-%s\t Source P2P: st-lrwan1-%s\n", i, elem1, elem2);
             if (strcmp(elem1, argv[1]) == 0) {
                 valid_node = 1;
