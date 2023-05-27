@@ -142,7 +142,7 @@ void _check_leakage (node_t node, payload_t* payload) {
 
     if (difference > LEAKAGE_CONDITION) {
         /* Leakage detected */
-        pust("leakage detected, sending a message to the source");
+        puts("leakage detected, sending a message to the source");
 
         /* Convert the differece from int to char* */
         char str_difference[VALUE_MAXIMUM_LENGTH];
