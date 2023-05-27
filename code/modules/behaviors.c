@@ -19,7 +19,7 @@
 /* Leakage */
 #define LEAKAGE_CONDITION 0 /* L/min */
 
-uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 20;
+uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 15;
 uint32_t LATENCY_P2P = US_PER_SEC * 0;
 
 int source_lora_ttn(node_t node) {
@@ -157,6 +157,9 @@ void _check_leakage (node_t node, payload_t* payload) {
         char* list[2] = {"send_cmd", format_payload(str_difference, node.node_self, node.node_source_p2p, "L", payload->logic_time)};
         char** argv = (char**)&list;
         send_cmd(2, argv);
+
+        /* Restart listening */
+        _start_listening();
     } else {
         puts("No leakage detected\n");
     }
