@@ -19,8 +19,7 @@
 /* Leakage */
 #define LEAKAGE_CONDITION 0 /* L/min */
 
-uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 4;
-uint32_t SOURCE_DUTY_CYCLE_PERIOD = US_PER_SEC * 1;
+uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 10;
 uint32_t LATENCY_P2P = US_PER_SEC * 0;
 
 int source_lora_ttn(node_t node) {

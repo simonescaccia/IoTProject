@@ -27,11 +27,22 @@ int get_water_flow(int self_node_type, char *self_node, int logic_time) {
             return 0;
     }
     if (self_node_type == 2) {
+        /* FORK data */
+        if (logic_time >= 0 && logic_time <= 2)
+            return 30;
+        if (logic_time >= 4 && logic_time <= 6)
+            return 20;
+        if (logic_time >= 7 && logic_time <= 10)
+            return 0;
+    }
+    if (self_node_type == 3) {
         /* BRANCH data */
         if (logic_time >= 0 && logic_time <= 2)
             return 30;
         if (logic_time >= 4 && logic_time <= 6)
             return 20;
+        if (logic_time >= 5 && logic_time <= 6)
+            return 10;
         if (logic_time >= 7 && logic_time <= 10)
             return 0;
     }
