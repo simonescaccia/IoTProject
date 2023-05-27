@@ -195,7 +195,7 @@ void message_received_clb (node_t node, char message[32]) {
 
     /* The CHIEF receive all the leakage messages */
     if (node.node_type == 1 && strcmp(payload->is_leak, "L") == 0) {
-        printf("Message of leakage received: %s\n", message);
+        printf("Message of leakage received: %s\n\n", message);
 
         /* UART send message to SOURCE TTN*/
 
