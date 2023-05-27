@@ -146,7 +146,7 @@ int listen_cmd(int argc, char **argv)
 
     netdev->driver->set(netdev, NETOPT_STATE, &state, sizeof(state));
 
-    printf("Listen mode set\n");
+    puts("Listen mode set\n");
 
     return 0;
 }
@@ -185,7 +185,7 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
 
         case NETDEV_EVENT_TX_COMPLETE:
             sx127x_set_sleep(&sx127x);
-            puts("Transmission completed");
+            puts("Transmission completed\n");
             break;
 
         case NETDEV_EVENT_CAD_DONE:

@@ -141,6 +141,7 @@ void _check_leakage (node_t node, payload_t* payload) {
 
     if (difference > LEAKAGE_CONDITION) {
         /* Leakage detected */
+        puts("Leakage detected, sending a message to the source");
 
         /* Convert the differece from int to char* */
         char str_difference[VALUE_MAXIMUM_LENGTH];
@@ -154,7 +155,7 @@ void _check_leakage (node_t node, payload_t* payload) {
 }
 
 void message_received_clb (node_t node, char message[32]) {
-    puts("Callback invoked, starting message parsing");
+    if (APP_DEBUG) puts("Callback invoked, starting message parsing");
     
     /* Message parsing */
     payload_t* payload = get_values(message);
