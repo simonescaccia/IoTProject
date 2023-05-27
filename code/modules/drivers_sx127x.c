@@ -96,7 +96,7 @@ int lora_setup_cmd(int argc, char **argv)
     netdev->driver->set(netdev, NETOPT_CODING_RATE,
                         &lora_cr, sizeof(lora_cr));
 
-    puts("[Info] setup: configuration set with success");
+    if (APP_DEBUG) puts("[Info] setup: configuration set with success");
 
     return 0;
 }

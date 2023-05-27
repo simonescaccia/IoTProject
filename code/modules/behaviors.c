@@ -148,6 +148,11 @@ void _check_leakage (node_t node, payload_t* payload) {
         char str_difference[VALUE_MAXIMUM_LENGTH];
         sprintf(str_difference, "%d", difference);
 
+        /* Wait for source switch to listen mode */
+        if (strcmp(node.node_father, node.node_source_p2p) == 0) {
+            xtimer_sleep(0.5);
+        }
+
         /* Send a message to the source */
         char* list[2] = {"send_cmd", format_payload(str_difference, node.node_self, node.node_source_p2p, "L", payload->logic_time)};
         char** argv = (char**)&list;

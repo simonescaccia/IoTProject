@@ -6,13 +6,9 @@
 /**
  * TTN self_node_type == 0, CHIEF self_node_type: 1
  * Water flow function simulation: x: logic_time, y: L/min
- * y = 30 L/min for x in [0, 6]
- * y = 0 L/min for x in [7, 10]
+ * y = 30 L/min for x in [0, 7]
+ * y = 0 L/min for x in [8, 10]
  * 
- * BRANCH self_node_type: 3
- * y = 30 L/min for x in [0, 2]
- * y = 20 L/min for x in [4, 6] LEAKAGE
- * y = 0 L/min for x [7, 10]
 */
 
 int get_water_flow(int self_node_type, char *self_node, int logic_time) {
@@ -20,30 +16,30 @@ int get_water_flow(int self_node_type, char *self_node, int logic_time) {
     (void)self_node;
 
     if (self_node_type == 0 || self_node_type == 1) {
-        /* CHIEF data */
-        if (logic_time >= 0 && logic_time <= 6)
+        /* SOURCE data */
+        if (logic_time >= 0 && logic_time <= 7)
             return 30;
-        if (logic_time >= 7 && logic_time <= 10)
+        if (logic_time >= 8 && logic_time <= 10)
             return 0;
     }
     if (self_node_type == 2) {
         /* FORK data */
-        if (logic_time >= 0 && logic_time <= 2)
+        if (logic_time >= 0 && logic_time <= 3)
             return 30;
-        if (logic_time >= 4 && logic_time <= 6)
+        if (logic_time >= 4 && logic_time <= 7)
             return 20;
-        if (logic_time >= 7 && logic_time <= 10)
+        if (logic_time >= 8 && logic_time <= 10)
             return 0;
     }
     if (self_node_type == 3) {
         /* BRANCH data */
-        if (logic_time >= 0 && logic_time <= 2)
+        if (logic_time >= 0 && logic_time <= 3)
             return 30;
-        if (logic_time >= 4 && logic_time <= 6)
+        if (logic_time >= 4 && logic_time <= 5)
             return 20;
-        if (logic_time >= 5 && logic_time <= 6)
+        if (logic_time >= 6 && logic_time <= 7)
             return 10;
-        if (logic_time >= 7 && logic_time <= 10)
+        if (logic_time >= 8 && logic_time <= 10)
             return 0;
     }
 
