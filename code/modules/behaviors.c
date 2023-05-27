@@ -19,7 +19,7 @@
 /* Leakage */
 #define LEAKAGE_CONDITION 0 /* L/min */
 
-uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 10;
+uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 20;
 uint32_t LATENCY_P2P = US_PER_SEC * 0;
 
 int source_lora_ttn(node_t node) {
@@ -135,13 +135,14 @@ static void _send_water_flow_to_children(node_t node, int time) {
 void _check_leakage (node_t node, payload_t* payload) {
     /* Sample */
     int water_flow = get_water_flow(node.node_type, node.node_self, atoi(payload->logic_time));
+    printf("Current water flow: %d. ", water_flow);
 
     /* Compute the difference */
     int difference = atoi(payload->value) - water_flow;
 
     if (difference > LEAKAGE_CONDITION) {
         /* Leakage detected */
-        puts("Leakage detected, sending a message to the source");
+        pust("leakage detected, sending a message to the source");
 
         /* Convert the differece from int to char* */
         char str_difference[VALUE_MAXIMUM_LENGTH];
@@ -151,6 +152,8 @@ void _check_leakage (node_t node, payload_t* payload) {
         char* list[2] = {"send_cmd", format_payload(str_difference, node.node_self, node.node_source_p2p, "L", payload->logic_time)};
         char** argv = (char**)&list;
         send_cmd(2, argv);
+    } else {
+        puts("No leakage detected\n");
     }
 }
 
@@ -175,7 +178,7 @@ void message_received_clb (node_t node, char message[32]) {
     /* Compute the sender of the message */
     if (strcmp(payload->from, node.node_father) == 0) {
         /* Message sent from the parent */
-        puts("Message from the parent received");
+        printf("Message from the parent received: %s\n", message);
 
         /* Check leakage */
         _check_leakage(node, payload);
@@ -184,7 +187,7 @@ void message_received_clb (node_t node, char message[32]) {
 
     /* The CHIEF receive all the leakage messages */
     if (node.node_type == 1 && strcmp(payload->is_leak, "L") == 0) {
-        puts("Message of leakage received");
+        printf("Message of leakage received: %s\n", message);
 
         /* UART send message to SOURCE TTN*/
 
@@ -194,7 +197,7 @@ void message_received_clb (node_t node, char message[32]) {
 }
 
 int lora_p2p(node_t node) {
-    puts("Beahvior: lora_p2p");
+    puts("Behavior: lora_p2p");
     
     xtimer_ticks32_t last_wakeup;
     bool is_last_wakeup = false;

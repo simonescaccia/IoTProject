@@ -15,6 +15,7 @@
 #include "sx127x_netdev.h"
 
 #include "drivers_sx127x.h"
+#include "app_debug.h"
 
 #define SX127X_LORA_MSG_QUEUE   (16U)
 #define SX127X_STACKSIZE        (THREAD_STACKSIZE_DEFAULT)
@@ -30,9 +31,6 @@ static sx127x_t sx127x;
 static void (*callback_on_msg_receive)(node_t, char[32]);
 
 static node_t node;
-
-// debug
-#define DEBUG 1
 
 int lora_setup_cmd(int argc, char **argv)
 {
@@ -168,13 +166,13 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
         netdev_lora_rx_info_t packet_info;
         switch (event) {
         case NETDEV_EVENT_RX_STARTED:
-            puts("Data reception started");
+            if (APP_DEBUG) puts("Data reception started");
             break;
 
         case NETDEV_EVENT_RX_COMPLETE:
             len = dev->driver->recv(dev, NULL, 0, 0);
             dev->driver->recv(dev, message, len, &packet_info);
-            printf(
+            if (APP_DEBUG) printf(
                 "{Payload: \"%s\" (%d bytes), RSSI: %i, SNR: %i, TOA: %" PRIu32 "}\n",
                 message, (int)len,
                 packet_info.rssi, (int)packet_info.snr,
@@ -230,8 +228,7 @@ void set_callback (callback ptr_reg_callback)
 
 int init_driver_127x(node_t callback_node)
 {
-    if(DEBUG) 
-        puts("[init_driver_127x] starting driver_127x init");
+    if(APP_DEBUG) puts("[init_driver_127x] starting driver_127x init");
 
     node = callback_node;
 
@@ -256,8 +253,7 @@ int init_driver_127x(node_t callback_node)
         return 1;
     }
 
-    if(DEBUG) 
-        puts("[init_driver_127x] driver_127x init done");
+    if(APP_DEBUG) puts("[init_driver_127x] driver_127x init done");
 
     return 0;
 }

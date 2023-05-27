@@ -13,9 +13,7 @@
 #include "semtech-loramac.h"
 #include "behaviors.h"
 #include "config.h"
-
-/* Debug */
-#define DEBUG 1
+#include "app_debug.h"
     
 static node_t node;
 
@@ -176,7 +174,7 @@ int node_config(int argc, char **argv)
 
 int check_configuration(void) {
 
-    if (DEBUG) {
+    if (APP_DEBUG) {
         if (node.node_self == NULL) {
             printf("node_self is NULL\n");
         } else {
