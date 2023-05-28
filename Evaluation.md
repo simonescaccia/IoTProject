@@ -35,22 +35,30 @@ We wish to evaluate the power consumption of MCUs that are not attached to a pow
 ## Algorithms Performances
 
 ### Water leak detection Algorithm
+Before designing a water leak detection algorithm, we focused on the dynamics of water in pipes. Since we are dealing with an irrigation system, a reasonable assumption is to consider water in pipes under pressure. It means that there are never empty pipes. Now, we can have two conditions, either stationary water or moving water, due to the increasing pressure at the source during irrigation time. This means that we can ignore the specific condition when doing a test, because the difference between adjacent flows will be bounded in both cases if there is no leakage, and not bounded otherwise. The detection algorithm starts from the source and propagates through the tree topology, always with the same logic for every father-child pair. The father sends water flow information to the child, which makes a proper computation and compares the obtained value with the received one, using a specific threshold. In case of leakage detection, it will communicate the leakage to the cloud through the LoRa gateway.
+
+One of the main problems related to the test is related to synchronization, because of the delay related to transmission latency. We thought about an handshaking approach to take into account this discrepancy and to compare water flows starting the sampling process at two close moments.
 
 1. Test propagation phase
+2. Leak notification
 
-+ One message from the CHIEF to the FORK childs
-+ One message from the FORK to the FORK childs
-+ One message from the FORK to the BRANCH childs
-
-2. If a leak is detected, the MCU that computes the check, will send a message to the cloud to notify the user
-
-We will evaluate the number of messages sent by the protocol and the time needed to complete the algorithm.
 The complexity will change depending on the number of FORKs, and we will compare variuous topologies in order to find the best one.
+
+### Energy consumption
+Our requirement is not to tolerate a water loss of more than one day, so we wish to detect a leakage within 24 h. Now, since the leakage is an unpredictable event, we cannot define a precise strategy apriori, but we want to indentify the best one in order to minimize power consumption. We compute this strategy analitically. Firstly, for simplicity, we focus on a simple father-child pair, since the same reasoning holds for every adjacent pair of nodes of the tree topology. Now, we define x as the send rate (msg/day) of the father, so the number of messages sent per day, and y as the total listen interval of the child (in hours/day). In order to be sure to correctly listen to at least one message in one day, y should be equal to (24/x + epsilon) hours/day, where epsilon is a neglectable time interval if compared with 24/x hours. Computing the energy consumption, there are three contributions, one related to the sender, one to the receiver and one to the exchange of messages linked to the leakage detection algorithm, so both for synchronization and test. This last component can be omitted in our considerations because it is not influenced by the choice of x, which we wish to know. So, the total energy consumption is given by:
+
+
+$$E(x,y) = E(x) + E(y) + E(algorithm) \approx E(x) + E(y)$$
+The two components are: 
+$$E(x) = P_{trans} \cdot t_{trans} + (P_{on} \cdot t_{on}) \cdot x +(P_{off} \cdot t_{off}) \cdot x$$
+$$E(y) = P_{listen} \cdot y + P_{on} \cdot t_{on} + P_{off} \cdot t_{off}$$
+
+Our analysis is hence focused on finding the integer value of x (number of messages per day of the father) such that the total energy consumption is minimized. The listen time of the child will depends on x value. 
+
 
 ### Monitoring of the water flow Algorithm
 
 From the CHIEF MCUs, send periodically a message to the cloud to update the water flow consumed.
-
 Performances depends on the latency between the cloud and the MCUs.
 
 ## Response Time Performances
