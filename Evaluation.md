@@ -70,6 +70,10 @@ To allow the harvesting of the energy, we should have an alternator connected to
 
 A possible solution for the energy harvesting is here: https://www.ebay.it/itm/322724692568 with the tutorial of the turbine https://www.youtube.com/watch?v=mtMO3VmCmiQ .
 
+We should for example connect this type of turbine called micro hydro water turbine generator to our water flow sensor.
+
+![solution](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/sensor_and_energy_image.png)  <\br>
+
 ## Response Time Performances
 
 The response time between CHIEF, FORKs and BRANCHEs depends on the distance between the MCUs, so it depends on the topology of the irrigation system.
