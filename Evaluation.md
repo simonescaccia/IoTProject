@@ -63,6 +63,11 @@ Our analysis is hence focused on finding the integer value of x (number of messa
 From the CHIEF MCUs, send periodically a message to the cloud to update the water flow consumed.
 Performances depends on the latency between the cloud and the MCUs.
 
+## Water flow sensor for energy harvesting
+This water flow sensor can not create energy for our batteries beacuse the electronic part is not connected to the turbine, it is only connected to the Hall Effect sensor.
+
+To allow the harvesting of the energy, we should have an alternator connected to the turbine to transform the mechanical energy into electrical energy.
+
 ## Response Time Performances
 
 The response time between CHIEF, FORKs and BRANCHEs depends on the distance between the MCUs, so it depends on the topology of the irrigation system.
