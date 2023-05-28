@@ -49,8 +49,10 @@ Our requirement is not to tolerate a water loss of more than one day, so we wish
 
 
 $$E(x,y) = E(x) + E(y) + E(algorithm) \approx E(x) + E(y)$$
+
 The two components are: 
 $$E(x) = P_{trans} \cdot t_{trans} + (P_{on} \cdot t_{on}) \cdot x +(P_{off} \cdot t_{off}) \cdot x$$
+
 $$E(y) = P_{listen} \cdot y + P_{on} \cdot t_{on} + P_{off} \cdot t_{off}$$
 
 Our analysis is hence focused on finding the integer value of x (number of messages per day of the father) such that the total energy consumption is minimized. The listen time of the child will depends on x value. 
