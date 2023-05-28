@@ -68,6 +68,8 @@ This water flow sensor can not create energy for our batteries beacuse the elect
 
 To allow the harvesting of the energy, we should have an alternator connected to the turbine to transform the mechanical energy into electrical energy.
 
+A possible solution for the energy harvesting is here: https://www.ebay.it/itm/322724692568 with the tutorial of the turbine https://www.youtube.com/watch?v=mtMO3VmCmiQ .
+
 ## Response Time Performances
 
 The response time between CHIEF, FORKs and BRANCHEs depends on the distance between the MCUs, so it depends on the topology of the irrigation system.
