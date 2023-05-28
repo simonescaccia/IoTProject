@@ -72,7 +72,7 @@ A possible solution for the energy harvesting is here: https://www.ebay.it/itm/3
 
 We should for example connect this type of turbine called micro hydro water turbine generator to our water flow sensor.
 
-![solution](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/sensor_and_energy_image.png)  <\br>
+![solution](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/sensor_and_energy_image.png)  </br>
 
 ## Response Time Performances
 
