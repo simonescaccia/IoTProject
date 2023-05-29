@@ -1,0 +1,74 @@
+{"id": "0", "flow source": "1.662640", "quantity": "0.221685"}
+{"id": "1", "flow_son": "1.441757", "flow_diff": "0.220883", "quantity leak": "0.029451"}
+{"id": "0", "flow source": "1.587622", "quantity": "0.433368"}
+{"id": "1", "flow_son": "1.328341", "flow_diff": "0.259281", "quantity leak": "0.064022"}
+{"id": "1", "flow_son": "1.289695", "flow_diff": "0.262118", "quantity leak": "0.098971"}
+{"id": "0", "flow source": "1.551813", "quantity": "0.640277"}
+{"id": "0", "flow source": "1.366155", "quantity": "0.822431"}
+{"id": "1", "flow_son": "1.253311", "flow_diff": "0.112844", "quantity leak": "0.114017"}
+{"id": "0", "flow source": "1.439536", "quantity": "1.014369"}
+{"id": "1", "flow_son": "1.219942", "flow_diff": "0.219594", "quantity leak": "0.143296"}
+{"id": "0", "flow source": "1.327036", "quantity": "1.191307"}
+{"id": "1", "flow_son": "1.031784", "flow_diff": "0.295252", "quantity leak": "0.182663"}
+{"id": "1", "flow_son": "1.035109", "flow_diff": "0.183358", "quantity leak": "0.207111"}
+{"id": "0", "flow source": "1.218467", "quantity": "1.353769"}
+{"id": "0", "flow source": "6.682211", "quantity": "2.244731"}
+{"id": "1", "flow_son": "6.321526", "flow_diff": "0.360685", "quantity leak": "0.255202"}
+{"id": "0", "flow source": "7.052256", "quantity": "3.185031"}
+{"id": "1", "flow_son": "6.789422", "flow_diff": "0.262834", "quantity leak": "0.290247"}
+{"id": "0", "flow source": "6.500653", "quantity": "4.051785"}
+{"id": "1", "flow_son": "6.321519", "flow_diff": "0.179133", "quantity leak": "0.314131"}
+{"id": "0", "flow source": "13.177195", "quantity": "5.808744"}
+{"id": "1", "flow_son": "12.717157", "flow_diff": "0.460037", "quantity leak": "0.375469"}
+{"id": "0", "flow source": "10.489597", "quantity": "7.207357"}
+{"id": "1", "flow_son": "10.063375", "flow_diff": "0.426222", "quantity leak": "0.432299"}
+{"id": "0", "flow source": "13.550832", "quantity": "9.014135"}
+{"id": "1", "flow_son": "12.970655", "flow_diff": "0.580176", "quantity leak": "0.509656"}
+{"id": "0", "flow source": "11.003091", "quantity": "10.481215"}
+{"id": "1", "flow_son": "7.121239", "flow_diff": "3.881852", "quantity leak": "1.027236"}
+{"id": "0", "flow source": "13.532675", "quantity": "12.285571"}
+{"id": "1", "flow_son": "8.280914", "flow_diff": "5.251760", "quantity leak": "1.727471"}
+{"id": "0", "flow source": "10.419772", "quantity": "13.674874"}
+{"id": "1", "flow_son": "6.890812", "flow_diff": "3.528960", "quantity leak": "2.197999"}
+{"id": "0", "flow source": "13.116346", "quantity": "15.423720"}
+{"id": "1", "flow_son": "7.817469", "flow_diff": "5.298878", "quantity leak": "2.904516"}
+{"id": "0", "flow source": "10.043011", "quantity": "16.762789"}
+{"id": "1", "flow_son": "7.134814", "flow_diff": "2.908196", "quantity leak": "3.292275"}
+{"id": "0", "flow source": "12.449206", "quantity": "18.422684"}
+{"id": "1", "flow_son": "11.571141", "flow_diff": "0.878065", "quantity leak": "3.409351"}
+{"id": "0", "flow source": "10.408825", "quantity": "19.810528"}
+{"id": "1", "flow_son": "9.870468", "flow_diff": "0.538357", "quantity leak": "3.481132"}
+{"id": "0", "flow source": "12.114693", "quantity": "21.425819"}
+{"id": "1", "flow_son": "11.792891", "flow_diff": "0.321802", "quantity leak": "3.524039"}
+{"id": "0", "flow source": "10.492617", "quantity": "22.824835"}
+{"id": "1", "flow_son": "9.685699", "flow_diff": "0.806917", "quantity leak": "3.631628"}
+{"id": "0", "flow source": "11.811852", "quantity": "24.399748"}
+{"id": "1", "flow_son": "11.405543", "flow_diff": "0.406309", "quantity leak": "3.685802"}
+{"id": "1", "flow_son": "10.553148", "flow_diff": "0.778286", "quantity leak": "3.789574"}
+{"id": "0", "flow source": "11.331434", "quantity": "25.910606"}
+{"id": "0", "flow source": "11.339182", "quantity": "27.422497"}
+{"id": "1", "flow_son": "10.905610", "flow_diff": "0.433572", "quantity leak": "3.847383"}
+{"id": "0", "flow source": "12.525204", "quantity": "29.092524"}
+{"id": "1", "flow_son": "11.829853", "flow_diff": "0.695351", "quantity leak": "3.940097"}
+{"id": "0", "flow source": "10.931912", "quantity": "30.550112"}
+{"id": "1", "flow_son": "10.055296", "flow_diff": "0.876616", "quantity leak": "4.056979"}
+{"id": "0", "flow source": "12.922944", "quantity": "32.273170"}
+{"id": "1", "flow_son": "12.938993", "flow_diff": "0.016048", "quantity leak": "4.059118"}
+{"id": "0", "flow source": "10.821995", "quantity": "33.716103"}
+{"id": "1", "flow_son": "10.277117", "flow_diff": "0.544878", "quantity leak": "4.131769"}
+{"id": "0", "flow source": "13.592099", "quantity": "35.528381"}
+{"id": "1", "flow_son": "12.827887", "flow_diff": "0.764213", "quantity leak": "4.233664"}
+{"id": "0", "flow source": "10.419314", "quantity": "36.917622"}
+{"id": "1", "flow_son": "9.818459", "flow_diff": "0.600856", "quantity leak": "4.313777"}
+{"id": "0", "flow source": "13.301288", "quantity": "38.691128"}
+{"id": "1", "flow_son": "12.680184", "flow_diff": "0.621103", "quantity leak": "4.396591"}
+{"id": "0", "flow source": "10.200889", "quantity": "40.051247"}
+{"id": "1", "flow_son": "9.433388", "flow_diff": "0.767501", "quantity leak": "4.498925"}
+{"id": "0", "flow source": "12.881846", "quantity": "41.768826"}
+{"id": "1", "flow_son": "12.347423", "flow_diff": "0.534424", "quantity leak": "4.570181"}
+{"id": "0", "flow source": "10.120113", "quantity": "43.118176"}
+{"id": "1", "flow_son": "5.988867", "flow_diff": "4.131246", "quantity leak": "5.121014"}
+{"id": "0", "flow source": "12.516786", "quantity": "44.787079"}
+{"id": "1", "flow_son": "6.950047", "flow_diff": "5.566739", "quantity leak": "5.863246"}
+{"id": "0", "flow source": "5.507088", "quantity": "45.521358"}
+{"id": "1", "flow_son": "5.160748", "flow_diff": "0.346340", "quantity leak": "5.909425"}
