@@ -147,8 +147,9 @@ static void _send_water_flow_to_children(node_t node, int time) {
 
             /* Waiting the transmission complete */
             while (!tx_complete) {
-                printf("here: %d", tx_complete);
-                xtimer_sleep(1);
+                puts("Here");
+                /* The sendere thread has less priority, so we need to sleep a little bit */
+                xtimer_sleep(0.1);
             }
         }
         
@@ -198,7 +199,10 @@ void transmission_complete_clb (void) {
 void message_received_clb (node_t node, char message[32]) {
     if (APP_DEBUG) puts("Callback invoked, starting message parsing");
 
-    if (strlen(message) > 31) printf("Extraneous message received, message lenght: %d\n", strlen(message));
+    if (strlen(message) > 31) {
+        printf("Extraneous message received, message lenght: %d\n", strlen(message));
+        return;
+    }
 
     /* Message parsing */
     payload_t* payload = get_values(message);
