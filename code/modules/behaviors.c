@@ -121,7 +121,7 @@ static void _send_water_flow_to_children(node_t node, int time) {
 
     if (water_flow_sum) {
 
-        if(APP_DEBUG) printf("Water flow sum: %d", water_flow_sum);
+        if(APP_DEBUG) printf("Water flow sum: %d\n\n", water_flow_sum);
 
         /* Convert the time from int to string */
         char str_time[LOGIC_TIME_MAXIMUM_LENGTH];
