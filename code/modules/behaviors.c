@@ -140,6 +140,9 @@ static void _send_water_flow_to_children(node_t node, int time) {
             char* list[2] = {"send_cmd", format_payload(str_water_flow[i], node.node_self, node.node_children[i], "V", str_time)};
             char** argv = (char**)&list;
             send_cmd(2, argv);
+
+            /* Waiting the transmission  */
+            xtimer_sleep(0.5);
         }
         
         /* Restart listening */
