@@ -23,7 +23,7 @@
 uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 15;
 uint32_t LATENCY_P2P = US_PER_SEC * 0;
 
-static int tx_complete;
+int tx_complete;
 
 int source_lora_ttn(node_t node) {
 
