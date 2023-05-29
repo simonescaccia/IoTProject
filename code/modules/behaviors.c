@@ -146,7 +146,10 @@ static void _send_water_flow_to_children(node_t node, int time) {
             send_cmd(2, argv);
 
             /* Waiting the transmission complete */
-            while (!tx_complete) {}
+            while (!tx_complete) {
+                printf("here: %d", tx_complete);
+                xtimer_sleep(1);
+            }
         }
         
         /* Restart listening */
