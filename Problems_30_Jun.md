@@ -10,12 +10,12 @@
 
 ### Done
 
-![simulation-done](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/simulation-Page-1.drawio.png)
+![simulation-done](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/Simulation-Page-1.drawio.png)
 
 ### Doing
 
-![simulation-doing](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/simulation-Page-2.drawio.png)
+![simulation-doing](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/Simulation-Page-2.drawio.png)
 
 ### To Do
 
-![simulation-todo](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/simulation-Page-3.drawio.png)
+![simulation-todo](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/Simulation-Page-3.drawio.png)
