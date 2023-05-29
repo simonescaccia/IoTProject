@@ -14,6 +14,8 @@ typedef struct {
 
     /* Number of children*/
     int children_count;
+    /* self children position */
+    int self_children_position;
 } node_t;
 
 #endif

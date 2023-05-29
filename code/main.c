@@ -31,6 +31,7 @@ int node_config(int argc, char **argv)
     node.node_children = NULL;
     node.node_type = 2;
     node.children_count = 0;
+    node.self_children_position = 0;
 
     int valid_node = 0;
 
@@ -108,6 +109,7 @@ int node_config(int argc, char **argv)
                 length = strlen(elem2);
                 node.node_children[node.children_count - 1] = malloc(length + 1);
                 strncpy(node.node_children[node.children_count - 1], elem2, length + 1);
+                node.self_children_position = node.children_count;
             }
         }
         
