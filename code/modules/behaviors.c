@@ -146,7 +146,10 @@ static void _send_water_flow_to_children(node_t node, int time) {
             send_cmd(2, argv);
 
             /* Waiting the transmission complete */
-            while (!tx_complete) {}
+            while (!tx_complete) {
+                /* The sendere thread has less priority, so we need to sleep a little bit */
+                xtimer_msleep(100);
+            }
         }
         
         /* Restart listening */
