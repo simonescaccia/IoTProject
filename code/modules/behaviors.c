@@ -115,6 +115,7 @@ static void _send_water_flow_to_children(node_t node, int time) {
     for (int i = 0; i < node.children_count; i++) {
         /* Sample */
         water_flow[i] = get_water_flow(node.node_type, i, time);
+        if(APP_DEBUG) printf("Water flow sensor %d: %d\n\n", i, water_flow_sum);
         /* Sum */
         water_flow_sum += water_flow[i];
     } 

@@ -18,12 +18,15 @@
 int get_water_flow(int self_node_type, int position, int logic_time) {
     /* logic_time should be in the range [0,17] */
 
-    if (logic_time == 0)    puts("Simulate no LEAKAGE with water usage\n");
-    if (logic_time == 3)    puts("Simulate no LEAKAGE without water usage\n");
-    if (logic_time == 6)    puts("Simulate a LEAKAGE between the CHIEF and the FORK with water usage\n");
-    if (logic_time == 9)    puts("Simulate a LEAKAGE between the FORK and a BRANCH with water usage\n");
-    if (logic_time == 12)   puts("Simulate a LEAKAGE between the CHIEF and the FORK without water usage\n");
-    if (logic_time == 15)   puts("Simulate a LEAKAGE between the FORK and a BRANCH without water usage\n");
+    if (self_node_type != 2 || (self_node_type == 2 && position == 0)) {
+        /* FORK print only one time */
+        if (logic_time == 0)    puts("Simulate no LEAKAGE with water usage\n");
+        if (logic_time == 3)    puts("Simulate no LEAKAGE without water usage\n");
+        if (logic_time == 6)    puts("Simulate a LEAKAGE between the CHIEF and the FORK with water usage\n");
+        if (logic_time == 9)    puts("Simulate a LEAKAGE between the FORK and a BRANCH with water usage\n");
+        if (logic_time == 12)   puts("Simulate a LEAKAGE between the CHIEF and the FORK without water usage\n");
+        if (logic_time == 15)   puts("Simulate a LEAKAGE between the FORK and a BRANCH without water usage\n");
+    }
 
     if (self_node_type == 0 || self_node_type == 1) {
         /* SOURCE data */
