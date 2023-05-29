@@ -23,7 +23,7 @@
 uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 15;
 uint32_t LATENCY_P2P = US_PER_SEC * 0;
 
-static bool tx_complete;
+static int tx_complete;
 
 int source_lora_ttn(node_t node) {
 
@@ -140,7 +140,7 @@ static void _send_water_flow_to_children(node_t node, int time) {
 
         /* Send water flow to children */
         for (int i = 0; i < node.children_count; i++) {
-            tx_complete = false;
+            tx_complete = 0;
             char* list[2] = {"send_cmd", format_payload(str_water_flow[i], node.node_self, node.node_children[i], "V", str_time)};
             char** argv = (char**)&list;
             send_cmd(2, argv);
@@ -189,7 +189,7 @@ void _check_leakage (node_t node, payload_t* payload) {
 
 void transmission_complete_clb (void) {
     puts("Callback on trasmission complete");
-    tx_complete = true;
+    tx_complete = 1;
 }
 
 void message_received_clb (node_t node, char message[32]) {
