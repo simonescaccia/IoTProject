@@ -149,7 +149,7 @@ static void _send_water_flow_to_children(node_t node, int time) {
             while (!tx_complete) {
                 puts("Here");
                 /* The sendere thread has less priority, so we need to sleep a little bit */
-                xtimer_sleep(0.1);
+                xtimer_sleep(0.5);
             }
         }
         
