@@ -120,9 +120,11 @@ static void _sample (sample_t* sample, node_t node, int time)
     for (int i = 0; i < node.children_count; i++) {
         /* Sample */
         sample->water_flow[i] = get_water_flow(node.node_type, i, time);
+        if (APP_DEBUG) printf("Sensor %d, value: %d", i, sample->water_flow[i]);
         /* Sum */
         sample->water_flow_sum += sample->water_flow[i];
     }
+    if (APP_DEBUG) printf("Sum: %d", sample->water_flow_sum);
 }
 
 static void _send_water_flow_to_children(node_t node, int time) 
