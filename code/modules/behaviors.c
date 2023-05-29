@@ -144,12 +144,6 @@ static void _send_water_flow_to_children(node_t node, int time) {
             /* Restart listening */
             _start_listening();
         }
-
-        /* Free memory */
-        for (int i = 0; i < node.children_count; i++) {
-            free(str_water_flow[i]);
-        }
-        free(str_water_flow);
     }
 }
 
