@@ -156,15 +156,18 @@ static void _send_water_flow_to_children(node_t node, int time)
             char** argv = (char**)&list;
             send_cmd(2, argv);
 
+            /* Restart listening */
+            _start_listening();
+
             /* Waiting the transmission complete */
-            while (!tx_complete) {
-                /* The sendere thread has less priority, so we need to sleep a little bit */
-                xtimer_msleep(100);
+            if (i != node.children_count - 1) {
+                /* Wait only if there is another send */
+                while (!tx_complete) {
+                    /* The sendere thread has less priority, so we need to sleep a little bit */
+                    xtimer_msleep(100);
+                }
             }
         }
-        
-        /* Restart listening */
-        _start_listening();
 
         /* Free memory */
         for (int i = 0; i < node.children_count; i++) {
