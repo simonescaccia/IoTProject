@@ -197,7 +197,7 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
             break;
 
         default:
-            printf("Unexpected netdev event received: %d\n", event);
+            if (APP_DEBUG) printf("Unexpected netdev event received: %d\n", event);
             break;
         }
     }
