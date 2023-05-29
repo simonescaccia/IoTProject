@@ -115,13 +115,13 @@ static void _start_listening (void)
 static void _sample (sample_t* sample, node_t node, int time) 
 {
     /* Check water flow for each sensor and send a message to its children if any */
-    sample.water_flow = (int*)malloc(sizeof(int)*node.children_count);
-    sample.water_flow_sum = 0;
+    sample->water_flow = (int*)malloc(sizeof(int)*node.children_count);
+    sample->water_flow_sum = 0;
     for (int i = 0; i < node.children_count; i++) {
         /* Sample */
-        sample.water_flow[i] = get_water_flow(node.node_type, i, time);
+        sample->water_flow[i] = get_water_flow(node.node_type, i, time);
         /* Sum */
-        sample.water_flow_sum += water_flow[i];
+        sample->water_flow_sum += sample->water_flow[i];
     }
 }
 
@@ -175,8 +175,8 @@ static void _send_water_flow_to_children(node_t node, int time)
 void _check_leakage (node_t node, payload_t* payload) {
     /* Get the value of the water flow */
     sample_t sample;
-    _sample(&sample, node, payload->logic_time);
-    free(sample.water_flow)
+    _sample(&sample, node, atoi(payload->logic_time));
+    free(sample.water_flow);
     printf("Current water flow: %d. ", sample.water_flow_sum);
 
     /* Compute the difference */
