@@ -25,8 +25,8 @@ uint32_t LATENCY_P2P = US_PER_SEC * 0;
 
 int tx_complete;
 
-int source_lora_ttn(node_t node) {
-
+int source_lora_ttn(node_t node) 
+{
     puts("Beahvior: source_lora_ttn");
 
     /* json to publish on TTN */
@@ -104,27 +104,36 @@ int source_lora_ttn(node_t node) {
     return 0;
 }
 
-static void _start_listening (void) {
+static void _start_listening (void) 
+{
     /* listen for lora messages */
     char* list[1] = {"listen_cmd"};
     char** argv = (char**)&list;
     listen_cmd(1, argv);
 }
 
-static void _send_water_flow_to_children(node_t node, int time) {
+static void _sample (sample_t* sample, node_t node, int time) 
+{
     /* Check water flow for each sensor and send a message to its children if any */
-    int* water_flow = (int*)malloc(sizeof(int)*node.children_count);
-    int water_flow_sum = 0;
+    sample.water_flow = (int*)malloc(sizeof(int)*node.children_count);
+    sample.water_flow_sum = 0;
     for (int i = 0; i < node.children_count; i++) {
         /* Sample */
-        water_flow[i] = get_water_flow(node.node_type, i, time);
+        sample.water_flow[i] = get_water_flow(node.node_type, i, time);
         /* Sum */
-        water_flow_sum += water_flow[i];
-    } 
+        sample.water_flow_sum += water_flow[i];
+    }
+}
 
-    if (water_flow_sum) {
+static void _send_water_flow_to_children(node_t node, int time) 
+{    
+    /* Get the value of the water flow */
+    sample_t sample;
+    _sample(&sample, node, time);
 
-        if(APP_DEBUG) printf("Water flow sum: %d\n\n", water_flow_sum);
+    if (sample.water_flow_sum) {
+
+        if(APP_DEBUG) printf("Water flow sum: %d\n\n", sample.water_flow_sum);
 
         /* Convert the time from int to string */
         char str_time[LOGIC_TIME_MAXIMUM_LENGTH];
@@ -133,10 +142,10 @@ static void _send_water_flow_to_children(node_t node, int time) {
         char** str_water_flow = (char**)malloc(sizeof(char*));
         for (int i = 0; i < node.children_count; i++) {
             str_water_flow[i] = (char*)malloc(sizeof(char)*VALUE_MAXIMUM_LENGTH);
-            sprintf(str_water_flow[i], "%d", water_flow[i]);
+            sprintf(str_water_flow[i], "%d", sample.water_flow[i]);
         }
 
-        free(water_flow);
+        free(sample.water_flow);
 
         /* Send water flow to children */
         for (int i = 0; i < node.children_count; i++) {
@@ -154,16 +163,24 @@ static void _send_water_flow_to_children(node_t node, int time) {
         
         /* Restart listening */
         _start_listening();
+
+        /* Free memory */
+        for (int i = 0; i < node.children_count; i++) {
+            free(str_water_flow[i]);
+        }
+        free(str_water_flow);
     }
 }
 
 void _check_leakage (node_t node, payload_t* payload) {
-    /* Sample */
-    int water_flow = get_water_flow(node.node_type, node.self_children_position, atoi(payload->logic_time));
-    printf("Current water flow: %d. ", water_flow);
+    /* Get the value of the water flow */
+    sample_t sample;
+    _sample(&sample, node, payload->logic_time);
+    free(sample.water_flow)
+    printf("Current water flow: %d. ", sample.water_flow_sum);
 
     /* Compute the difference */
-    int difference = atoi(payload->value) - water_flow;
+    int difference = atoi(payload->value) - sample.water_flow_sum;
 
     if (difference > LEAKAGE_CONDITION) {
         /* Leakage detected */
