@@ -146,9 +146,7 @@ static void _send_water_flow_to_children(node_t node, int time) {
             send_cmd(2, argv);
 
             /* Waiting the transmission complete */
-            while (!tx_complete) {
-                puts("Here");
-            }
+            while (!tx_complete) {}
         }
         
         /* Restart listening */
