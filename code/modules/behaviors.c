@@ -68,8 +68,8 @@ int source_lora_ttn(node_t node) {
             return -1;
         }*/
 
-        /* Set time for sampling: [0, 17] */
-        s_time = (s_time+1) % 18;
+        /* Set time for sampling: [0, inf) */
+        s_time = (s_time + 1);
 
         /* Get water flow value */
         int water_flow = get_water_flow(node.node_type, 0, s_time);
@@ -249,8 +249,8 @@ int lora_p2p(node_t node) {
     _start_listening();
 
     while (1) {
-        /* Set time for sampling: [0, 17] */
-        time = (time+1) % 18;
+        /* Set time for sampling: [0, inf) */
+        time = (time + 1);
 
         /* BRANCH doesn't have children */
         if (node.node_type != 3) _send_water_flow_to_children(node, time);
