@@ -253,7 +253,7 @@ int start(int argc, char **argv)
 
 static const shell_command_t commands[] = {
     { "config",         "Configure node location in the tree",  node_config },
-    { "start",          "Start the normal mode",                start }
+    { "start",          "Start the normal mode",                start       },
     { NULL, NULL, NULL }
 };
 
