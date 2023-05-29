@@ -142,7 +142,7 @@ static void _send_water_flow_to_children(node_t node, int time) {
             send_cmd(2, argv);
 
             /* Waiting the transmission  */
-            xtimer_sleep(0.5);
+            if(i != node.children_count - 1) xtimer_sleep(0.1);
         }
         
         /* Restart listening */
