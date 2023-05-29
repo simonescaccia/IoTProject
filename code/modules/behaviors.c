@@ -20,7 +20,7 @@
 /* Leakage */
 #define LEAKAGE_CONDITION 0 /* L/min */
 
-uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 15;
+uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 20;
 uint32_t LATENCY_P2P = US_PER_SEC * 0;
 
 int tx_complete;
