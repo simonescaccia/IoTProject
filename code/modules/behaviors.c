@@ -188,6 +188,7 @@ void _check_leakage (node_t node, payload_t* payload) {
 }
 
 void transmission_complete_clb (void) {
+    puts("Callback on trasmission complete");
     tx_complete = true;
 }
 
