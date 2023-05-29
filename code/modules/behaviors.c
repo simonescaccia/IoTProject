@@ -115,7 +115,6 @@ static void _send_water_flow_to_children(node_t node, int time) {
     for (int i = 0; i < node.children_count; i++) {
         /* Sample */
         water_flow[i] = get_water_flow(node.node_type, i, time);
-        if(APP_DEBUG) printf("Water flow sensor %d: %d\n\n", i, water_flow[i]);
         /* Sum */
         water_flow_sum += water_flow[i];
     } 
@@ -128,8 +127,9 @@ static void _send_water_flow_to_children(node_t node, int time) {
         char str_time[LOGIC_TIME_MAXIMUM_LENGTH];
         sprintf(str_time, "%d", time); 
         /* Convert the water flow from int to char* and split it between children */
-        char** str_water_flow = (char**)malloc(sizeof(char)*VALUE_MAXIMUM_LENGTH*node.children_count); 
+        char** str_water_flow = (char**)malloc(sizeof(char*));
         for (int i = 0; i < node.children_count; i++) {
+            str_water_flow[i] = (char*)malloc(sizeof(char)*VALUE_MAXIMUM_LENGTH);
             sprintf(str_water_flow[i], "%d", water_flow[i]);
         }
 
@@ -140,6 +140,9 @@ static void _send_water_flow_to_children(node_t node, int time) {
             char* list[2] = {"send_cmd", format_payload(str_water_flow[i], node.node_self, node.node_children[i], "V", str_time)};
             char** argv = (char**)&list;
             send_cmd(2, argv);
+
+            free(str_water_flow[i]);
+            if (i == node.children_count-1) free(str_water_flow);
 
             /* Restart listening */
             _start_listening();
