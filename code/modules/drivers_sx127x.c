@@ -29,6 +29,7 @@ static char message[32];
 static sx127x_t sx127x;
 
 static void (*callback_on_msg_receive)(node_t, char[32]);
+static void (*callback_tx_complete)(void);
 
 static node_t node;
 
@@ -184,6 +185,8 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
         case NETDEV_EVENT_TX_COMPLETE:
             sx127x_set_sleep(&sx127x);
             puts("Transmission completed\n");
+            /* Callback for tx completed */ 
+            (*callback_tx_complete)();
             break;
 
         case NETDEV_EVENT_CAD_DONE:
@@ -221,9 +224,10 @@ void *_recv_thread(void *arg)
     }
 }
 
-void set_callback (callback ptr_reg_callback)
+void set_callbacks (clb_msg_received ptr_clb_msg_received, clb_tx_completed ptr_clb_tx_completed)
 {
-    callback_on_msg_receive = ptr_reg_callback;
+    callback_on_msg_receive = ptr_clb_msg_received;
+    callback_tx_complete = ptr_clb_tx_completed;
 }
 
 int init_driver_127x(node_t callback_node)

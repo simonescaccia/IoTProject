@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "xtimer.h"
+#include "mutex.h"
 
 #include "behaviors.h"
 #include "sample_generator.h"
@@ -21,6 +22,8 @@
 
 uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 15;
 uint32_t LATENCY_P2P = US_PER_SEC * 0;
+
+static bool tx_complete;
 
 int source_lora_ttn(node_t node) {
 
@@ -137,12 +140,13 @@ static void _send_water_flow_to_children(node_t node, int time) {
 
         /* Send water flow to children */
         for (int i = 0; i < node.children_count; i++) {
+            tx_complete = false;
             char* list[2] = {"send_cmd", format_payload(str_water_flow[i], node.node_self, node.node_children[i], "V", str_time)};
             char** argv = (char**)&list;
             send_cmd(2, argv);
 
-            /* Waiting the transmission  */
-            if(i != node.children_count - 1) xtimer_sleep(0.1);
+            /* Waiting the transmission complete */
+            while (!tx_complete);
         }
         
         /* Restart listening */
@@ -183,9 +187,15 @@ void _check_leakage (node_t node, payload_t* payload) {
     }
 }
 
+void transmission_complete_clb (void) {
+    tx_complete = true;
+}
+
 void message_received_clb (node_t node, char message[32]) {
     if (APP_DEBUG) puts("Callback invoked, starting message parsing");
-    
+
+    if (strlen(message) > 31) printf("Extraneous message received, message lenght: %d\n", strlen(message));
+
     /* Message parsing */
     payload_t* payload = get_values(message);
     if (!payload) {

@@ -230,7 +230,7 @@ int start(int argc, char **argv)
         }
 
         /* Set on messsage received callback */
-        set_callback(message_received_clb);
+        set_callbacks(message_received_clb, transmission_complete_clb);
 
         /* Setup sx127x drivers */
         char* list[4] = {"lora_setup_cmd","250","7","5"};
