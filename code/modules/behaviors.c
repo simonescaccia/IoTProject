@@ -141,8 +141,8 @@ static void _send_water_flow_to_children(node_t node, int time) {
             char** argv = (char**)&list;
             send_cmd(2, argv);
 
-            //free(str_water_flow[i]);
-            //if (i == node.children_count-1) free(str_water_flow);
+            free(str_water_flow[i]);
+            if (i == node.children_count-1) free(str_water_flow);
 
             /* Restart listening */
             _start_listening();
