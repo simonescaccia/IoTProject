@@ -253,11 +253,7 @@ int start(int argc, char **argv)
 
 static const shell_command_t commands[] = {
     { "config",         "Configure node location in the tree",  node_config },
-    { "start",          "Start the normal mode",                start },
-    { "setup",          "Initialize LoRa modulation settings",  lora_setup_cmd },
-    { "send",           "Send raw payload string",              send_cmd },
-    { "listen",         "Start raw payload listener",           listen_cmd },
-    { "loramac",        "Control Semtech loramac stack",        loramac_handler },
+    { "start",          "Start the normal mode",                start }
     { NULL, NULL, NULL }
 };
 

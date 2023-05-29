@@ -121,6 +121,8 @@ static void _send_water_flow_to_children(node_t node, int time) {
 
     if (water_flow_sum) {
 
+        if(APP_DEBUG) printf("Water flow sum: %d", water_flow_sum);
+
         /* Convert the time from int to string */
         char str_time[LOGIC_TIME_MAXIMUM_LENGTH];
         sprintf(str_time, "%d", time); 
@@ -137,8 +139,6 @@ static void _send_water_flow_to_children(node_t node, int time) {
             char* list[2] = {"send_cmd", format_payload(str_water_flow[i], node.node_self, node.node_children[i], "V", str_time)};
             char** argv = (char**)&list;
             send_cmd(2, argv);
-
-            free(str_water_flow);
 
             /* Restart listening */
             _start_listening();
