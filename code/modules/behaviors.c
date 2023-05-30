@@ -160,7 +160,7 @@ static void _send_water_flow_to_children(node_t node, int time)
             /* Wait for transmission complete */
             while (!tx_complete_child) {
                 /* The sendere thread has less priority, so we need to sleep a little bit */
-                xtimer_msleep(10);
+                xtimer_msleep(100);
             }
         }
 
@@ -207,7 +207,7 @@ void _check_leakage (node_t node, payload_t* payload) {
         /* Wait for transmission complete*/
         while (!tx_complete_father) {
             /* The sendere thread has less priority, so we need to sleep a little bit */
-            xtimer_msleep(10);
+            xtimer_msleep(100);
         }
 
         /* Restart listening */
