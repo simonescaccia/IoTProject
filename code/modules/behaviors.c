@@ -23,7 +23,8 @@
 uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 20;
 uint32_t LATENCY_P2P = US_PER_SEC * 0;
 
-int tx_complete;
+int tx_complete_child;
+int tx_complete_father;
 
 int source_lora_ttn(node_t node) 
 {
@@ -151,16 +152,20 @@ static void _send_water_flow_to_children(node_t node, int time)
 
         /* Send water flow to children */
         for (int i = 0; i < node.children_count; i++) {
-            tx_complete = 0;
+            tx_complete_child = 0;
             char* list[2] = {"send_cmd", format_payload(str_water_flow[i], node.node_self, node.node_children[i], "V", str_time)};
             char** argv = (char**)&list;
             send_cmd(2, argv);
 
-            /* Restart listening */
-            _start_listening();
-
-
+            /* Wait for transmission complete */
+            while (!tx_complete_child) {
+                /* The sendere thread has less priority, so we need to sleep a little bit */
+                xtimer_msleep(10);
+            }
         }
+
+        /* Restart listening */
+        _start_listening();
 
         /* Free memory */
         for (int i = 0; i < node.children_count; i++) {
@@ -194,12 +199,20 @@ void _check_leakage (node_t node, payload_t* payload) {
         }
 
         /* Send a message to the source */
+        tx_complete_father = 0;
         char* list[2] = {"send_cmd", format_payload(str_difference, node.node_self, node.node_source_p2p, "L", payload->logic_time)};
         char** argv = (char**)&list;
         send_cmd(2, argv);
 
+        /* Wait for transmission complete*/
+        while (!tx_complete_father) {
+            /* The sendere thread has less priority, so we need to sleep a little bit */
+            xtimer_msleep(10);
+        }
+
         /* Restart listening */
         _start_listening();
+        
     } else {
         puts("No leakage detected\n");
     }
@@ -259,7 +272,7 @@ int lora_p2p(node_t node) {
     
     xtimer_ticks32_t last_wakeup;
     bool is_last_wakeup = false;
-    int time = -1;
+    int time = 5;
 
     _start_listening();
 
