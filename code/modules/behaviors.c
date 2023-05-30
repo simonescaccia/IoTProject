@@ -212,7 +212,7 @@ void _check_leakage (node_t node, payload_t* payload) {
 
         /* Restart listening */
         _start_listening();
-        
+
     } else {
         puts("No leakage detected\n");
     }
@@ -220,7 +220,8 @@ void _check_leakage (node_t node, payload_t* payload) {
 
 void transmission_complete_clb (void) {
     if (APP_DEBUG) puts("Callback on trasmission complete");
-    tx_complete = 1;
+    tx_complete_father = 1;
+    tx_complete_child = 1;
 }
 
 void message_received_clb (node_t node, char message[32]) {
