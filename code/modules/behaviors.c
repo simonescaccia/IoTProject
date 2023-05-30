@@ -24,7 +24,6 @@ uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 20;
 uint32_t LATENCY_P2P = US_PER_SEC * 0;
 
 int tx_complete_child;
-int tx_complete_father;
 
 int source_lora_ttn(node_t node) 
 {
@@ -199,16 +198,9 @@ void _check_leakage (node_t node, payload_t* payload) {
         }
 
         /* Send a message to the source */
-        tx_complete_father = 0;
         char* list[2] = {"send_cmd", format_payload(str_difference, node.node_self, node.node_source_p2p, "L", payload->logic_time)};
         char** argv = (char**)&list;
         send_cmd(2, argv);
-
-        /* Wait for transmission complete*/
-        while (!tx_complete_father) {
-            /* The sendere thread has less priority, so we need to sleep a little bit */
-            xtimer_msleep(100);
-        }
 
         /* Restart listening */
         _start_listening();
@@ -220,8 +212,6 @@ void _check_leakage (node_t node, payload_t* payload) {
 
 void transmission_complete_clb (void) {
     if (APP_DEBUG) puts("Callback on trasmission complete");
-    tx_complete_father = 1;
-    xtimer_msleep(100);
     tx_complete_child = 1;
 }
 
