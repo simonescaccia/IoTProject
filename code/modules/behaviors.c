@@ -221,6 +221,7 @@ void _check_leakage (node_t node, payload_t* payload) {
 void transmission_complete_clb (void) {
     if (APP_DEBUG) puts("Callback on trasmission complete");
     tx_complete_father = 1;
+    xtimer_msleep(100);
     tx_complete_child = 1;
 }
 
