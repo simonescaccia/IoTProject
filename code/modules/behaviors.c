@@ -162,9 +162,10 @@ static void _send_water_flow_to_children(node_t node, int time)
             /* Waiting the transmission complete */
             if (i != node.children_count - 1) {
                 /* Wait only if there is another send */
+                int j = 0;
                 while (!tx_complete) {
                     /* The sendere thread has less priority, so we need to sleep a little bit */
-                    xtimer_msleep(100);
+                    j++;
                 }
             }
         }
@@ -197,7 +198,9 @@ void _check_leakage (node_t node, payload_t* payload) {
 
         /* Wait for source switch to listen mode */
         if (strcmp(node.node_father, node.node_source_p2p) == 0) {
-            xtimer_sleep(0.5);
+            /* Wait awake */
+            int j = 0;
+            while (++j < 100) {}
         }
 
         /* Send a message to the source */
