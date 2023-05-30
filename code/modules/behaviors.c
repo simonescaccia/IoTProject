@@ -152,7 +152,8 @@ static void _send_water_flow_to_children(node_t node, int time)
         /* Send water flow to children */
         for (int i = 0; i < node.children_count; i++) {
             tx_complete_child = 0;
-            char* list[2] = {"send_cmd", format_payload(str_water_flow[i], node.node_self, node.node_children[i], "V", str_time)};
+            char* payload = format_payload(str_water_flow[i], node.node_self, node.node_children[i], "V", str_time);
+            char* list[2] = {"send_cmd", payload};
             char** argv = (char**)&list;
             send_cmd(2, argv);
 
@@ -198,12 +199,16 @@ void _check_leakage (node_t node, payload_t* payload) {
         }
 
         /* Send a message to the source */
-        char* list[2] = {"send_cmd", format_payload(str_difference, node.node_self, node.node_source_p2p, "L", payload->logic_time)};
+        char* payload = format_payload(str_difference, node.node_self, node.node_source_p2p, "L", payload->logic_time);
+        char* list[2] = {"send_cmd", payload};
         char** argv = (char**)&list;
         send_cmd(2, argv);
 
         /* Restart listening */
         _start_listening();
+
+        /* Free memory */
+        free(payload);
 
     } else {
         puts("No leakage detected\n");
@@ -228,6 +233,8 @@ void message_received_clb (node_t node, char message[32]) {
     if (!payload) {
         /* Not a message from our application */
         if (APP_DEBUG) puts("Not a message from our application");
+
+        free_payload(payload);
         return;
     }
 
@@ -235,6 +242,8 @@ void message_received_clb (node_t node, char message[32]) {
     if (strcmp(payload->to, node.node_self) != 0) {
         /* Message not sent to me */
         if (APP_DEBUG) puts("Message not sent to me");
+
+        free_payload(payload);
         return;
     }
     
@@ -245,6 +254,8 @@ void message_received_clb (node_t node, char message[32]) {
 
         /* Check leakage */
         _check_leakage(node, payload);
+
+        free_payload(payload);
         return;
     }
 
@@ -254,6 +265,7 @@ void message_received_clb (node_t node, char message[32]) {
 
         /* UART send message to SOURCE TTN*/
 
+        free_payload(payload);
         return;        
     }
 

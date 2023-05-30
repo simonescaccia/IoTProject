@@ -79,3 +79,12 @@ payload_t* get_values (char message[32]) {
         return NULL;
     }
 }
+
+void free_payload (payload_t* payload) {
+    free(payload->from);
+    free(payload->is_leak);
+    free(payload->logic_time);
+    free(payload->to);
+    free(payload->value);
+    free(payload);
+}

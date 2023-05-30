@@ -9,3 +9,5 @@ typedef struct {
 char* format_payload (char value[21], char from[3], char to[3], char leak[2], char logic_time[55]);
 
 payload_t* get_values (char message[32]);
+
+void free_payload(payload_t* payload);
