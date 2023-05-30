@@ -164,6 +164,7 @@ static void _send_water_flow_to_children(node_t node, int time)
                 /* Wait only if there is another send */
                 while (!tx_complete) {
                     /* The sendere thread has less priority, so we need to sleep a little bit */
+                    printf("Here\n");
                     xtimer_msleep(100);
                 }
             }
