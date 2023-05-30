@@ -1,6 +1,6 @@
 #ifndef APP_DEBUG_H
 #define APP_DEBUG_H
 
-#define APP_DEBUG 0
+#define APP_DEBUG 1
 
 #endif
