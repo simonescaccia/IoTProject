@@ -1,0 +1,44 @@
+.button {
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+  
+  .container {  display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+    "chart statistics"
+    "buttons .";
+  }
+  
+  .chart { grid-area: chart; }
+  
+  .statistics { 
+    grid-area: statistics; 
+    margin-top: 40px;
+  }
+  
+  .buttons { 
+    grid-area: buttons;
+    margin-top: 40px;
+  }
+
+  #flowchart {
+    width:100%;
+    max-width:600px
+  }
+
+
+  #leakagechart {
+    width:100%;
+    max-width:600px
+  }

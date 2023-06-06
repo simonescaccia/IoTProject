@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html> 
+    <head>
+        <meta charset="utf-8">
+        <title>Water Flow Monitor</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+        <link rel="stylesheet" href="style.css">
+        <script src="index.js"></script>
+    </head>
+
+    <body>
+        <body onload="display()">
+            <h1>Irrigation Water Leakage System</h1>
+            <p>Welcome to our project for the IoT Algorithms and Services course of the Academic Year 2022-2023 at Sapienza University of Rome.</p>
+        
+            <div class="container">
+                <div class="chart">
+                    <h3>This chart shows the water flow at the source.</h3>
+                    <canvas id="flowchart"></canvas>
+                </div>
+            
+                <div class="statistics">
+                    <h3>Stats:</h3>
+                    
+                </div>
+                
+            </div>
+            <div class="container">
+                <div class="chart">
+                    <h3>This chart shows possible leakages in some specific pipe.</h3>
+                    <canvas id="leakagechart"></canvas>
+                </div>
+            
+                <div class="statistics">
+                    <h3>Stats:</h3>
+                    
+            </div>
+                
+            </div>
+    </body>
+</html>
