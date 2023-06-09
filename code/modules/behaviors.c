@@ -4,6 +4,7 @@
 
 #include "xtimer.h"
 #include "mutex.h"
+#include "time.h"
 
 #include "behaviors.h"
 #include "sample_generator.h"
@@ -29,6 +30,7 @@ uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 20;
 uint32_t LATENCY_P2P = US_PER_SEC * 0;
 
 int tx_complete_child;
+char message[20];
 
 int source_lora_ttn(node_t node) 
 {
@@ -72,6 +74,11 @@ int source_lora_ttn(node_t node)
             printf("Error: invalid format.\n");
             return -1;
         }*/
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+        //printf("now: %d/%02d/%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        sprintf(message, "%d/%02d/%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);         
+        
 
         /* Set time for sampling: [0, inf) */
         s_time = (s_time + 1);
@@ -79,7 +86,7 @@ int source_lora_ttn(node_t node)
         /* Get water flow value */
         int water_flow = get_water_flow(node.node_type, 0, s_time);
         /* Fill json document */
-        sprintf(json, "{\"node_id\": \"%s\", \"datetime\": \"%s\", \"water_flow\": \"%d\"}", node.node_self, "datetime", water_flow);
+        sprintf(json, "{\"node_id\": \"%s\", \"datetime\": \"%s\", \"water_flow\": \"%d\"}", node.node_self, message, water_flow);
         
         puts(json);
 
