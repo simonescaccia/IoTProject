@@ -20,6 +20,11 @@
 /* Leakage */
 #define LEAKAGE_CONDITION 0 /* L/min */
 
+/* Setting TTN parameters */
+#define DEV_EUI "70B3D57ED005D1D6"
+#define APP_EUI "0000000000000011"
+#define APP_KEY "5F129D225F930EB831FBE861B3B307D0"
+
 uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 20;
 uint32_t LATENCY_P2P = US_PER_SEC * 0;
 
@@ -39,15 +44,15 @@ int source_lora_ttn(node_t node)
     //time_t current;
 
      /* Set TTN application parameters */
-    char* deveui_list[4] = {"loramac", "set", "deveui", "70B3D57ED005D65B"};
+    char* deveui_list[4] = {"loramac", "set", "deveui", DEV_EUI};
     char** argv = (char**)&deveui_list;
     loramac_handler(4,argv);
 
-    char* appeui_list[4] = {"loramac", "set", "appeui", "0000000000000011"};
+    char* appeui_list[4] = {"loramac", "set", "appeui", APP_EUI};
     argv = (char**)&appeui_list;
     loramac_handler(4,argv);
 
-    char* appkey_list[4] = {"loramac", "set", "appkey", "31AD5FCDDCD4F37EAC0293F186A9AB72"};
+    char* appkey_list[4] = {"loramac", "set", "appkey", APP_KEY};
     argv = (char**)&appkey_list;
     loramac_handler(4,argv);
 
