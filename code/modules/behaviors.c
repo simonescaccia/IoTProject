@@ -192,7 +192,7 @@ static void _sample (sample_t* sample, node_t node, int time)
 {
     /* Check water flow for each sensor and send a message to its children if any */
     sample->water_flow = (double*)malloc(sizeof(double)*node.children_count);
-    sample->water_flow_sum = 0;
+    sample->water_flow_sum = 0.0;
     for (int i = 0; i < node.children_count; i++) {
         /* Sample */
         sample->water_flow[i] = get_water_flow(node.node_type, i, time);
