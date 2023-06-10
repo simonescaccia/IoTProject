@@ -213,6 +213,7 @@ static void _send_water_flow_to_children(node_t node, int time)
     if (sample.water_flow_sum) {
 
         if(APP_DEBUG) { printf("Water flow sum: "); print_float(sample.water_flow_sum, 2); printf("\n\n"); }
+        int printed_chars;
 
         /* Convert the time from int to string */
         char str_time[LOGIC_TIME_MAXIMUM_LENGTH];
@@ -221,9 +222,8 @@ static void _send_water_flow_to_children(node_t node, int time)
         char** str_water_flow = (char**)malloc(sizeof(char*));
         for (int i = 0; i < node.children_count; i++) {
             str_water_flow[i] = (char*)malloc(sizeof(char)*VALUE_MAXIMUM_LENGTH);
-            print_float(sample.water_flow[i], 2);
-            fmt_float(str_water_flow[i], sample.water_flow[i], 2);
-            printf("\nstr_waterflow[%d]: %s\n\n", i, str_water_flow[i]);
+            printed_chars = fmt_float(str_water_flow[i], sample.water_flow[i], 2);
+            str_water_flow[i][printed_chars] = '\0';
         }
 
         free(sample.water_flow);
@@ -272,9 +272,12 @@ void _check_leakage (node_t node, payload_t* payload) {
         /* Leakage detected */
         puts("leakage detected, sending a message to the source");
 
+        int printed_chars;
+
         /* Convert the differece from double to char* */
         char str_difference[VALUE_MAXIMUM_LENGTH];
-        fmt_float(str_difference, difference, 2);
+        printed_chars = fmt_float(str_difference, difference, 2);
+        str_difference[printed_chars] = '\0';
 
         /* Wait for source switch to listen mode */
         if (strcmp(node.node_father, node.node_source_p2p) == 0) {
