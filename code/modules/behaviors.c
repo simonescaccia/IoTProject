@@ -210,6 +210,9 @@ static void _send_water_flow_to_children(node_t node, int time)
     sample_t sample;
     _sample(&sample, node, time);
 
+    print_float(sample.water_flow_sum, 2);
+    printf("\n");
+
     if (sample.water_flow_sum) {
 
         if(APP_DEBUG) { printf("Water flow sum: "); print_float(sample.water_flow_sum, 2); printf("\n\n"); }
