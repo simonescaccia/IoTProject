@@ -249,8 +249,6 @@ static void _send_water_flow_to_children(node_t node, int time)
                 /* The sendere thread has less priority, so we need to sleep a little bit */
                 xtimer_msleep(100);
             }
-            
-            
         }
 
         /* Restart listening */
@@ -370,7 +368,7 @@ int lora_p2p(node_t node) {
     xtimer_ticks32_t last_wakeup;
     bool is_last_wakeup = false;
     /* Starting logic time for the sample generator */
-    int time = 3;
+    int time = 5;
 
     _start_listening();
 
