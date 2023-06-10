@@ -276,7 +276,7 @@ void _check_leakage (node_t node, payload_t* payload) {
 
     if (difference > LEAKAGE_CONDITION) {
         /* Leakage detected */
-        puts("leakage detected, sending a message to the source");
+        puts("Leakage detected, sending a message to the source");
 
         int printed_chars;
 
