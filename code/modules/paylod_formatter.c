@@ -4,11 +4,19 @@
 #include <app_debug.h>
 
 #include "payload_formatter.h"
+#include "assert.h"
 
 const char* APP_ID = "0000";
 
 /* driver sx127x message length */
 const int MESSAGE_LENGTH = 32;
+
+const int VALUE_LENGHT = 13;
+const int FROM_LENGHT = 2;
+const int TO_LENGHT = 2;
+const int LEAK_LENGTH = 1;
+const int LOGIC_TIME_LENGHT = 4;
+const int COMMA_NUMBERS = 5;
 
 /**
  * @brief Return the message to send by lora p2p, using the following formatting: <0000 app_id>,<node from>,<node to>,<L for leakage or V for value>,<value>
@@ -16,7 +24,15 @@ const int MESSAGE_LENGTH = 32;
  * 5 comma chars, 2 chars for from and to, 4 chars for the APP_ID, 1 char for leakage info, 13 chars for the value, 4 chars for the logic time
  * 
 */
-char* format_payload (char value[21], char from[3], char to[3], char leak[2], char logic_time[55]) {
+char* format_payload (
+    char value[VALUE_LENGHT + 1], 
+    char from[FROM_LENGHT + 1], 
+    char to[TO_LENGHT + 1], 
+    char leak[LEAK_LENGTH + 1], 
+    char logic_time[LOGIC_TIME_LENGHT + 1]
+) {
+    assert(MESSAGE_LENGTH == strlen(APP_ID) + VALUE_LENGHT + FROM_LENGHT + TO_LENGHT + LEAK_LENGTH + LOGIC_TIME_LENGHT + COMMA_NUMBERS);
+
     char* payload = malloc(sizeof(char) * MESSAGE_LENGTH); 
     snprintf(payload, MESSAGE_LENGTH, "%s,%s,%s,%s,%s,%s", APP_ID, from, to, leak, value, logic_time);
     return payload;

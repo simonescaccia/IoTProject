@@ -42,9 +42,10 @@ int source_lora_ttn(node_t node)
     /* Sampling time */
     int s_time = -1;
     /* Current date and time */
-    char datetime[20];
-    time_t t;
-     /* Set TTN application parameters */
+    //char datetime[20];
+    //time_t t;
+
+    /* Set TTN application parameters */
     char* deveui_list[4] = {"loramac", "set", "deveui", DEV_EUI};
     char** argv = (char**)&deveui_list;
     loramac_handler(4,argv);
@@ -70,9 +71,9 @@ int source_lora_ttn(node_t node)
         s_time = (s_time+1) % 10;
 
         /* Get water flow value */
-        int water_flow = get_water_flow(node.node_type, 0, s_time);
+        float water_flow = get_water_flow(node.node_type, 0, s_time);
         /* Send source water flow information */
-        sprintf(json, "{\"Id\": \"flow\", \"Flow\": \"%d\"}", water_flow);
+        sprintf(json, "{\"Id\": \"flow\", \"Flow\": \"%f\"}", water_flow);
         puts(json);
 
         char* tx_list[3] = {"loramac", "tx", json};
@@ -93,7 +94,7 @@ int source_lora_ttn(node_t node)
 
         char number[5];  
         char* child, *father;
-        int leakage;
+        double leakage;
         float threshold = 1.0;
 
         for (int i = 0; i < n; i++) {
@@ -122,7 +123,7 @@ int source_lora_ttn(node_t node)
                 child = malloc(15 * sizeof(char));
                 strcpy(child, nodes[i + 1]);
 
-                float father_water_flow, child_water_flow;
+                double father_water_flow, child_water_flow;
                 
 
                 if (rand() % 2 == 0) {
@@ -190,16 +191,16 @@ static void _start_listening (void)
 static void _sample (sample_t* sample, node_t node, int time) 
 {
     /* Check water flow for each sensor and send a message to its children if any */
-    sample->water_flow = (int*)malloc(sizeof(int)*node.children_count);
+    sample->water_flow = (double*)malloc(sizeof(double)*node.children_count);
     sample->water_flow_sum = 0;
     for (int i = 0; i < node.children_count; i++) {
         /* Sample */
         sample->water_flow[i] = get_water_flow(node.node_type, i, time);
-        if (APP_DEBUG) printf("Sensor %d, value: %d\n", i, sample->water_flow[i]);
+        if (APP_DEBUG) printf("Sensor %d, value: %f\n", i, sample->water_flow[i]);
         /* Sum */
         sample->water_flow_sum += sample->water_flow[i];
     }
-    if (APP_DEBUG) printf("Sum: %d\n", sample->water_flow_sum);
+    if (APP_DEBUG) printf("Sum: %f\n", sample->water_flow_sum);
 }
 
 static void _send_water_flow_to_children(node_t node, int time) 
@@ -210,7 +211,7 @@ static void _send_water_flow_to_children(node_t node, int time)
 
     if (sample.water_flow_sum) {
 
-        if(APP_DEBUG) printf("Water flow sum: %d\n\n", sample.water_flow_sum);
+        if(APP_DEBUG) printf("Water flow sum: %f\n\n", sample.water_flow_sum);
 
         /* Convert the time from int to string */
         char str_time[LOGIC_TIME_MAXIMUM_LENGTH];
@@ -219,7 +220,7 @@ static void _send_water_flow_to_children(node_t node, int time)
         char** str_water_flow = (char**)malloc(sizeof(char*));
         for (int i = 0; i < node.children_count; i++) {
             str_water_flow[i] = (char*)malloc(sizeof(char)*VALUE_MAXIMUM_LENGTH);
-            sprintf(str_water_flow[i], "%d", sample.water_flow[i]);
+            sprintf(str_water_flow[i], "%f", sample.water_flow[i]);
         }
 
         free(sample.water_flow);
@@ -259,18 +260,18 @@ void _check_leakage (node_t node, payload_t* payload) {
     sample_t sample;
     _sample(&sample, node, atoi(payload->logic_time));
     free(sample.water_flow);
-    printf("Current water flow: %d. ", sample.water_flow_sum);
+    printf("Current water flow: %f. ", sample.water_flow_sum);
 
     /* Compute the difference */
-    int difference = atoi(payload->value) - sample.water_flow_sum;
+    double difference = atof(payload->value) - sample.water_flow_sum;
 
     if (difference > LEAKAGE_CONDITION) {
         /* Leakage detected */
         puts("leakage detected, sending a message to the source");
 
-        /* Convert the differece from int to char* */
+        /* Convert the differece from double to char* */
         char str_difference[VALUE_MAXIMUM_LENGTH];
-        sprintf(str_difference, "%d", difference);
+        sprintf(str_difference, "%.2f", difference);
 
         /* Wait for source switch to listen mode */
         if (strcmp(node.node_father, node.node_source_p2p) == 0) {

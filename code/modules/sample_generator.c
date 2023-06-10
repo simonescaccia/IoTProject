@@ -15,7 +15,7 @@
 /**
  * @brief position cares about the pair sensor-child: set 0 or 1, and used only for FORKs and BRANCHs
 */
-int get_water_flow(int self_node_type, int position, int time) {
+double get_water_flow(int self_node_type, int position, int time) {
     int logic_time = time % 18;
     /* logic_time should be in the range [0,17] */
 
@@ -32,49 +32,49 @@ int get_water_flow(int self_node_type, int position, int time) {
     if (self_node_type == 0 || self_node_type == 1) {
         /* SOURCE data */
         if ((logic_time >= 0 && logic_time <= 2) || (logic_time >= 6 && logic_time <= 11))
-            return 40; /* Maximum flow rate*/
+            return 40.0; /* Maximum flow rate*/
         if (logic_time >= 12 && logic_time <= 17)
-            return 20;
+            return 20.0;
         if (logic_time >= 3 && logic_time <= 5)
-            return 0;
+            return 0.0;
     }
     if (self_node_type == 2 && position == 0) {
         /* FORK data sensor 0*/
         if ((logic_time >= 0 && logic_time <= 2) || (logic_time >= 9 && logic_time <= 11) || (logic_time >= 15 && logic_time <= 17))
-            return 20;
+            return 20.0;
         if (logic_time >= 6 && logic_time <= 8)
-            return 10;
+            return 10.0;
         if ((logic_time >= 3 && logic_time <= 5) || (logic_time >= 12 && logic_time <= 14))
-            return 0;
+            return 0.0;
     }
     if (self_node_type == 2 && position == 1) {
         /* FORK data sensor 1*/
         if ((logic_time >= 0 && logic_time <= 2) || (logic_time >= 9 && logic_time <= 11))
-            return 20;
+            return 20.0;
         if (logic_time >= 6 && logic_time <= 8)
-            return 10;
+            return 10.0;
         if ((logic_time >= 3 && logic_time <= 5) || (logic_time >= 12 && logic_time <= 17))
-            return 0;
+            return 0.0;
     }
     if (self_node_type == 3 && position == 0) {
         /* BRANCH 0 data */
         if (logic_time >= 0 && logic_time <= 2)
-            return 20;
+            return 20.0;
         if (logic_time >= 6 && logic_time <= 11)
-            return 10;
+            return 10.0;
         if ((logic_time >= 3 && logic_time <= 5) || (logic_time >= 12 && logic_time <= 17))
-            return 0;
+            return 0.0;
     }
     if (self_node_type == 3 && position == 1) {
         /* BRANCH 1 data */
         if ((logic_time >= 0 && logic_time <= 2) || (logic_time >= 9 && logic_time <= 11))
-            return 20;
+            return 20.0;
         if (logic_time >= 6 && logic_time <= 8)
-            return 10;
+            return 10.0;
         if ((logic_time >= 3 && logic_time <= 5) || (logic_time >= 12 && logic_time <= 17))
-            return 0;
+            return 0.0;
     }
 
 
-    return 0;
+    return 0.0;
 }

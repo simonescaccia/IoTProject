@@ -1,1 +1,1 @@
-extern int get_water_flow(int self_node_type, int position, int time);
+double get_water_flow(int self_node_type, int position, int time);
