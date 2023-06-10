@@ -33,6 +33,8 @@ char* format_payload (
     char leak[LEAK_LENGTH + 1], 
     char logic_time[LOGIC_TIME_LENGHT + 1]
 ) {
+    printf("Here\n");    
+
     assert(MESSAGE_LENGTH == strlen(APP_ID) + VALUE_LENGHT + FROM_LENGHT + TO_LENGHT + LEAK_LENGTH + LOGIC_TIME_LENGHT + COMMA_NUMBERS);
 
     printf("Here\n");
