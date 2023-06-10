@@ -195,13 +195,12 @@ static void _sample (sample_t* sample, node_t node, int time)
     sample->water_flow_sum = 0.0;
     for (int i = 0; i < node.children_count; i++) {
         /* Sample */
-        printf("get_water_flow. i: %d, value: %f", i, get_water_flow(node.node_type, i, time));
         sample->water_flow[i] = get_water_flow(node.node_type, i, time);
-        if (APP_DEBUG) printf("Sensor %d, value: %f\n", i, sample->water_flow[i]);
+        if (APP_DEBUG) printf("Sensor %d, value: %lf\n", i, sample->water_flow[i]);
         /* Sum */
         sample->water_flow_sum += sample->water_flow[i];
     }
-    if (APP_DEBUG) printf("Sum: %f\n", sample->water_flow_sum);
+    if (APP_DEBUG) printf("Sum: %lf\n", sample->water_flow_sum);
 }
 
 static void _send_water_flow_to_children(node_t node, int time) 
@@ -212,7 +211,7 @@ static void _send_water_flow_to_children(node_t node, int time)
 
     if (sample.water_flow_sum) {
 
-        if(APP_DEBUG) printf("Water flow sum: %f\n\n", sample.water_flow_sum);
+        if(APP_DEBUG) printf("Water flow sum: %lf\n\n", sample.water_flow_sum);
 
         /* Convert the time from int to string */
         char str_time[LOGIC_TIME_MAXIMUM_LENGTH];
@@ -221,7 +220,7 @@ static void _send_water_flow_to_children(node_t node, int time)
         char** str_water_flow = (char**)malloc(sizeof(char*));
         for (int i = 0; i < node.children_count; i++) {
             str_water_flow[i] = (char*)malloc(sizeof(char)*VALUE_MAXIMUM_LENGTH);
-            sprintf(str_water_flow[i], "%f", sample.water_flow[i]);
+            sprintf(str_water_flow[i], "%lf", sample.water_flow[i]);
         }
 
         free(sample.water_flow);
