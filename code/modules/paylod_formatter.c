@@ -35,6 +35,10 @@ char* format_payload (
 ) {
     assert(MESSAGE_LENGTH == strlen(APP_ID) + VALUE_LENGHT + FROM_LENGHT + TO_LENGHT + LEAK_LENGTH + LOGIC_TIME_LENGHT + COMMA_NUMBERS);
 
+    printf("Here\n");
+    printf("value: %s", value);
+    printf("Here\n");
+
     char* payload = malloc(sizeof(char) * MESSAGE_LENGTH); 
     snprintf(payload, MESSAGE_LENGTH, "%s,%s,%s,%s,%s,%s", APP_ID, from, to, leak, value, logic_time);
     return payload;
