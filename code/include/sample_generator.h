@@ -1,1 +1,1 @@
-double get_water_flow(int self_node_type, int position, int time);
+float get_water_flow(int self_node_type, int position, int time);

@@ -19,8 +19,8 @@ typedef struct {
 } node_t;
 
 typedef struct {
-    double* water_flow;        /* Array that contains all the sensor sampling value */
-    double water_flow_sum;     /* The sum of all the sensor sampling */
+    float* water_flow;        /* Array that contains all the sensor sampling value */
+    float water_flow_sum;     /* The sum of all the sensor sampling */
 } sample_t;
 
 #endif
