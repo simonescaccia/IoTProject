@@ -221,8 +221,9 @@ static void _send_water_flow_to_children(node_t node, int time)
         char** str_water_flow = (char**)malloc(sizeof(char*));
         for (int i = 0; i < node.children_count; i++) {
             str_water_flow[i] = (char*)malloc(sizeof(char)*VALUE_MAXIMUM_LENGTH);
+            print_float(sample.water_flow[i]);
             fmt_float(str_water_flow[i], sample.water_flow[i], 2);
-            printf("str_waterflow[%d]: %s\n", i, str_water_flow[i]);
+            printf("\nstr_waterflow[%d]: %s\n\n", i, str_water_flow[i]);
         }
 
         free(sample.water_flow);
@@ -359,7 +360,7 @@ int lora_p2p(node_t node) {
     xtimer_ticks32_t last_wakeup;
     bool is_last_wakeup = false;
     /* Starting logic time for the sample generator */
-    int time = 3;
+    int time = 5;
 
     _start_listening();
 
