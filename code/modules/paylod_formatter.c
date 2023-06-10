@@ -46,25 +46,20 @@ char* format_payload (
 */
 payload_t* get_values (char message[32]) {
     if(APP_DEBUG) printf("Message: %s, length: %d\n", message, strlen(message));
-    
-    puts("Here");
 
     /* Check app id, at least 3 comma chars, 2 chars for from and to, 4 chars for the APP_ID */
     if (strlen(message) > 11 && strlen(message) < 32 && strncmp(message, APP_ID, 4) == 0) 
     {
-        puts("Here");
-
         /* strtkn needs an array */
         char msg[32];
         sprintf(msg, "%s", message);
-        
-        puts("Here");
 
         /*  Parse the string */
         payload_t *payload = (payload_t*)malloc(sizeof(payload_t));
         char* token = strtok(msg, ",");
         int i = 0;
         while (token != NULL) {
+            printf("i: %d, token: %s\n", i, token);
             switch (i) {
                 case 1:
                     payload->from = (char*)malloc(sizeof(char)*(strlen(token)+1));

@@ -233,7 +233,8 @@ static void _send_water_flow_to_children(node_t node, int time)
             str_water_flow[i][printed_chars] = '\0';
         }
 
-        free(sample.water_flow);
+        free(sample.water_flow);            
+
         char* str_payload = NULL;
 
         /* Send water flow to children */
