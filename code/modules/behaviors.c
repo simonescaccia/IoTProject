@@ -195,6 +195,7 @@ static void _sample (sample_t* sample, node_t node, int time)
     sample->water_flow_sum = 0.0;
     for (int i = 0; i < node.children_count; i++) {
         /* Sample */
+        print("get_water_flow. i: %d, value: %f", i, get_water_flow(node.node_type, i, time));
         sample->water_flow[i] = get_water_flow(node.node_type, i, time);
         if (APP_DEBUG) printf("Sensor %d, value: %f\n", i, sample->water_flow[i]);
         /* Sum */
