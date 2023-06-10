@@ -19,6 +19,7 @@ QUIET ?= 1
 USEMODULE += xtimer
 
 # Shell
+USEMODULE += fmt
 USEMODULE += shell
 USEMODULE += shell_cmds_default
 USEMODULE += ps

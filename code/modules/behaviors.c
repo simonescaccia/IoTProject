@@ -11,6 +11,7 @@
 #include "drivers_sx127x.h"
 #include "payload_formatter.h"
 #include "semtech-loramac.h"
+#include "fmt.h"
 
 #include "app_debug.h"
 
@@ -196,11 +197,11 @@ static void _sample (sample_t* sample, node_t node, int time)
     for (int i = 0; i < node.children_count; i++) {
         /* Sample */
         sample->water_flow[i] = get_water_flow(node.node_type, i, time);
-        if (APP_DEBUG) printf("Sensor %d, value: %lf\n", i, sample->water_flow[i]);
+        if (APP_DEBUG) { printf("Sensor %d, value: ", i); print_float(sample->water_flow[i], 2); printf("\n"); }
         /* Sum */
         sample->water_flow_sum += sample->water_flow[i];
     }
-    if (APP_DEBUG) printf("Sum: %lf\n", sample->water_flow_sum);
+    if (APP_DEBUG) { printf("Sum: "); print_float(sample->water_flow_sum, 2); printf("\n"); }
 }
 
 static void _send_water_flow_to_children(node_t node, int time) 
@@ -211,7 +212,7 @@ static void _send_water_flow_to_children(node_t node, int time)
 
     if (sample.water_flow_sum) {
 
-        if(APP_DEBUG) printf("Water flow sum: %lf\n\n", sample.water_flow_sum);
+        if(APP_DEBUG) { printf("Water flow sum: "); print_float(sample.water_flow_sum, 2); printf("\n\n"); }
 
         /* Convert the time from int to string */
         char str_time[LOGIC_TIME_MAXIMUM_LENGTH];
@@ -220,7 +221,7 @@ static void _send_water_flow_to_children(node_t node, int time)
         char** str_water_flow = (char**)malloc(sizeof(char*));
         for (int i = 0; i < node.children_count; i++) {
             str_water_flow[i] = (char*)malloc(sizeof(char)*VALUE_MAXIMUM_LENGTH);
-            sprintf(str_water_flow[i], "%lf", sample.water_flow[i]);
+            fmt_float(str_water_flow[i], sample.water_flow[i], 2);
         }
 
         free(sample.water_flow);
