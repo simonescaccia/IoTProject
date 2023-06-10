@@ -231,7 +231,6 @@ static void _send_water_flow_to_children(node_t node, int time)
 
         /* Send water flow to children */
         for (int i = 0; i < node.children_count; i++) {
-            printf("Here1\n");
             tx_complete_child = 0;
             str_payload = format_payload(str_water_flow[i], node.node_self, node.node_children[i], "V", str_time);
             char* list[2] = {"send_cmd", str_payload};
