@@ -370,7 +370,7 @@ int lora_p2p(node_t node) {
     xtimer_ticks32_t last_wakeup;
     bool is_last_wakeup = false;
     /* Starting logic time for the sample generator */
-    int time = -1;
+    int time = 3;
 
     _start_listening();
 
