@@ -221,7 +221,7 @@ static void _send_water_flow_to_children(node_t node, int time)
         char** str_water_flow = (char**)malloc(sizeof(char*));
         for (int i = 0; i < node.children_count; i++) {
             str_water_flow[i] = (char*)malloc(sizeof(char)*VALUE_MAXIMUM_LENGTH);
-            print_float(sample.water_flow[i]);
+            print_float(sample.water_flow[i], 2);
             fmt_float(str_water_flow[i], sample.water_flow[i], 2);
             printf("\nstr_waterflow[%d]: %s\n\n", i, str_water_flow[i]);
         }
