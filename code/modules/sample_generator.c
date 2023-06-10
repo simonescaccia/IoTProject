@@ -4,7 +4,7 @@
 #include "string.h"
 
 /**
- * logic_time in [0, 2]: Simulate no LEAKAGE with water usage
+ * logic_time in [0, 2]: Simulate no LEAKAGE with water usage - Test also float water flow mesurements
  * logic_time in [3, 5]: Simulate no LEAKAGE without water usage
  * logic_time in [6, 8]: Simulate a LEAKAGE between the CHIEF and the FORK with water usage
  * logic_time in [9, 11]: Simulate a LEAKAGE between the FORK and a BRANCH with water usage
@@ -32,7 +32,7 @@ double get_water_flow(int self_node_type, int position, int time) {
     if (self_node_type == 0 || self_node_type == 1) {
         /* SOURCE data */
         if ((logic_time >= 0 && logic_time <= 2) || (logic_time >= 6 && logic_time <= 11))
-            return 40.0; /* Maximum flow rate*/
+            return 35.6; /* Maximum flow rate*/
         if (logic_time >= 12 && logic_time <= 17)
             return 20.0;
         if (logic_time >= 3 && logic_time <= 5)
@@ -40,8 +40,10 @@ double get_water_flow(int self_node_type, int position, int time) {
     }
     if (self_node_type == 2 && position == 0) {
         /* FORK data sensor 0*/
-        if ((logic_time >= 0 && logic_time <= 2) || (logic_time >= 9 && logic_time <= 11) || (logic_time >= 15 && logic_time <= 17))
-            return 20.0;
+        if (logic_time >= 0 && logic_time <= 2)
+            return 17.8;
+        if ((logic_time >= 9 && logic_time <= 11) || (logic_time >= 15 && logic_time <= 17))
+            return 20;
         if (logic_time >= 6 && logic_time <= 8)
             return 10.0;
         if ((logic_time >= 3 && logic_time <= 5) || (logic_time >= 12 && logic_time <= 14))
@@ -49,8 +51,10 @@ double get_water_flow(int self_node_type, int position, int time) {
     }
     if (self_node_type == 2 && position == 1) {
         /* FORK data sensor 1*/
-        if ((logic_time >= 0 && logic_time <= 2) || (logic_time >= 9 && logic_time <= 11))
-            return 20.0;
+        if (logic_time >= 0 && logic_time <= 2)
+            return 17.8;
+        if (logic_time >= 9 && logic_time <= 11)
+            return 20;
         if (logic_time >= 6 && logic_time <= 8)
             return 10.0;
         if ((logic_time >= 3 && logic_time <= 5) || (logic_time >= 12 && logic_time <= 17))
@@ -59,7 +63,7 @@ double get_water_flow(int self_node_type, int position, int time) {
     if (self_node_type == 3 && position == 0) {
         /* BRANCH 0 data */
         if (logic_time >= 0 && logic_time <= 2)
-            return 20.0;
+            return 17.8;
         if (logic_time >= 6 && logic_time <= 11)
             return 10.0;
         if ((logic_time >= 3 && logic_time <= 5) || (logic_time >= 12 && logic_time <= 17))
@@ -67,7 +71,9 @@ double get_water_flow(int self_node_type, int position, int time) {
     }
     if (self_node_type == 3 && position == 1) {
         /* BRANCH 1 data */
-        if ((logic_time >= 0 && logic_time <= 2) || (logic_time >= 9 && logic_time <= 11))
+        if (logic_time >= 0 && logic_time <= 2)
+            return 17.8;
+        if (logic_time >= 9 && logic_time <= 11)
             return 20.0;
         if (logic_time >= 6 && logic_time <= 8)
             return 10.0;
