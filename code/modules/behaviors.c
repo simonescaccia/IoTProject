@@ -261,7 +261,7 @@ void _check_leakage (node_t node, payload_t* payload) {
     sample_t sample;
     _sample(&sample, node, atoi(payload->logic_time));
     free(sample.water_flow);
-    printf("Current water flow: %f. ", sample.water_flow_sum);
+    printf("Current water flow: "); print_float(sample.water_flow_sum); printf(". ");
 
     /* Compute the difference */
     double difference = atof(payload->value) - sample.water_flow_sum;
@@ -272,7 +272,7 @@ void _check_leakage (node_t node, payload_t* payload) {
 
         /* Convert the differece from double to char* */
         char str_difference[VALUE_MAXIMUM_LENGTH];
-        sprintf(str_difference, "%.2f", difference);
+        fmt(str_difference, difference, 2);
 
         /* Wait for source switch to listen mode */
         if (strcmp(node.node_father, node.node_source_p2p) == 0) {
