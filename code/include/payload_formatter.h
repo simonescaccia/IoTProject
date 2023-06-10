@@ -1,3 +1,6 @@
+#ifndef PAYLOAD_FORMATTER
+#define PAYLOAD_FORMATTER
+
 typedef struct {
     char* from;             /* source node of the message */
     char* to;               /* destination node of the message */
@@ -11,3 +14,5 @@ char* format_payload (char value[21], char from[3], char to[3], char leak[2], ch
 payload_t* get_values (char message[32]);
 
 void free_payload(payload_t* payload);
+
+#endif
