@@ -17,7 +17,7 @@ In our case, we refer to 2023.04 RIOT-OS version.
 
 Clone RIOT-OS repository with:
 
-    git clone https://github.com/RIOT-OS/RIOT.git -b 2023.04 branch
+    git clone https://github.com/RIOT-OS/RIOT.git -b 2023.04
 
 Then clone our repository:
 
