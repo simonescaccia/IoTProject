@@ -54,12 +54,16 @@ payload_t* get_values (char message[32]) {
         char msg[32];
         sprintf(msg, "%s", message);
 
+        printf("message: %s\n");
+
         /*  Parse the string */
         payload_t *payload = (payload_t*)malloc(sizeof(payload_t));
+
+        printf("Here");
+
         char* token = strtok(msg, ",");
         int i = 0;
         while (token != NULL) {
-            printf("i: %d, token: %s\n", i, token);
             switch (i) {
                 case 1:
                     payload->from = (char*)malloc(sizeof(char)*(strlen(token)+1));
