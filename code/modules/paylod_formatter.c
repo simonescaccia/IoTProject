@@ -11,12 +11,14 @@ const char* APP_ID = "0000";
 /* driver sx127x message length */
 const int MESSAGE_LENGTH = 32;
 
+/* the sum should be equal to the message lenght minus the length of the app id, see assert */
 const int VALUE_LENGHT = 13;
 const int FROM_LENGHT = 2;
 const int TO_LENGHT = 2;
 const int LEAK_LENGTH = 1;
 const int LOGIC_TIME_LENGHT = 4;
 const int COMMA_NUMBERS = 5;
+
 
 /**
  * @brief Return the message to send by lora p2p, using the following formatting: <0000 app_id>,<node from>,<node to>,<L for leakage or V for value>,<value>
