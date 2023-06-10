@@ -15,7 +15,7 @@
 /**
  * @brief position cares about the pair sensor-child: set 0 or 1, and used only for FORKs and BRANCHs
 */
-double get_water_flow(int self_node_type, int position, int time) {
+float get_water_flow(int self_node_type, int position, int time) {
     int logic_time = time % 18;
     /* logic_time should be in the range [0,17] */
 

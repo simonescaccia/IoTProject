@@ -95,7 +95,7 @@ int source_lora_ttn(node_t node)
 
         char number[5];  
         char* child, *father;
-        double leakage;
+        float leakage;
         float threshold = 1.0;
 
         for (int i = 0; i < n; i++) {
@@ -124,7 +124,7 @@ int source_lora_ttn(node_t node)
                 child = malloc(15 * sizeof(char));
                 strcpy(child, nodes[i + 1]);
 
-                double father_water_flow, child_water_flow;
+                float father_water_flow, child_water_flow;
                 
 
                 if (rand() % 2 == 0) {
@@ -199,7 +199,7 @@ static void _sample (sample_t* sample, node_t node, int time)
         sensors_number = node.children_count;
 
     /* Check water flow for each sensor and send a message to its children if any */
-    sample->water_flow = (double*)malloc(sizeof(double)*node.children_count);
+    sample->water_flow = (float*)malloc(sizeof(float)*node.children_count);
     sample->water_flow_sum = 0.0;
     for (int i = 0; i < sensors_number; i++) {
         /* Sample */
@@ -272,7 +272,7 @@ void _check_leakage (node_t node, payload_t* payload) {
     printf("Current water flow: "); print_float(sample.water_flow_sum, 2); printf(". ");
 
     /* Compute the difference */
-    double difference = atof(payload->value) - sample.water_flow_sum;
+    float difference = atof(payload->value) - sample.water_flow_sum;
 
     if (difference > LEAKAGE_CONDITION) {
         /* Leakage detected */
@@ -280,7 +280,7 @@ void _check_leakage (node_t node, payload_t* payload) {
 
         int printed_chars;
 
-        /* Convert the differece from double to char* */
+        /* Convert the differece from float to char* */
         char str_difference[VALUE_MAXIMUM_LENGTH];
         printed_chars = fmt_float(str_difference, difference, 2);
         str_difference[printed_chars] = '\0';
