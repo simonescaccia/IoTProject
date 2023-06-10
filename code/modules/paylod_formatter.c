@@ -53,13 +53,9 @@ payload_t* get_values (char message[32]) {
         /* strtkn needs an array */
         char msg[32];
         sprintf(msg, "%s", message);
-
-        printf("Here\n");
-
+        
         /*  Parse the string */
         payload_t *payload = (payload_t*)malloc(sizeof(payload_t));
-
-        printf("Here\n");
 
         char* token = strtok(msg, ",");
         int i = 0;
