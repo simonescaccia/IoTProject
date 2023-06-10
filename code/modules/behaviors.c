@@ -191,10 +191,17 @@ static void _start_listening (void)
 
 static void _sample (sample_t* sample, node_t node, int time) 
 {
+    /* Count the number of sensors for this board */
+    int sensors_number;
+    if (node.children_count <= 1) 
+        sensors_number = 1;
+    else 
+        sensors_number = node.children_count;
+
     /* Check water flow for each sensor and send a message to its children if any */
     sample->water_flow = (double*)malloc(sizeof(double)*node.children_count);
     sample->water_flow_sum = 0.0;
-    for (int i = 0; i < node.children_count; i++) {
+    for (int i = 0; i < sensors_number; i++) {
         /* Sample */
         sample->water_flow[i] = get_water_flow(node.node_type, i, time);
         if (APP_DEBUG) { printf("Sensor %d, value: ", i); print_float(sample->water_flow[i], 2); printf("\n"); }
