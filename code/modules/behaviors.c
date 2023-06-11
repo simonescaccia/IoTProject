@@ -369,11 +369,18 @@ void message_received_clb (node_t node, char message[32]) {
 void *_periodic_listening(void *arg) {
 
     (void)arg;
-    xtimer_ticks32_t last_wakeup = xtimer_now();
+    xtimer_ticks32_t last_wakeup;
+    bool is_last_wakeup = false;
 
     while (1) {
         _start_listening();
 
+        /* Duty cycle */
+        if (!is_last_wakeup) {
+            /* set last_wakeup only the first time */
+            is_last_wakeup = true;
+            last_wakeup = xtimer_now();
+        }
         xtimer_periodic_wakeup(&last_wakeup, SIMULATED_DAY);
     }
 }
