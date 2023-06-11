@@ -4,7 +4,6 @@
 #include <math.h>
 
 #include "xtimer.h"
-#include "mutex.h"
 
 #include "behaviors.h"
 #include "sample_generator.h"
