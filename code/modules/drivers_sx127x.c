@@ -16,6 +16,7 @@
 
 #include "drivers_sx127x.h"
 #include "app_debug.h"
+#include "params.h"
 
 #include "xtimer.h"
 
@@ -138,7 +139,11 @@ int listen_cmd(int argc, char **argv)
     const netopt_enable_t single = false;
 
     netdev->driver->set(netdev, NETOPT_SINGLE_RECEIVE, &single, sizeof(single));
-    const uint32_t timeout = 0;
+    uint32_t timeout;
+    if (DUTY_CYCLE)
+        timeout = LISTENING_TIMEOUT;
+    else
+        timeout = 0;
 
     netdev->driver->set(netdev, NETOPT_RX_TIMEOUT, &timeout, sizeof(timeout));
 
@@ -189,6 +194,7 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
             puts("Transmission completed\n");
             /* Callback for tx completed */ 
             (*callback_tx_complete)();
+            if (DUTY_CYCLE) sx127x_set_sleep(&sx127x);
             break;
 
         case NETDEV_EVENT_CAD_DONE:

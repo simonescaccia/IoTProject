@@ -13,6 +13,7 @@
 #include "semtech-loramac.h"
 #include "fmt.h"
 
+#include "params.h"
 #include "app_debug.h"
 
 /* Check payload_formatter for more details */
@@ -27,11 +28,14 @@
 #define APP_EUI "0000000000000011"
 #define APP_KEY "5F129D225F930EB831FBE861B3B307D0"
 
-uint32_t LEAKAGE_TEST_PERIOD = US_PER_SEC * 20;
 uint32_t LATENCY_P2P = US_PER_SEC * 0;
 
 int tx_complete_child;
 char message[20];
+
+/* Thread stack */
+#define SX127X_STACKSIZE        (THREAD_STACKSIZE_DEFAULT)
+static char stack[SX127X_STACKSIZE];
 
 int source_lora_ttn(node_t node) 
 {
@@ -363,6 +367,18 @@ void message_received_clb (node_t node, char message[32]) {
 
 }
 
+void *_periodic_listening(void *arg) {
+
+    (void)arg;
+    xtimer_ticks32_t last_wakeup = xtimer_now();
+
+    while (1) {
+        _start_listening();
+
+        xtimer_periodic_wakeup(&last_wakeup, SIMULATED_DAY);
+    }
+}
+
 int lora_p2p(node_t node) {
     puts("Behavior: lora_p2p");
     
@@ -371,7 +387,20 @@ int lora_p2p(node_t node) {
     /* Starting logic time for the sample generator */
     int time = 4;
 
-    _start_listening();
+    /* Start listening: periodic if DUTY_CYCLE is setted, else continuous listening */
+    if (DUTY_CYCLE) {
+        kernel_pid_t _listen_pid = thread_create(stack, sizeof(stack), THREAD_PRIORITY_MAIN - 1,
+                                THREAD_CREATE_STACKTEST, _periodic_listening, NULL,
+                                "_periodic_listening");
+
+        if (_listen_pid <= KERNEL_PID_UNDEF) {
+            puts("Creation of _periodic_listening thread failed");
+            return 1;
+        }
+    } else {
+        _start_listening();
+    }
+        
 
     while (1) {
         /* Set time for sampling: [0, inf) */
