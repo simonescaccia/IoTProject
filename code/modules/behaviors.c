@@ -255,6 +255,9 @@ static void _send_water_flow_to_children(node_t node, int time)
             }
         }
 
+        /* Restart listening */
+        if (!DUTY_CYCLE) _start_listening();
+
         free(str_payload);
         /* Free memory */
         for (int i = 0; i < node.children_count; i++) {
@@ -295,6 +298,9 @@ void _check_leakage (node_t node, payload_t* payload) {
         char* list[2] = {"send_cmd", str_payload};
         char** argv = (char**)&list;
         send_cmd(2, argv);
+
+        /* Restart listening */
+        if (!DUTY_CYCLE) _start_listening();
 
         /* Free memory */
         free(str_payload);
