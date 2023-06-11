@@ -381,7 +381,7 @@ void *_periodic_listening(void *arg) {
             is_last_wakeup = true;
             last_wakeup = xtimer_now();
         }
-        xtimer_periodic_wakeup(&last_wakeup, SIMULATED_DAY);
+        xtimer_periodic_wakeup(&last_wakeup, 30);
     }
 }
 
