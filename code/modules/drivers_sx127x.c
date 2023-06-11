@@ -198,7 +198,6 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
             break;
 
         case NETDEV_EVENT_TX_COMPLETE:
-            sx127x_set_sleep(&sx127x);
             puts("Transmission completed\n");
             /* Callback for tx completed */ 
             (*callback_tx_complete)();
@@ -208,7 +207,6 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
             break;
 
         case NETDEV_EVENT_TX_TIMEOUT:
-            sx127x_set_sleep(&sx127x);
             break;
 
         default:

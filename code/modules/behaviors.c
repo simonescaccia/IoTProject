@@ -255,9 +255,6 @@ static void _send_water_flow_to_children(node_t node, int time)
             }
         }
 
-        /* Restart listening */
-        _start_listening();
-
         free(str_payload);
         /* Free memory */
         for (int i = 0; i < node.children_count; i++) {
@@ -298,9 +295,6 @@ void _check_leakage (node_t node, payload_t* payload) {
         char* list[2] = {"send_cmd", str_payload};
         char** argv = (char**)&list;
         send_cmd(2, argv);
-
-        /* Restart listening */
-        _start_listening();
 
         /* Free memory */
         free(str_payload);
@@ -391,7 +385,7 @@ int lora_p2p(node_t node) {
     xtimer_ticks32_t last_wakeup;
     bool is_last_wakeup = false;
     /* Starting logic time for the sample generator */
-    int time = 4;
+    int time = 3;
 
     /* Start listening: periodic if DUTY_CYCLE is setted, else continuous listening */
     if (DUTY_CYCLE && node.node_type != 1) {
