@@ -10,24 +10,24 @@
 /**
  * Simulate one day in seconds
 */
-#define SIMULATED_DAY 30
+extern const uint32_t SIMULATED_DAY;
 
 /**
  * Estimated time in seconds for sampling and data processing (values difference)
 */
-#define SAMPLING_PLUS_DATA_PROCESSING 2
+extern const uint32_t SAMPLING_PLUS_DATA_PROCESSING;
 
 /**
  * Choose how often (number of times in a SIMULATED_DAY) we send a message 
  * with the sampled value to the childrens
 */
-#define NUMBER_OF_SENDING_PER_DAY 3
-#define LEAKAGE_TEST_PERIOD (SIMULATED_DAY/NUMBER_OF_SENDING_PER_DAY)
+extern const uint32_t NUMBER_OF_SENDING_PER_DAY;
+extern const uint32_t LEAKAGE_TEST_PERIOD;
 
 /**
  * Duty cycle continuous listening
 */
-#define LISTENING_TIMEOUT (2*SAMPLING_PLUS_DATA_PROCESSING+LEAKAGE_TEST_PERIOD)
+extern const uint32_t LISTENING_TIMEOUT;
 
 typedef struct {
     /* Defining node type: 0 for TNN, 1 for CHIEF, 2 for FORK, 3 for BRANCH */
