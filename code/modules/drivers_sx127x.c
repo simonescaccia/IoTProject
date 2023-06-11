@@ -187,6 +187,14 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
                 sx127x_get_time_on_air((const sx127x_t *)dev, len));
             /* Callback for message handling */ 
             (*callback_on_msg_receive)(node, message);
+            if (DUTY_CYCLE) sx127x_set_sleep(&sx127x);
+            break;
+
+        case NETDEV_EVENT_RX_TIMEOUT:
+            if (DUTY_CYCLE) {
+                sx127x_set_sleep(&sx127x);
+                puts("Rx timeout");
+            }
             break;
 
         case NETDEV_EVENT_TX_COMPLETE:
@@ -194,7 +202,6 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
             puts("Transmission completed\n");
             /* Callback for tx completed */ 
             (*callback_tx_complete)();
-            if (DUTY_CYCLE) sx127x_set_sleep(&sx127x);
             break;
 
         case NETDEV_EVENT_CAD_DONE:
