@@ -394,7 +394,7 @@ int lora_p2p(node_t node) {
     int time = 4;
 
     /* Start listening: periodic if DUTY_CYCLE is setted, else continuous listening */
-    if (DUTY_CYCLE) {
+    if (DUTY_CYCLE && node.node_type != 1) {
         kernel_pid_t _listen_pid = thread_create(stack, sizeof(stack), THREAD_PRIORITY_MAIN - 1,
                                 THREAD_CREATE_STACKTEST, _periodic_listening, NULL,
                                 "_periodic_listening");

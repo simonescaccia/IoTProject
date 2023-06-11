@@ -140,8 +140,8 @@ int listen_cmd(int argc, char **argv)
 
     netdev->driver->set(netdev, NETOPT_SINGLE_RECEIVE, &single, sizeof(single));
     uint32_t timeout;
-    if (DUTY_CYCLE)
-        timeout = LISTENING_TIMEOUT;
+    if (DUTY_CYCLE && node.node_type != 1)
+        timeout = LISTENING_TIMEOUT * US_PER_SEC;
     else
         timeout = 0;
 
@@ -187,11 +187,11 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
                 sx127x_get_time_on_air((const sx127x_t *)dev, len));
             /* Callback for message handling */ 
             (*callback_on_msg_receive)(node, message);
-            if (DUTY_CYCLE) sx127x_set_sleep(&sx127x);
+            if (DUTY_CYCLE && node.node_type != 1) sx127x_set_sleep(&sx127x);
             break;
 
         case NETDEV_EVENT_RX_TIMEOUT:
-            if (DUTY_CYCLE) {
+            if (DUTY_CYCLE && node.node_type != 1) {
                 sx127x_set_sleep(&sx127x);
                 puts("Rx timeout");
             }
