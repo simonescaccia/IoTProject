@@ -381,7 +381,7 @@ void *_periodic_listening(void *arg) {
             is_last_wakeup = true;
             last_wakeup = xtimer_now();
         }
-        xtimer_periodic_wakeup(&last_wakeup, 30);
+        xtimer_periodic_wakeup(&last_wakeup, US_PER_SEC * SIMULATED_DAY);
     }
 }
 
@@ -395,7 +395,7 @@ int lora_p2p(node_t node) {
 
     /* Start listening: periodic if DUTY_CYCLE is setted, else continuous listening */
     if (DUTY_CYCLE) {
-        kernel_pid_t _listen_pid = thread_create(stack, sizeof(stack), THREAD_PRIORITY_MAIN + 1,
+        kernel_pid_t _listen_pid = thread_create(stack, sizeof(stack), THREAD_PRIORITY_MAIN - 1,
                                 THREAD_CREATE_STACKTEST, _periodic_listening, NULL,
                                 "_periodic_listening");
 
@@ -421,7 +421,7 @@ int lora_p2p(node_t node) {
             is_last_wakeup = true;
             last_wakeup = xtimer_now();
         }
-        xtimer_periodic_wakeup(&last_wakeup, LEAKAGE_TEST_PERIOD);
+        xtimer_periodic_wakeup(&last_wakeup, US_PER_SEC * LEAKAGE_TEST_PERIOD);
     }
 
     return 0;
