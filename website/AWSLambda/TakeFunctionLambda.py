@@ -8,10 +8,11 @@ from datetime import datetime
 # Create a DynamoDB object using the AWS SDK
 dynamodb = boto3.resource('dynamodb')
 
-# Use the DynamoDB object to select our table
+# Use the DynamoDB object to select our tables
 table_flow = dynamodb.Table('WaterFlowSourceTable')
 table_leakage = dynamodb.Table('WaterLeakageTable')
 
+# Generate a timestamp for the event
 time_now = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
 
 # Define the handler function that the Lambda service will use
@@ -23,7 +24,6 @@ def lambda_handler(event, context):
     test = payload["myTestValue"]
 
     
-    
     if (test['Id']=='flow') :
         # Write payload and time to the DynamoDB table using the object we instantiated and save response in a variable
         response = table_flow.put_item(
@@ -31,10 +31,6 @@ def lambda_handler(event, context):
                 'Datetime': time_now,
                 'Flow': test['Flow']
                 })
-        #response = table_flow.scan()
-        #output = response['Items']
-    
-        print(response['Items'])
         
         return {
            'statusCode': 200
@@ -50,10 +46,6 @@ def lambda_handler(event, context):
                 'Leakage': test["Leakage"]
                 })
             
-        #response = table_leakage.scan()
-        #output = response['Items']
-    
-        print(response['Items'])
         
         return {
            'statusCode': 200
