@@ -223,7 +223,6 @@ void *_recv_thread(void *arg)
         else {
             puts("Unexpected msg type");
         }
-        xtimer_sleep(30);
     }
 }
 
