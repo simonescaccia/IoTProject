@@ -208,11 +208,11 @@ static void _sample (sample_t* sample, node_t node, int time)
     for (int i = 0; i < sensors_number; i++) {
         /* Sample */
         sample->water_flow[i] = get_water_flow(node.node_type, i, time);
-        if (APP_DEBUG) { printf("Sensor %d, value: ", i); print_float(sample->water_flow[i], 2); printf("\n"); }
+        printf("Sensor %d, value: ", i); print_float(sample->water_flow[i], 2); printf(". ");
         /* Sum */
         sample->water_flow_sum += sample->water_flow[i];
     }
-    if (APP_DEBUG) { printf("Sum: "); print_float(sample->water_flow_sum, 2); printf("\n"); }
+    printf("Total water flow: "); print_float(sample->water_flow_sum, 2); printf("\n");
 }
 
 static void _send_water_flow_to_children(node_t node, int time) 

@@ -3,6 +3,8 @@
 #include "sample_generator.h"
 #include "string.h"
 
+#include "app_debug.h"
+
 /**
  * logic_time in [0, 2]: Simulate no LEAKAGE with water usage - Test also float water flow mesurements
  * logic_time in [3, 5]: Simulate no LEAKAGE without water usage
@@ -19,14 +21,16 @@ float get_water_flow(int self_node_type, int position, int time) {
     int logic_time = time % 18;
     /* logic_time should be in the range [0,17] */
 
-    if (self_node_type != 2 || (self_node_type == 2 && position == 0)) {
-        /* FORK print only one time */
-        if (logic_time == 0)    puts("Simulate no LEAKAGE with water usage\n");
-        if (logic_time == 3)    puts("Simulate no LEAKAGE without water usage\n");
-        if (logic_time == 6)    puts("Simulate a LEAKAGE between the CHIEF and the FORK with water usage\n");
-        if (logic_time == 9)    puts("Simulate a LEAKAGE between the FORK and a BRANCH with water usage\n");
-        if (logic_time == 12)   puts("Simulate a LEAKAGE between the CHIEF and the FORK without water usage\n");
-        if (logic_time == 15)   puts("Simulate a LEAKAGE between the FORK and a BRANCH without water usage\n");
+    if (APP_DEBUG) {
+        if (self_node_type != 2 || (self_node_type == 2 && position == 0)) {
+            /* FORK print only one time */
+            if (logic_time == 0)    puts("Simulate no LEAKAGE with water usage\n");
+            if (logic_time == 3)    puts("Simulate no LEAKAGE without water usage\n");
+            if (logic_time == 6)    puts("Simulate a LEAKAGE between the CHIEF and the FORK with water usage\n");
+            if (logic_time == 9)    puts("Simulate a LEAKAGE between the FORK and a BRANCH with water usage\n");
+            if (logic_time == 12)   puts("Simulate a LEAKAGE between the CHIEF and the FORK without water usage\n");
+            if (logic_time == 15)   puts("Simulate a LEAKAGE between the FORK and a BRANCH without water usage\n");
+        }
     }
 
     if (self_node_type == 0 || self_node_type == 1) {
