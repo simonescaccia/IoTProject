@@ -144,6 +144,7 @@ int listen_cmd(int argc, char **argv)
         timeout = LISTENING_TIMEOUT * US_PER_SEC;
     else
         timeout = 0;
+    if (APP_DEBUG) printf("Listen timeout setted to %d", LISTENING_TIMEOUT);
 
     netdev->driver->set(netdev, NETOPT_RX_TIMEOUT, &timeout, sizeof(timeout));
 
