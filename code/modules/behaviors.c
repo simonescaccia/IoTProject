@@ -213,7 +213,7 @@ static void _sample (sample_t* sample, node_t node, int time)
         /* Sum */
         sample->water_flow_sum += sample->water_flow[i];
     }
-    printf("Total water flow: "); print_float(sample->water_flow_sum, 2); printf("\n");
+    printf("Total water flow: "); print_float(sample->water_flow_sum, 2); printf("\n\n");
 }
 
 static void _send_water_flow_to_children(node_t node, int time) 
