@@ -186,9 +186,9 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
                 message, (int)len,
                 packet_info.rssi, (int)packet_info.snr,
                 sx127x_get_time_on_air((const sx127x_t *)dev, len));
+            if (DUTY_CYCLE && node.node_type != 1) sx127x_set_sleep(&sx127x);
             /* Callback for message handling */ 
             (*callback_on_msg_receive)(node, message);
-            if (DUTY_CYCLE && node.node_type != 1) sx127x_set_sleep(&sx127x);
             break;
 
         case NETDEV_EVENT_RX_TIMEOUT:
