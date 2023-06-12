@@ -5,7 +5,7 @@
  * 1 ON
  * 0 OFF
 */
-#define DUTY_CYCLE 1
+#define DUTY_CYCLE 0
 
 /**
  * Simulate one day in seconds
