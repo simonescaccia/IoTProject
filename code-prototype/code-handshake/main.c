@@ -102,10 +102,17 @@ xtimer_ticks32_t sample_time_end;
 xtimer_ticks32_t sample_time_diff;
 xtimer_ticks32_t periodic_time;
 
+xtimer_ticks32_t time_s0_source;
+xtimer_ticks32_t time_s1_source;
+xtimer_ticks32_t time_s2_source;
+xtimer_ticks32_t time_s0_son;
+xtimer_ticks32_t time_s1_son;
+xtimer_ticks32_t time_s2_son;
+
 char* mex; //for received messages
 
 int ret = -1;
-char message[100];
+char message[200];
 float water_flow_rate_other=0.0;
 float water_flow_rate=0.0;
 float water_flow_diff=0.0;
@@ -301,12 +308,18 @@ static void _on_msg_received(MessageData *data)
     mex = (char *)data->message->payload;
 
     if((strcmp (mex, "heloy"))==0){
+        time_s0_son = xtimer_now();
         value_message_on_received="answr";
         thread_wakeup(publish_thread_node); //publish("answr");
+        time_s1_son = xtimer_now();
     }
 
     else if((strcmp (mex, "answr"))==0){
         answer=1;
+        time_s1_source = xtimer_now();
+        value_message_on_received="start";
+        thread_wakeup(publish_thread_node);
+        thread_wakeup(water_sensor_thread);
     }
 
     else if((strcmp (mex, "start"))==0){
@@ -319,7 +332,7 @@ static void _on_msg_received(MessageData *data)
             //thread_wakeup(thread_buzzer);
             //thread_wakeup(thread_led);
             water_flow_rate_other = atof(mex);
-
+            time_s2_son = xtimer_now();
             if(water_flow_rate-water_flow_rate_other > 3 || water_flow_rate_other-water_flow_rate > 3){
                 if(water_flow_rate-water_flow_rate_other > 0)
                 {    water_flow_diff=water_flow_rate-water_flow_rate_other; }
@@ -329,7 +342,8 @@ static void _on_msg_received(MessageData *data)
                 printf("LEAKEGE DETECTED \t -> \t My flow:%f \t Other: %f \t difference: %f\n",water_flow_rate,water_flow_rate_other,water_flow_diff);                             
                 
                 total_quantity=total_quantity+water_flow_diff/60*8;
-                sprintf(message, "{\"id\": \"%d\", \"flow_son\": \"%f\", \"flow_diff\": \"%f\", \"quantity leak\": \"%f\"}", board, water_flow_rate, water_flow_diff, total_quantity);             
+                //sprintf(message, "{\"id\": \"%d\", \"flow_son\": \"%f\", \"flow_diff\": \"%f\", \"quantity leak\": \"%f\"}", board, water_flow_rate, water_flow_diff, total_quantity);             
+                sprintf(message, "{\"time_s0_son\": \"%d\", \"time_s1_son\": \"%d\", \"sample_time_now\": \"%d\", \"sample_time_end\": \"%d\", \"time_s2_son\": \"%d\"}", time_s0_son, time_s1_son, sample_time_now, sample_time_end, time_s2_son);             
                 message_on_aws=message;
                 thread_wakeup(publish_thread_aws);
             }
@@ -342,10 +356,12 @@ static void _on_msg_received(MessageData *data)
                 printf("NO LEAKEGE\n");
 
                 total_quantity=total_quantity+water_flow_diff/60*8;
-                sprintf(message, "{\"id\": \"%d\", \"flow_son\": \"%f\", \"flow_diff\": \"%f\", \"quantity leak\": \"%f\"}", board, water_flow_rate, water_flow_diff, total_quantity);             
+                //sprintf(message, "{\"id\": \"%d\", \"flow_son\": \"%f\", \"flow_diff\": \"%f\", \"quantity leak\": \"%f\"}", board, water_flow_rate, water_flow_diff, total_quantity);             
+                sprintf(message, "{\"time_s0_son\": \"%d\", \"time_s1_son\": \"%d\", \"sample_time_now\": \"%d\", \"sample_time_end\": \"%d\", \"time_s2_son\": \"%d\"}", time_s0_son, time_s1_son, sample_time_now, sample_time_end, time_s2_son);             
                 message_on_aws=message;
                 thread_wakeup(publish_thread_aws);
             }
+        answer=0;    
         work=0;    
         }
     }
@@ -467,11 +483,13 @@ void* water_sensor_sampling(void* arg){
         printf("frequency: %f Hz\t water_flow_rate: %f L/min\n",frequency,water_flow_rate);
         printf("water sensor thread end\n");
         if(board==0){
+            time_s2_source = xtimer_now();
             sprintf(message, "%f", water_flow_rate);
             publish(message);
             
             total_quantity=total_quantity+water_flow_rate/60*8;
-            sprintf(message, "{\"id\": \"%d\", \"flow source\": \"%f\", \"quantity\": \"%f\"}", board, water_flow_rate, total_quantity);             
+            //sprintf(message, "{\"id\": \"%d\", \"flow source\": \"%f\", \"quantity\": \"%f\"}", board, water_flow_rate, total_quantity);             
+            sprintf(message, "{\"time_s0_source\": \"%d\", \"time_s1_source\": \"%d\", \"time_s2_source\": \"%d\"}", time_s0_source, time_s1_source, time_s2_source); 
             message_on_aws=message;
             thread_wakeup(publish_thread_aws);
         }
@@ -539,16 +557,18 @@ int main(void)
     periodic_time = xtimer_now(); 
     
     while(1){
-
+        /*
         if(board==0){
 
             while(1){  
                 if(water_sensor_test()==1){
+                    time_s0_source = xtimer_now();
                     publish("heloy");
                     xtimer_periodic_wakeup(&periodic_time, ANSWER_AGAIN_PERIODIC);
                     while(1){
                         if(answer==0){
                             printf("To do again, no answer from son\n");
+                            time_s0_source = xtimer_now();
                             publish("heloy");
                             xtimer_periodic_wakeup(&periodic_time, ANSWER_AGAIN_PERIODIC);
                         }
@@ -564,12 +584,12 @@ int main(void)
                 } 
             }
 
-            
+            time_s1_source = xtimer_now();
             value_message_on_received="start";
             thread_wakeup(publish_thread_node);
             thread_wakeup(water_sensor_thread);
             //publish("start");
-            answer=0;
+            
             printf("I am doing the sampling\n");
             xtimer_periodic_wakeup(&periodic_time, DAILY_PERIODIC);
             if(ret<0){
@@ -577,7 +597,22 @@ int main(void)
                 xtimer_sleep(1);
             }
         } 
-        
+        */
+        if(board==0){
+
+            while(1){  
+                if(water_sensor_test()==1){
+                    time_s0_source = xtimer_now();
+                    publish("heloy");
+                }
+                xtimer_periodic_wakeup(&periodic_time, DAILY_PERIODIC);
+                if(ret<0){
+                    connect();
+                    xtimer_sleep(1);
+                }
+            } 
+        }
+
         if(board!=0){
             while(1){
                 xtimer_periodic_wakeup(&periodic_time, DAILY_PERIODIC);
