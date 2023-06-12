@@ -141,10 +141,10 @@ int listen_cmd(int argc, char **argv)
     netdev->driver->set(netdev, NETOPT_SINGLE_RECEIVE, &single, sizeof(single));
     uint32_t timeout;
     if (DUTY_CYCLE && node.node_type != 1)
-        timeout = LISTENING_TIMEOUT * US_PER_SEC;
+        timeout = LISTENING_TIMEOUT * MS_PER_SEC;
     else
         timeout = 0;
-    if (APP_DEBUG) printf("Listen timeout setted to %" PRIu32 "", timeout);
+    if (APP_DEBUG) printf("Listen timeout setted to %" PRIu32 "\n", timeout);
 
     netdev->driver->set(netdev, NETOPT_RX_TIMEOUT, &timeout, sizeof(timeout));
 
