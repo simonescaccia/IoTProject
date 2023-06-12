@@ -34,7 +34,8 @@ char message[20];
 
 /* Thread stack */
 #define SX127X_STACKSIZE        (THREAD_STACKSIZE_DEFAULT)
-static char stack[SX127X_STACKSIZE];
+static char stack_listen[SX127X_STACKSIZE];
+static char stack_send[SX127X_STACKSIZE];
 
 int source_lora_ttn(node_t node) 
 {
@@ -385,17 +386,37 @@ void *_periodic_listening(void *arg) {
     }
 }
 
-int lora_p2p(node_t node) {
-    puts("Behavior: lora_p2p");
-    
+void *_periodic_sending(void *arg) {
+
     xtimer_ticks32_t last_wakeup;
     bool is_last_wakeup = false;
     /* Starting logic time for the sample generator */
     int time = 3;
+    node_t node = *(node_t *)arg;
+
+    while (1) {
+        /* Set time for sampling: [0, inf) */
+        time = (time + 1);
+
+        _send_water_flow_to_children(node, time);
+
+        /* Duty cycle */
+        if (!is_last_wakeup) {
+            /* set last_wakeup only the first time */
+            is_last_wakeup = true;
+            last_wakeup = xtimer_now();
+        }
+        xtimer_periodic_wakeup(&last_wakeup, US_PER_SEC * LEAKAGE_TEST_PERIOD);
+    }
+}
+
+int lora_p2p(node_t node) {
+
+    puts("Behavior: lora_p2p");
 
     /* Start listening: periodic if DUTY_CYCLE is setted, else continuous listening */
     if (DUTY_CYCLE && node.node_type != 1) {
-        kernel_pid_t _listen_pid = thread_create(stack, sizeof(stack), THREAD_PRIORITY_MAIN - 1,
+        kernel_pid_t _listen_pid = thread_create(stack_listen, sizeof(stack_listen), THREAD_PRIORITY_MAIN - 1,
                                 THREAD_CREATE_STACKTEST, _periodic_listening, NULL,
                                 "_periodic_listening");
 
@@ -406,22 +427,18 @@ int lora_p2p(node_t node) {
     } else {
         _start_listening();
     }
+
+    /* Start sending: only if the current node is not a BRANCH */
+    if (node.node_type != 3) {
         
+        kernel_pid_t _sending_pid = thread_create(stack_send, sizeof(stack_send), THREAD_PRIORITY_MAIN - 1,
+                                THREAD_CREATE_STACKTEST, _periodic_sending, (void *)&node,
+                                "_periodic_sending");
 
-    while (1) {
-        /* Set time for sampling: [0, inf) */
-        time = (time + 1);
-
-        /* BRANCH doesn't have children */
-        if (node.node_type != 3) _send_water_flow_to_children(node, time);
-
-        /* Duty cycle */
-        if (!is_last_wakeup) {
-            /* set last_wakeup only the first time */
-            is_last_wakeup = true;
-            last_wakeup = xtimer_now();
-        }
-        xtimer_periodic_wakeup(&last_wakeup, US_PER_SEC * LEAKAGE_TEST_PERIOD);
+        if (_sending_pid <= KERNEL_PID_UNDEF) {
+            puts("Creation of _periodic_sending thread failed");
+            return 1;
+        } 
     }
 
     return 0;
