@@ -205,6 +205,7 @@ static void _sample (sample_t* sample, node_t node, int time)
     /* Check water flow for each sensor and send a message to its children if any */
     sample->water_flow = (float*)malloc(sizeof(float)*node.children_count);
     sample->water_flow_sum = 0.0;
+    printf("Sampling: ");
     for (int i = 0; i < sensors_number; i++) {
         /* Sample */
         sample->water_flow[i] = get_water_flow(node.node_type, i, time);
@@ -316,12 +317,15 @@ void transmission_complete_clb (void) {
     tx_complete_child = 1;
 }
 
-void message_received_clb (node_t node, char message[32]) {
+/**
+ * @return 1 if the message is sent from the parent, then you need to stop listening, else return 0
+*/
+int message_received_clb (node_t node, char message[32]) {
     if (APP_DEBUG) puts("Callback invoked, starting message parsing");
 
     if (strlen(message) > 31) {
         printf("Extraneous message received, message lenght: %d\n", strlen(message));
-        return;
+        return 0;
     }
 
     /* Message parsing */
@@ -331,7 +335,7 @@ void message_received_clb (node_t node, char message[32]) {
         if (APP_DEBUG) puts("Not a message from our application");
 
         free_payload(payload);
-        return;
+        return 0;
     }
 
     /* Check destination */
@@ -340,7 +344,7 @@ void message_received_clb (node_t node, char message[32]) {
         if (APP_DEBUG) puts("Message not sent to me");
 
         free_payload(payload);
-        return;
+        return 0;
     }
     
     /* Compute the sender of the message */
@@ -352,7 +356,7 @@ void message_received_clb (node_t node, char message[32]) {
         _check_leakage(node, payload);
 
         free_payload(payload);
-        return;
+        return 1;
     }
 
     /* The CHIEF receive all the leakage messages */
@@ -362,9 +366,10 @@ void message_received_clb (node_t node, char message[32]) {
         /* UART send message to SOURCE TTN*/
 
         free_payload(payload);
-        return;        
+        return 0;        
     }
 
+    return 0;
 }
 
 void *_periodic_listening(void *arg) {

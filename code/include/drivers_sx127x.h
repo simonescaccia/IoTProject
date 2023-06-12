@@ -1,6 +1,6 @@
 #include "params.h"
 
-typedef void (*clb_msg_received)(node_t node, char message[32]);
+typedef int (*clb_msg_received)(node_t node, char message[32]);
 typedef void (*clb_tx_completed)(void);
 
 int lora_setup_cmd(int argc, char **argv);

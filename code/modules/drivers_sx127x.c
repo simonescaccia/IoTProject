@@ -31,7 +31,7 @@ static kernel_pid_t _recv_pid;
 static char message[32];
 static sx127x_t sx127x;
 
-static void (*callback_on_msg_receive)(node_t, char[32]);
+static int (*callback_on_msg_receive)(node_t, char[32]);
 static void (*callback_tx_complete)(void);
 
 static node_t node;
@@ -186,9 +186,12 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
                 message, (int)len,
                 packet_info.rssi, (int)packet_info.snr,
                 sx127x_get_time_on_air((const sx127x_t *)dev, len));
-            if (DUTY_CYCLE && node.node_type != 1) sx127x_set_sleep(&sx127x);
             /* Callback for message handling */ 
-            (*callback_on_msg_receive)(node, message);
+            int stop_listen = (*callback_on_msg_receive)(node, message);
+            if (stop_listen && DUTY_CYCLE && node.node_type != 1) { 
+                sx127x_set_sleep(&sx127x); 
+                puts("Rx power off");
+            }
             break;
 
         case NETDEV_EVENT_RX_TIMEOUT:
