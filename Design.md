@@ -125,3 +125,5 @@ This system works well but it is uselessly complex and it is less efficient than
 This is the third algorithm that we have implemented and it is the one that will be used in the real scenario. <br/>
 In particular the Source controls if there is a water flow, if yes it sends an "heloy" to the Son, the Son sends an "answr" to the Source and it also starts the test, Source receives the message "answr" and starts the test; Source sends to the Son the result of the test; when the Son has both the values, sees if there is a leakage, if yes it sends the value of the leakage in L/min to AWS. <br/>
 This system works well and uses one less message.
+ <br/>
+ In the evaluetion part, it is available the different analysis on the data. 
