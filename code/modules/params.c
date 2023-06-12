@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <params.h>
 
-uint32_t const SIMULATED_DAY = 30;
+uint32_t const SIMULATED_DAY = 60;
 
 uint32_t const SAMPLING_PLUS_DATA_PROCESSING = 2;
 
