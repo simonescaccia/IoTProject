@@ -101,3 +101,27 @@ Test algorithm:
 2. If it is a FORK, child MCU computes expected values of water flow
 3. Child MCU compares received value with its own value.
 4. In case of error, child sends an alert to the cloud.
+
+We have tried 3 different algorithms for allow a correct and synchronized test between two diffent nodes. The three algorthms are:
+* Ack
+* Handdshake
+* SyncAck
+All the algorithms are available in the directory "code-prototype".
+
+#### Ack
+![ack](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/ack.png) <br/>
+This is the first algorithm that we have implemented and it does not work well. Firstly there is a bug in the code, in fact with this code the Son has an higher flow that the Source, and this is not physically possible (if you find the problem, please tell us where is it), Secondly with the data obtained, we have seen that the water flow arriving to the Source (before our architecture) is not stable and the code was not robust against this problem. <br/>
+In particular the Source controls if there is a water flow, if yes it does the test and sends the value to the Son; the Son obtains the value, sends an "answr" to the Source (used to control the Son is not broken) and starts the test; after that it does the difference between the two values and see if there is a leakage or not, if yes it sends the value of the leakage in L/min to AWS. <br/>
+For the motivation written before, this system is proned to the false positive and we have stopped the analysis on it. 
+
+#### Handshake
+![handshake](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/handshake.png) <br/>
+This is the second algorithm that we have implemented and it works well. <br/>
+In particular the Source controls if there is a water flow, if yes it sends an "heloy" to the Son, the Son sends an "answr" to the Source, Source sends the message "start" and starts the test; when the Son obtains the "start" it also starts the test; the Source sends to the Son the result of the test and, when the Son has both the values, sees if there is a leakage, if yes it sends the value of the leakage in L/min to AWS. <br/>
+This system works well but it is uselessly complex and it is less efficient than the next one.
+
+#### SyncAck
+![syncAck](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/syncAck.png) <br/>
+This is the third algorithm that we have implemented and it is the one that will be used in the real scenario. <br/>
+In particular the Source controls if there is a water flow, if yes it sends an "heloy" to the Son, the Son sends an "answr" to the Source and it also starts the test, Source receives the message "answr" and starts the test; Source sends to the Son the result of the test; when the Son has both the values, sees if there is a leakage, if yes it sends the value of the leakage in L/min to AWS. <br/>
+This system works well and uses one less message.
