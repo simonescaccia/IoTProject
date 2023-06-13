@@ -1,146 +1,225 @@
 // Configuration of the API endpoint 
 const config = {
    // AWS API Gateway URL to be inserted here
-    api_endpoint: 'https://62mgg7in5j.execute-api.us-east-1.amazonaws.com/dev' 
+    api_url: 'https://ll9tfou6n5.execute-api.us-east-1.amazonaws.com/dev' 
   };
 
-  var values_x = [];
-  var columns_colors = []; 
-  var colors = ["blue", "red", "black"]
-  var current_color = 0;
-  var values_y = [];
-  var ch1;
-  var ch2;
-  var values_y_flow = [];
-  var columns_colors_flow = [];
-  var input1 = [];
-  var input2 = [];
-  
-  function displayDataOnChart(data_input){
+/* Global Data */
 
-    console.log(data_input);
-    // Extracting body section of the response
-    const body = JSON.parse(data_input).body
-    // Parsing body content
-    const parsed_data = JSON.parse(body);
+ // Data for flow chart
+ var x_values_flow = [];
+ var y_values_flow = [];
+ // Data for leakage chart
+ var x_values_leakage = [];
+ var y_values_leakage = [];
 
-    console.log(parsed_data);
+/* Statistics */
 
-    for (let i = 0; i < parsed_data.length; i++) {
-      var object = parsed_data[i];
-      for (var property in object) {
-        console.log('item ' + i + ': ' + property + '=' + object[property]);
-      }
+// Average measured source water flow
+var avg_measured_flow = 0;
+// Average daily flow
+var avg_daily_flow = 0;
 
-      columns_colors.push(colors[1]);
-      const datetime = new Date(parsed_data[i]["Datetime"]);
+
+// Average detected leakage
+var avg_leakage = 0;
+
+function dataLoading(parsed_data){
+
+  // Extracting body_flow section of the response
+  const flow_data = parsed_data.body_flow;
+
+  // Extracting body_leakage section of the response
+  const leakage_data = parsed_data.body_leakage;
+
+  // Parsing contents
+  const parsed_flow_data = JSON.parse(flow_data);
+  const parsed_leakage_data = JSON.parse(leakage_data);
+
+  // Flow data processing
+  for (let i = 0; i < parsed_flow_data.length; i++) {
+
+    const datetime = parsed_flow_data[i]["Datetime"];
+    // Convert sample time to Locale format
+    var value = datetime.toLocaleString(); 
+    
+    // Add value to values_x array
+    x_values_flow.push(value); 
+
+    value = parsed_flow_data[i]["Flow"];
+    y_values_flow.push(value);
+
+  }
+
+  var processed_children = [];
+  const n = Math.min(parsed_leakage_data.length,10);
+
+  // Leakage data processing
+  for (let i = 0; i < n; i++) {
+    const child = parsed_leakage_data[i]["Child"];
+
+    if (!(processed_children.includes(child))) {
+      
+      processed_children.push(child);
+
+      const father = parsed_leakage_data[i]["Father"]; 
+
+      const datetime = new Date(parsed_leakage_data[i]["Datetime"]);
       // Convert sample time to Locale format
-      var label = datetime.toLocaleString(); 
-      
-      // Add label to values_x array
-      values_x.push(label); 
+      var date = datetime.toLocaleString(); 
 
-      label = parsed_data[i]["Flow"];
-      values_y.push(label);
+      // Father-child pair generation
+      value = ("Pair: ").concat(father.slice(-2)).concat("-").concat(child.slice(-2)).concat(" Time: ").concat(date.slice(-8));
+      
+      // Add value to values_x array
+      x_values_leakage.push(value); 
   
-      //ch1.data.datasets[0].data.push(parsed_data[i]["Flow"]);
-      //ch1.update();
-      
-      //ch2.data.datasets[0].data.push(parsed_data[i]["Flow"]);
-      //ch2.update();
-      
-      //input1.push([parsed_data[i]["Datetime"], parsed_data[i]["Flow"]]);
-      //input2.push([parsed_data[i]["Datetime"], parsed_data[i]["Flow"]]); 
+      value = parsed_leakage_data[i]["Leakage"];
+      y_values_leakage.push(value);
+    }
+  }
+}
+
+/* Source water flow statistics */
+async function getFlowStatistics() {
+
+  // Reset statistics
+  avg_measured_flow = 0;
+  avg_daily_flow = 0;
+
+  const now = new Date();
+
+  const day = ("0" + now.getDate()).slice(-2);
+  const month = ("0" + (now.getMonth() + 1)).slice(-2);
+  const year = now.getFullYear();
+
+  let today = day + '/' + month + '/' + year;
+
+  var avg_dict = {};
+
+  var total_flow = 0;
+
+  for (let i = 0; i < y_values_flow.length; i++) {
+
+    total_flow += parseFloat(y_values_flow[i]);
+    var current_datetime = (x_values_flow[i].toLocaleString()).substring(0,10);
+
+    if (today != current_datetime) {
+      if (typeof avg_dict[current_datetime] === "undefined") {
+        avg_dict[current_datetime] = [parseFloat(y_values_flow[i])];
+      }
+      else {
+        avg_dict[current_datetime].push(parseFloat(y_values_flow[i]));
+      }
     }
 
-    console.log(values_x);
-    console.log(values_y);
+  }
+
+  avg_measured_flow = parseFloat(total_flow / y_values_flow.length);
+
+  var avgs = [];
+
+  for (var date in avg_dict) {
+    var values = avg_dict[date];
+    var sum = 0;
+    for (let i = 0; i < values.length; i++) {
+      sum += parseFloat(values[i]);
+    }
+    var avg = parseFloat(sum/values.length);
+    avgs.push(avg);
+  }
+
+
+  sum = 0;
+  for (let i = 0; i < avgs.length; i++) {
+    sum += parseFloat(avgs[i]);
+  }
+
+  avg_daily_flow = parseFloat(sum/avgs.length);
+
+}
+
+
+ /* Water leakage statistics */
+async function getLeakageStatistics() {
+
+  // Reset statistics 
+  var total_leakage = 0;
+
+  for (let i = 0; i < y_values_leakage.length; i++) {
+
+    total_leakage += parseFloat(y_values_leakage[i]);
 
   }
-  
-     
-  function plot(id , val_y) {
 
-    var chartData = {
-      labels: values_x,
+  avg_leakage = parseFloat(total_leakage/y_values_leakage.length);
+
+}
+
+    
+function plot(id, x_values, y_values) {
+  var color = "black";
+
+  if (id === "flowchart") {
+    color = "blue";
+  }
+  else if (id === "leakagechart") {
+    color = "red";
+  }
+
+  const ctx = document.getElementById(id).getContext('2d');
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: x_values,
       datasets: [{
-        backgroundColor: columns_colors,
-        data: val_y
+        backgroundColor: color,
+        data: y_values
       }]
-    };
-  
-    if (id === "flowchart") {
-
-      chart = new Chart(id, {
-        type: "bar",
-        data: chartData,
-        options: {
-          legend: { display: false },
-          title: { display: true },
-          scales: {
-            yAxes: [{
-                ticks: { beginAtZero: true }
-            }]
-          }
-        }
-      });
-
-      return chart;
-    }
-    
-    else if (id === "leakagechart") {
-
-      var chartDataFlow = {
-        labels: values_x,
-        datasets: [{
-          // Use a different color
-          backgroundColor: colors[0],
-          data: val_y
+    },
+    options: {
+      legend: {display: false},
+      title: {display: false},
+      scales: {
+        yAxes: [{
+            ticks: { beginAtZero: true }
         }]
-      };
-
-      chart = new Chart(id, {
-        type: "bar",
-        data: chartDataFlow,
-        options: {
-          legend: { display: false },
-          title: { display: true },
-          scales: {
-            yAxes: [{
-              ticks: { beginAtZero: true }
-            }]
-          }
-        }
-      });
-      return chart;
+      }
     }
-  }
+  });
+}
+
+
+async function display() {
+  await callAPI()
+
+  plot("flowchart", x_values_flow, y_values_flow);
+  plot("leakagechart", x_values_leakage, y_values_leakage);
+
+  getFlowStatistics();
+  document.getElementById("avg-measured-flow").innerHTML =  avg_measured_flow;
+  document.getElementById("avg-daily-flow").innerHTML = avg_daily_flow;
+
+  getLeakageStatistics();
+  document.getElementById("avg-leakage").innerHTML = avg_leakage;
+
+}
+
+
+async function callAPI() {
+
+  // Instantiate a headers object
+  var headers = new Headers();
   
+  // Set the options of the request
+  var requestOptions = {
+      method: 'GET',
+      headers: headers 
+  };
   
-  function callAPI(base,exponent){
-    // Instantiate a headers object
-    var headers = new Headers();
-   
-    // Set the options of the request
-    var requestOptions = {
-        method: 'GET',
-        headers: headers 
-    };
-    
-    // Fetch content from API 
-    fetch(config.api_endpoint, requestOptions)
-    .then(response => response.text()).then(result => displayDataOnChart(result))
-    
-  }
+  // Fetch content from API 
+  const response = await fetch(config.api_url, requestOptions);
+  const parsed_data = await response.json();
+  dataLoading(parsed_data);
 
- 
-  function display(){   
-    
-    // Plot the two charts
-    flowchart = plot("flowchart", values_y);
-    leakagechart = plot("leakagechart", values_y_flow);
-
-    // Call the API to retrieve values 
-    callAPI();
-
-  }
+}
