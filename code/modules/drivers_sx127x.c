@@ -34,7 +34,7 @@ static sx127x_t sx127x;
 static int (*callback_on_msg_receive)(node_t, char[32]);
 static void (*callback_tx_complete)(void);
 
-static bool is_sleeping = true;
+static bool is_listen_sleeping = true;
 
 static node_t node;
 
@@ -135,11 +135,11 @@ int listen_cmd(int argc, char **argv)
 {
     (void)argv;
 
-    if (argc == 2 && is_sleeping) {
+    if (argc == 2 && is_listen_sleeping) {
         /* Try to listen after a send when listening off */
         return 0;
     } else {
-        is_sleeping = false;
+        is_listen_sleeping = false;
     }
 
     netdev_t *netdev = &sx127x.netdev;
@@ -204,7 +204,7 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
             /* Callback for message handling */ 
             int stop_listen = (*callback_on_msg_receive)(node, message);
             if (stop_listen && DUTY_CYCLE && node.node_type != 1) { 
-                is_sleeping = true;
+                is_listen_sleeping = true;
                 sx127x_set_sleep(&sx127x); 
                 puts("Rx power off");
             }
@@ -212,7 +212,7 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
 
         case NETDEV_EVENT_RX_TIMEOUT:
             if (DUTY_CYCLE && node.node_type != 1) {
-                is_sleeping = true;
+                is_listen_sleeping = true;
                 sx127x_set_sleep(&sx127x);
                 puts("Rx timeout");
             }
