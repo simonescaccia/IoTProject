@@ -17,6 +17,7 @@ QUIET ?= 1
 
 # Timer
 USEMODULE += xtimer
+USEMODULE += ztimer
 
 # Shell
 USEMODULE += fmt

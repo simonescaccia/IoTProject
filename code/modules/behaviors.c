@@ -193,6 +193,16 @@ static void _start_listening (void)
     listen_cmd(1, argv);
 }
 
+/** Restart listening only in the following conditions (checked in listen_cmd):
+ * Alway listening: DUTY_CYCLE = 0 or node.node_type = 1 (CHIEF)
+ * I was listening before the message send
+*/
+static void _restart_listening (void) {
+    char* list[2] = {"listen_cmd", "resend"};
+    char** argv = (char**)&list;
+    listen_cmd(2, argv);
+}
+
 static void _sample (sample_t* sample, node_t node, int time) 
 {
     /* Count the number of sensors for this board */
@@ -258,7 +268,7 @@ static void _send_water_flow_to_children(node_t node, int time)
         }
 
         /* Restart listening */
-        if (!DUTY_CYCLE) _start_listening();
+        _restart_listening();
 
         free(str_payload);
         /* Free memory */
@@ -301,8 +311,9 @@ void _check_leakage (node_t node, payload_t* payload) {
         char** argv = (char**)&list;
         send_cmd(2, argv);
 
+        
         /* Restart listening */
-        if (!DUTY_CYCLE) _start_listening();
+        _restart_listening();
 
         /* Free memory */
         free(str_payload);
