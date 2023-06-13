@@ -19,7 +19,6 @@
 #include "params.h"
 
 #include "xtimer.h"
-#include "ztimer64.h"
 
 #define SX127X_LORA_MSG_QUEUE   (16U)
 #define SX127X_STACKSIZE        (THREAD_STACKSIZE_DEFAULT)
@@ -34,6 +33,8 @@ static sx127x_t sx127x;
 
 static int (*callback_on_msg_receive)(node_t, char[32]);
 static void (*callback_tx_complete)(void);
+
+static bool is_sleeping = true;
 
 static node_t node;
 
@@ -134,6 +135,13 @@ int listen_cmd(int argc, char **argv)
 {
     (void)argv;
 
+    if (argc == 2 && is_sleeping) {
+        /* Try to listen after a send when listening off */
+        return 0;
+    } else {
+        is_sleeping = false;
+    }
+
     netdev_t *netdev = &sx127x.netdev;
     // Switch to continuous listen mode
     const netopt_enable_t single = false;
@@ -151,6 +159,8 @@ int listen_cmd(int argc, char **argv)
         if (APP_DEBUG) printf("Listen timeout setted to %" PRIu32 "\n", timeout);
 
         netdev->driver->set(netdev, NETOPT_RX_TIMEOUT, &timeout, sizeof(timeout));
+    } else {
+        if (APP_DEBUG) puts("Listen timeout not setted");
     }
 
     // Switch to RX state
@@ -194,6 +204,7 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
             /* Callback for message handling */ 
             int stop_listen = (*callback_on_msg_receive)(node, message);
             if (stop_listen && DUTY_CYCLE && node.node_type != 1) { 
+                is_sleeping = true;
                 sx127x_set_sleep(&sx127x); 
                 puts("Rx power off");
             }
@@ -201,6 +212,7 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
 
         case NETDEV_EVENT_RX_TIMEOUT:
             if (DUTY_CYCLE && node.node_type != 1) {
+                is_sleeping = true;
                 sx127x_set_sleep(&sx127x);
                 puts("Rx timeout");
             }
