@@ -35,11 +35,6 @@ static sx127x_t sx127x;
 static int (*callback_on_msg_receive)(node_t, char[32]);
 static void (*callback_tx_complete)(void);
 
-static ztimer64_clock_t clock;	
-static ztimer_clock_t base_clock;
-static uint64_t timestamp_last_timeout_us = 0;
-static uint64_t last_setted_timeout_ms = 0;
-
 static node_t node;
 
 int lora_setup_cmd(int argc, char **argv)
@@ -139,46 +134,24 @@ int listen_cmd(int argc, char **argv)
 {
     (void)argv;
 
-    uint32_t timeout;
-
-    if (!DUTY_CYCLE || node.node_type == 1) {
-        /* Continue listening */
-        timeout = 0;
-    } else {
-        /** DUTY_CYCLE = 1 && node.node_type != 1 
-         * Check if the timeout was expired, then you need to sleep
-        */
-        uint64_t timestamp_now_us = ztimer64_now(&clock);
-        if (argc == 1 || !timestamp_last_timeout_us) {
-            /* Periodic listening or first time resending */
-            timeout = LISTENING_TIMEOUT * MS_PER_SEC;
-        } else {
-            /* Restarting listening after a send */
-            uint64_t timestamp_difference_ms = (timestamp_now_us - timestamp_last_timeout_us) / US_PER_MS;
-            if (timestamp_difference_ms <= last_setted_timeout_ms) {
-                /* Remaining timeout */
-                timeout = LISTENING_TIMEOUT * MS_PER_SEC - timestamp_difference_ms;
-            } else {
-                /* Continue sleeping */
-                return 0;
-            }
-        }
-        /* Save the timeout in order to evaluate it the next time */
-        last_setted_timeout_ms = timeout;
-        /* Update last timeout */
-        timestamp_last_timeout_us = timestamp_now_us;
-    }
-
     netdev_t *netdev = &sx127x.netdev;
     // Switch to continuous listen mode
     const netopt_enable_t single = false;
 
     netdev->driver->set(netdev, NETOPT_SINGLE_RECEIVE, &single, sizeof(single));
-        
     
-    if (APP_DEBUG) printf("Listen timeout setted to %" PRIu32 "\n", timeout);
+    if (argc == 2) {
+        /* Relistening after a sending dooesn't affect the timeout */
+        uint32_t timeout;
+        if (!DUTY_CYCLE || node.node_type == 1)
+            /* Continue listening */
+            timeout = 0;
+        else
+            timeout = LISTENING_TIMEOUT * MS_PER_SEC;
+        if (APP_DEBUG) printf("Listen timeout setted to %" PRIu32 "\n", timeout);
 
-    netdev->driver->set(netdev, NETOPT_RX_TIMEOUT, &timeout, sizeof(timeout));
+        netdev->driver->set(netdev, NETOPT_RX_TIMEOUT, &timeout, sizeof(timeout));
+    }
 
     // Switch to RX state
     netopt_state_t state = NETOPT_STATE_RX;
@@ -282,9 +255,6 @@ void set_callbacks (clb_msg_received ptr_clb_msg_received, clb_tx_completed ptr_
 int init_driver_127x(node_t callback_node)
 {
     if(APP_DEBUG) puts("[init_driver_127x] starting driver_127x init");
-
-    /* Setting the clock for listening timeout */
-    ztimer64_clock_init (&clock, &base_clock); 	
 
     node = callback_node;
 
