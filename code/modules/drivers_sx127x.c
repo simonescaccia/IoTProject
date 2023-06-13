@@ -34,7 +34,8 @@ static sx127x_t sx127x;
 static int (*callback_on_msg_receive)(node_t, char[32]);
 static void (*callback_tx_complete)(void);
 
-static bool is_listen_sleeping = true;
+static xtimer_ticks64_t timestamp_last_timeout_ticks64 = 0;
+static uint64_t last_setted_timeout_ms = 0;
 
 static node_t node;
 
@@ -135,11 +136,34 @@ int listen_cmd(int argc, char **argv)
 {
     (void)argv;
 
-    if (argc == 2 && is_listen_sleeping) {
-        /* Try to listen after a send when listening off */
-        return 0;
+    uint32_t timeout;
+    if (!DUTY_CYCLE || node.node_type == 1) {
+        /* Continue listening */
+        timeout = 0;
     } else {
-        is_listen_sleeping = false;
+        /** DUTY_CYCLE = 1 && node.node_type != 1 
+         * Check if the timeout was expired, then you need to sleep
+        */
+        xtimer_ticks64_t timestamp_now_ticks64 = xtimer_now64();
+        if (argc == 1 || !timestamp_last_timeout_ticks64) {
+            /* Periodic listening or first time resending */
+            timeout = LISTENING_TIMEOUT * MS_PER_SEC;
+        } else {
+            /* Restarting listening after a send */
+            xtimer_ticks64_t diff = xtimer_diff64(timestamp_now_ticks64, timestamp_last_timeout_ticks64); 
+            uint64_t timestamp_difference_ms = xtimer_usec_from_ticks64(diff)/US_PER_MS;
+            if (timestamp_difference_ms <= last_setted_timeout_ms) {
+                /* Remaining timeout */
+                timeout = LISTENING_TIMEOUT * MS_PER_SEC - timestamp_difference_ms;
+            } else {
+                /* Continue sleeping */
+                return 0;
+            }
+        }
+        /* Save the timeout in order to evaluate it the next time */
+        last_setted_timeout_ms = timeout;
+        /* Update last timeout */
+        timestamp_last_timeout_ticks64 = timestamp_now_ticks64;
     }
 
     netdev_t *netdev = &sx127x.netdev;
@@ -147,21 +171,10 @@ int listen_cmd(int argc, char **argv)
     const netopt_enable_t single = false;
 
     netdev->driver->set(netdev, NETOPT_SINGLE_RECEIVE, &single, sizeof(single));
-    
-    if (argc == 1) {
-        /* Relistening after a sending dooesn't affect the timeout */
-        uint32_t timeout;
-        if (!DUTY_CYCLE || node.node_type == 1)
-            /* Continue listening */
-            timeout = 0;
-        else
-            timeout = LISTENING_TIMEOUT * MS_PER_SEC;
-        if (APP_DEBUG) printf("Listen timeout setted to %" PRIu32 "\n", timeout);
 
-        netdev->driver->set(netdev, NETOPT_RX_TIMEOUT, &timeout, sizeof(timeout));
-    } else {
-        if (APP_DEBUG) puts("Listen timeout not setted");
-    }
+    // Set liisten timeout
+    if (APP_DEBUG) printf("Listen timeout setted to %" PRIu32 "\n", timeout);
+    netdev->driver->set(netdev, NETOPT_RX_TIMEOUT, &timeout, sizeof(timeout));
 
     // Switch to RX state
     netopt_state_t state = NETOPT_STATE_RX;
@@ -203,8 +216,7 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
                 sx127x_get_time_on_air((const sx127x_t *)dev, len));
             /* Callback for message handling */ 
             int stop_listen = (*callback_on_msg_receive)(node, message);
-            if (stop_listen && DUTY_CYCLE && node.node_type != 1) { 
-                is_listen_sleeping = true;
+            if (stop_listen && DUTY_CYCLE && node.node_type != 1) {
                 sx127x_set_sleep(&sx127x); 
                 puts("Rx power off");
             }
@@ -212,7 +224,6 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
 
         case NETDEV_EVENT_RX_TIMEOUT:
             if (DUTY_CYCLE && node.node_type != 1) {
-                is_listen_sleeping = true;
                 sx127x_set_sleep(&sx127x);
                 puts("Rx timeout");
             }
@@ -266,7 +277,7 @@ void set_callbacks (clb_msg_received ptr_clb_msg_received, clb_tx_completed ptr_
 
 int init_driver_127x(node_t callback_node)
 {
-    if(APP_DEBUG) puts("[init_driver_127x] starting driver_127x init");
+    if(APP_DEBUG) puts("[init_driver_127x] starting driver_127x init");; 
 
     node = callback_node;
 

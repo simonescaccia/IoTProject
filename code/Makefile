@@ -16,11 +16,11 @@ DEVELHELP ?= 1
 QUIET ?= 1
 
 # Timer
+USEMODULE += fmt
 USEMODULE += xtimer
-USEMODULE += ztimer
+USEMODULE += xtimer_no_ztimer_default
 
 # Shell
-USEMODULE += fmt
 USEMODULE += shell
 USEMODULE += shell_cmds_default
 USEMODULE += ps
@@ -44,7 +44,6 @@ USEPKG += semtech-loramac
 USEMODULE += semtech_loramac_rx
 
 USEMODULE += auto_init_loramac
-USEMODULE += fmt
 
 # Default IotLab Config to run the test
 ifneq (,$(filter iotlab%,$(MAKECMDGOALS)))
