@@ -140,7 +140,7 @@ int listen_cmd(int argc, char **argv)
 
     netdev->driver->set(netdev, NETOPT_SINGLE_RECEIVE, &single, sizeof(single));
     
-    if (argc == 2) {
+    if (argc == 1) {
         /* Relistening after a sending dooesn't affect the timeout */
         uint32_t timeout;
         if (!DUTY_CYCLE || node.node_type == 1)

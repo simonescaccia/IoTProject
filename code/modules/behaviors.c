@@ -311,7 +311,6 @@ void _check_leakage (node_t node, payload_t* payload) {
         char** argv = (char**)&list;
         send_cmd(2, argv);
 
-        
         /* Restart listening */
         _restart_listening();
 
@@ -446,7 +445,6 @@ int lora_p2p(node_t node) {
 
     /* Start sending: only if the current node is not a BRANCH */
     if (node.node_type != 3) {
-        
         kernel_pid_t _sending_pid = thread_create(stack_send, sizeof(stack_send), THREAD_PRIORITY_MAIN - 1,
                                 THREAD_CREATE_STACKTEST, _periodic_sending, (void *)&node,
                                 "_periodic_sending");
