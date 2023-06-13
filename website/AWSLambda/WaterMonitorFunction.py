@@ -9,10 +9,11 @@ def lambda_handler(event, context):
     # Create a DynamoDB object using the AWS SDK
     dynamodb = boto3.resource('dynamodb')
 
-    # Use the DynamoDB object to select our table
+    # Use the DynamoDB object to select our tables
     table_leakage = dynamodb.Table('WaterLeakageTable')
     table_flow = dynamodb.Table('WaterFlowSourceTable')
 
+    # Retrieve tuples of our tables to return
     response_leakage = table_leakage.scan()
     response_flow = table_flow.scan()
 
