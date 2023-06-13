@@ -343,8 +343,7 @@ int message_received_clb (node_t node, char message[32]) {
     if (!payload) {
         /* Not a message from our application */
         if (APP_DEBUG) puts("Not a message from our application");
-
-        free_payload(payload);
+        
         return 0;
     }
 
