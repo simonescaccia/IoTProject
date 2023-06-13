@@ -18,7 +18,7 @@ QUIET ?= 1
 # Timer
 USEMODULE += fmt
 USEMODULE += xtimer
-USEMODULE += xtimer_no_ztimer_default
+USEMODULE += ztimer64_msec
 
 # Shell
 USEMODULE += shell

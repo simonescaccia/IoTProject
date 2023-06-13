@@ -19,6 +19,7 @@
 #include "params.h"
 
 #include "xtimer.h"
+#include "ztimer64.h"
 
 #define SX127X_LORA_MSG_QUEUE   (16U)
 #define SX127X_STACKSIZE        (THREAD_STACKSIZE_DEFAULT)
@@ -34,7 +35,7 @@ static sx127x_t sx127x;
 static int (*callback_on_msg_receive)(node_t, char[32]);
 static void (*callback_tx_complete)(void);
 
-static xtimer_ticks64_t timestamp_last_timeout_ticks64 = 0;
+static uint64_t timestamp_last_timeout_ms = 0;
 static uint64_t last_setted_timeout_ms = 0;
 
 static node_t node;
@@ -144,14 +145,13 @@ int listen_cmd(int argc, char **argv)
         /** DUTY_CYCLE = 1 && node.node_type != 1 
          * Check if the timeout was expired, then you need to sleep
         */
-        xtimer_ticks64_t timestamp_now_ticks64 = xtimer_now64();
-        if (argc == 1 || !timestamp_last_timeout_ticks64) {
+        uint64_t timestamp_now_ms = ztimer64_now(ZTIMER64_MSEC);
+        if (argc == 1 || !timestamp_last_timeout_ms) {
             /* Periodic listening or first time resending */
             timeout = LISTENING_TIMEOUT * MS_PER_SEC;
         } else {
             /* Restarting listening after a send */
-            xtimer_ticks64_t diff = xtimer_diff64(timestamp_now_ticks64, timestamp_last_timeout_ticks64); 
-            uint64_t timestamp_difference_ms = xtimer_usec_from_ticks64(diff)/US_PER_MS;
+            uint64_t timestamp_difference_ms = timestamp_now_ms - timestamp_last_timeout_ms;
             if (timestamp_difference_ms <= last_setted_timeout_ms) {
                 /* Remaining timeout */
                 timeout = LISTENING_TIMEOUT * MS_PER_SEC - timestamp_difference_ms;
@@ -163,7 +163,7 @@ int listen_cmd(int argc, char **argv)
         /* Save the timeout in order to evaluate it the next time */
         last_setted_timeout_ms = timeout;
         /* Update last timeout */
-        timestamp_last_timeout_ticks64 = timestamp_now_ticks64;
+        timestamp_last_timeout_ms = timestamp_now_ms;
     }
 
     netdev_t *netdev = &sx127x.netdev;
