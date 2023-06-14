@@ -62,14 +62,24 @@ In the end, about the syncAck algorithm, it is possible to see the same trend of
 We have done some analysis to set a correct threshold in our algorithms to limit the presence of false positives and false negatives. We have also thought that a false negative is more serious than a false positive, and so our system will be prone to false positives.<br/>
 We have analysed the time of the Handshake and SyncAck algorithm to understand the error that can be created and to use this values for the calucus of the energy consumption.
 We have analysed that the standard deviation is high and this means that there is a large distribution of the data, in particular this means that the time taken by the messages and the code is fluctuating. Looking at the scheme, it is possible to understand the time of the messages and also the quality of the synchronization of the algorithms.
-<br/>Hanshake<br/>
+<br/>**Hanshake**<br/>
 ![s](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/iamges/handshake_time.png)<br/>
 Here there are 0,308s in the Son between the end of the test and the arrival of the value of the Source, knowing that in average the message takes 0,380s from the sender to the receiver, this means that the Source has ended the test 0,080s before the Son. We double it (also for the difference in starting time) and we obtain 0,160s. <br/>
-0,160 : 3 = x : 100 -> x=5,33 % of different water in the Source and the Son. <br/>
-The impulses every min are 541 (by datasheet), so in 3 seconds are 
 
-<br/>SyncAck<br/>
+<br/>**SyncAck**<br/>
 ![s](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/syncAck_time.png)<br/>
+Here there are 0,325s(message) + 0,159s(difference) in the Son between the end of the test and the arrival of the value of the Source, knowing that in average the message takes 0,326s from the sender to the receiver, this means that the Source has ended the test 0,159s before the Son. We double it (also for the difference in starting time) and we obtain 0,318s. <br/>
+
+<br/>**Difference**<br/>
+To find the error of the two algorithm we have to decide the time of testing: now is 3s but if we increase it, the influence of the error derived by the synchronization problem is less.
+If we put the time of the test at 10s, we have that 0,160 : 10 = x : 100 and that 0,318 : 10 = x : 100. So, influence of handshake is x = 1,6% , while influence of syncAck is y = 3,18% .
+Looking at the number of impulses per minute in the datasheet, that is 541 impulses/min, we can find the error of impulses derived by the percentage.<br/>
+x = 1,6% -> flow = frequency * 60 s / 541 imp = 1,6% * 541 imp * 1 / 60 s * 60 s / 541 imp = 0,016 l/min <br/>
+y = 3,18% -> flow = frequency * 60 s / 541 imp = 3,18% * 541 imp * 1 / 60 s * 60 s / 541 imp = 0,318 l/min <br/>
+The syncAck is worse than the handshake but it uses one less message. Beacuse the instrumental error is higher, as we will see, the thing that is significant is the number of messages and so the syncACK will be the final algorithm of our application.
+
+### Turbine error
+
 
 ### Energy consumption
 Our requirement is not to tolerate a water loss of more than one day, so we wish to detect a leakage within 24 h. Now, since the leakage is an unpredictable event, we cannot define a precise strategy apriori, but we want to indentify the best one in order to minimize power consumption. We compute this strategy analitically. Firstly, for simplicity, we focus on a simple father-child pair, since the same reasoning holds for every adjacent pair of nodes of the tree topology. Now, we define x as the send rate (msg/day) of the father, so the number of messages sent per day, and y as the total listen interval of the child (in hours/day). In order to be sure to correctly listen to at least one message in one day, y should be equal to (24/x + epsilon) hours/day, where epsilon is a neglectable time interval if compared with 24/x hours. Computing the energy consumption, there are three contributions, one related to the sender, one to the receiver and one to the exchange of messages linked to the leakage detection algorithm, so both for synchronization and test. This last component can be omitted in our considerations because it is not influenced by the choice of x, which we wish to know. So, the total energy consumption is given by:
