@@ -63,11 +63,11 @@ We have done some analysis to set a correct threshold in our algorithms to limit
 We have analysed the time of the Handshake and SyncAck algorithm to understand the error that can be created and to use this values for the calucus of the energy consumption.
 We have analysed that the standard deviation is high and this means that there is a large distribution of the data, in particular this means that the time taken by the messages and the code is fluctuating. Looking at the scheme, it is possible to understand the time of the messages and also the quality of the synchronization of the algorithms. <br/>**Hanshake**<br/>
 ![s](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/iamges/handshake_time.png)<br/>
-Here there are 0,308s in the Son between the end of the test and the arrival of the value of the Source, knowing that in average the message takes 0,380s from the sender to the receiver, this means that the Source has ended the test 0,080s before the Son. We double it (also for the difference in starting time) and we obtain 0,160s. <br/>
+Here there are 0,308s in the Son between the end of the test and the arrival of the value of the Source, knowing that in average the message takes 0,380s from the sender to the receiver, this means that the Source has ended the test 0,080s before the Son. We double it (also for the difference in starting time) and we obtain 0,160s.
 
 <br/>**SyncAck**<br/>
 ![s](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/syncAck_time.png)<br/>
-Here there are 0,325s(message) + 0,159s(difference) in the Son between the end of the test and the arrival of the value of the Source, knowing that in average the message takes 0,326s from the sender to the receiver, this means that the Source has ended the test 0,159s before the Son. We double it (also for the difference in starting time) and we obtain 0,318s. <br/>
+Here there are 0,325s(message) + 0,159s(difference) in the Son between the end of the test and the arrival of the value of the Source, knowing that in average the message takes 0,326s from the sender to the receiver, this means that the Source has ended the test 0,159s before the Son. We double it (also for the difference in starting time) and we obtain 0,318s. 
 
 <br/>**Difference**<br/>
 To find the error of the two algorithm we have to decide the time of testing: now is 3s but if we increase it, the influence of the error derived by the synchronization problem is less.
