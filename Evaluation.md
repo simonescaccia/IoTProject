@@ -61,8 +61,7 @@ In the end, about the syncAck algorithm, it is possible to see the same trend of
 ### Water leak detection Threshold
 We have done some analysis to set a correct threshold in our algorithms to limit the presence of false positives and false negatives. We have also thought that a false negative is more serious than a false positive, and so our system will be prone to false positives.<br/>
 We have analysed the time of the Handshake and SyncAck algorithm to understand the error that can be created and to use this values for the calucus of the energy consumption.
-We have analysed that the standard deviation is high and this means that there is a large distribution of the data, in particular this means that the time taken by the messages and the code is fluctuating. Looking at the scheme, it is possible to understand the time of the messages and also the quality of the synchronization of the algorithms.
-<br/>**Hanshake**<br/>
+We have analysed that the standard deviation is high and this means that there is a large distribution of the data, in particular this means that the time taken by the messages and the code is fluctuating. Looking at the scheme, it is possible to understand the time of the messages and also the quality of the synchronization of the algorithms. <br/>**Hanshake**<br/>
 ![s](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/iamges/handshake_time.png)<br/>
 Here there are 0,308s in the Son between the end of the test and the arrival of the value of the Source, knowing that in average the message takes 0,380s from the sender to the receiver, this means that the Source has ended the test 0,080s before the Son. We double it (also for the difference in starting time) and we obtain 0,160s. <br/>
 
