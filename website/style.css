@@ -158,9 +158,9 @@ body {
 }
 
 .page-content .grid {
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 30px;
+  gap: 30px;
 }
 
 .page-content .grid > article {
@@ -177,8 +177,16 @@ body {
 }
 
 
+
 /* MQ RULES
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
+@media screen and (min-width: 1500px) { 
+  .page-content .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
 @media screen and (max-width: 767px) {
   .page-header, 
   .page-content {
@@ -233,6 +241,8 @@ body {
 
   .page-content .grid {
     grid-gap: 10px;
+    grid-template-columns: repeat(1, 1fr);
+    margin: auto;
   }
 
   .upper-section {
@@ -260,7 +270,7 @@ body {
   margin: 30px;
 }
 
-h1 {
+.container > h1 {
   font-size:1.5vw;
 }
 
