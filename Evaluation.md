@@ -56,7 +56,8 @@ About the Hanshake algorithm, it is perfect to detect the leakage and the trend 
 ![h2](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_test2.png)<br/>
 
 In the end, about the syncAck algorithm, it is possible to see the same trend of the handshake algorithm but with one less message. 
-![s](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_test1.png)<br/>
+![s1](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_test1.png)<br/>
+![s2](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_test2.png)<br/>
 
 ### Water leak detection Threshold
 We have done some analysis to set a correct threshold in our algorithms to limit the presence of false positives and false negatives. We have also thought that a false negative is more serious than a false positive, and so our system will be prone to false positives.<br/>
