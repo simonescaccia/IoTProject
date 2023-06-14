@@ -77,6 +77,7 @@ Looking at the number of impulses per minute in the datasheet, that is 541 impul
 x = 1,6% -> flow = L/min = 541imp / 60s * 1,6% * 30L / 541imp = 0,48 L/min <br/>
 y = 3,18% -> flow = L/min = 541imp / 60s * 3,18% * 30L / 541imp = 0,95 L/min <br/>
 The syncAck is worse than the handshake but it uses one less message. Beacuse the instrumental error is higher, as we will see, the thing that is significant is the number of messages and so the syncACK will be the final algorithm of our application.
+<br/> *It is possible to improve the algorithms using correctly a 'sleep' for some milliseconds; but, because the standard deviation is high, more data are needed to be accurate.*
 
 ### Turbine error
 Another significant error of the architecture is the instrumental error of the water flow sensor. Because of we have not another turbine with the correct value of the water flow or other instruments, we have run the system for several tests and we have analysed the difference between the values of Source and Son. We have observed the difference because the water flow before our application is not costant (decided by the public pipeline).
