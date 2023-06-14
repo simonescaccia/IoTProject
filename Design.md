@@ -8,8 +8,6 @@ We propose a tree architecture with a MCU at source site connected to a water fl
 
 Since in the simulation we used a node for each MCU, our tree architecture can be represented in a more understandable way as follows.
 
-![tree](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/tree.jpg) <br/>
-
 ## High level diagram
 
 ![architecture](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/architecture.jpg) <br/>
