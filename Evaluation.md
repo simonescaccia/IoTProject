@@ -73,8 +73,9 @@ Here there are 0,325s(message) + 0,159s(difference) in the Son between the end o
 To find the error of the two algorithm we have to decide the time of testing: now is 3s but if we increase it, the influence of the error derived by the synchronization problem is less.
 If we put the time of the test at 10s, we have that 0,160 : 10 = x : 100 and that 0,318 : 10 = x : 100. So, influence of handshake is x = 1,6% , while influence of syncAck is y = 3,18% .
 Looking at the number of impulses per minute in the datasheet, that is 541 impulses/min, we can find the error of impulses derived by the percentage.<br/>
-x = 1,6% -> flow = frequency * 60 s / 541 imp = 1,6% * 541 imp * 1 / 60 s * 60 s / 541 imp = 0,016 l/min <br/>
-y = 3,18% -> flow = frequency * 60 s / 541 imp = 3,18% * 541 imp * 1 / 60 s * 60 s / 541 imp = 0,318 l/min <br/>
+541imp / 60s and 30L / 60s -> 30L / 541imp <br/>
+x = 1,6% -> flow = L/min = 541imp / 60s * 1,6% * 30L / 541imp = 0,48 L/min <br/>
+y = 3,18% -> flow = L/min = 541imp / 60s * 3,18% * 30L / 541imp = 0,95 L/min <br/>
 The syncAck is worse than the handshake but it uses one less message. Beacuse the instrumental error is higher, as we will see, the thing that is significant is the number of messages and so the syncACK will be the final algorithm of our application.
 
 ### Turbine error
@@ -108,6 +109,13 @@ A possible solution for the energy harvesting is here: https://www.ebay.it/itm/3
 
 We should for example connect this type of turbine called micro hydro water turbine generator to our water flow sensor.
 
+We have analysed if there is the possibility to charge the device using this turbine and it is feasible: 
+1. Esp32 in the active mode consume 240 mA and it is powered at 5 V; so, because in the prototype the duty cicle is not implemented, it consumes 1,2 W.
+2. The Water Flow Sensor consume 10 mA (max) and it is powered at 5 V (because it is connected with the Esp32); so it consumes 0,05 W.
+3. The Micro Water Turbine Hydro Generator works at 12 V, the power is 10 W and the intensity is 1,2 A; beacuse the diameter is lower than the diameter of the Water Flow Sensor, we do a proportion: if the sensor works with max 30 L/min (diameter=15,24mm), the generator work with max 25,6 L/min (diameter=13mm). 
+The generator ideally can charge the device and the sensor beacuse it gives 10 W and they need 1,25 W. Other analysis should be done to know the daily water flow and relative energy produced.
+
+
 ## Response Time Performances
 
-The response time between CHIEF, FORKs and BRANCHEs depends on the distance between the MCUs, so it depends on the topology of the irrigation system.
+The response time between CHIEF, FORKs and BRANCHEs depends on the distance between the MCUs, so it depends on the topology of the irrigation system. An idea of the time taken by the architecture is shown in the previous chapter about the setting of the water leak detection threshold.
