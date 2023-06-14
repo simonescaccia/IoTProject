@@ -82,7 +82,7 @@ The syncAck is worse than the handshake but it uses one less message. Beacuse th
 
 ### Turbine error
 Another significant error of the architecture is the instrumental error of the water flow sensor. Because of we have not another turbine with the correct value of the water flow or other instruments, we have run the system for several tests and we have analysed the difference between the values of Source and Son. We have observed the difference because the water flow before our application is not costant (decided by the public pipeline).
-![err](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/error.png)<br/>
+![err](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/error.png)<br/>
 We have found that the average of the difference is -0.35 L/min ± σ =0.48 L/min the error is 0.48 / root of N (N number of events) = 0,06 error. The system is proned to have the Son with an higher water flow value. 
 
 ### Energy consumption
