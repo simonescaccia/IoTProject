@@ -11,7 +11,7 @@
     <body onload="display()">
 
             <svg style="display:none;">
-                 <symbol id="logo" viewBox="0 0 16 16">
+                <symbol id="logo" viewBox="0 0 16 16">
                   <rect width="7" height="7" />
                   <rect y="9" width="7" height="7" />
                   <rect x="9" width="7" height="7" />
@@ -82,7 +82,6 @@
                 </section>
 
                 <section class="grid">
-
                   <article>
                     <div class="container">
                       <h1>Irrigation Water Leakage System</h1> 
@@ -92,7 +91,7 @@
 
                   <article>
                     <div class="container">
-                        <h2>Water flow at the source (in liters/m<sup>3</sup>)</h2>
+                        <h2>Water flow at the source (in liters/minute)</h2>
                         <canvas id="flowchart"></canvas>
                         <script>
                            plot("flowchart", x_values_flow, y_values_flow);
@@ -106,8 +105,8 @@
                     <div class="container">
                       <h2>Source water flow statistics:</h2>
                       <div class="statistics">
-                        <p> Average measured water flow at the source (in liters/m<sup>3</sup>): <p id ="avg-measured-flow"></p><br>
-                            Average daily water flow at the source (in liters/m<sup>3</sup>):<p id ="avg-daily-flow"></p>
+                        <p> Average measured water flow at the source (in l/min): <p id ="avg-measured-flow"></p><br>
+                            Average daily water flow at the source (in l/min):<p id ="avg-daily-flow"></p>
                         </p>
                       </div>
                     </div>
@@ -117,18 +116,17 @@
                     <div class="container">
                       <h2>Water leakages statistics:</h2>
                       <div class="statistics">
-                        <p> Average detected leakage (in liters/m<sup>3</sup>):<p id ="avg-leakage"></p>
+                        <p> Average detected leakage (in l/min):<p id ="avg-leakage"></p>
                         </p>
                       </div>
                     </div>
                   </article>
 
-                  <article>
-                    
+                  <article>          
 
                     <div class="container">
                       <div class="chart">
-                        <h2>Possible recent leakages (in liters/m<sup>3</sup>)</h2>
+                        <h2>Possible recent leakages (in liters/minutes)</h2>
                         <canvas id="leakagechart"></canvas> 
                         <script>
                           plot("leakagechart", x_values_leakage, y_values_leakage);
@@ -138,7 +136,6 @@
                     </div>
 
                   </article>
-
                   <article></article>
                 </section>
                 <footer class="page-footer">
