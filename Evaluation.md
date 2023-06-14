@@ -76,7 +76,7 @@ Looking at the number of impulses per minute in the datasheet, that is 541 impul
 541imp / 60s and 30L / 60s -> 30L / 541imp <br/>
 x = 1,6% -> flow = L/min = 541imp / 60s * 1,6% * 30L / 541imp = 0,48 L/min <br/>
 y = 3,18% -> flow = L/min = 541imp / 60s * 3,18% * 30L / 541imp = 0,95 L/min <br/>
-The syncAck is worse than the handshake but it uses one less message. Beacuse the instrumental error is higher, as we will see, the thing that is significant is the number of messages and so the syncACK will be the final algorithm of our application.
+The syncAck is worse than the handshake but it uses one less message. Beacuse the instrumental error is higher, as we will see, the thing that is significant is the number of messages and so the syncACK will be the final algorithm of our application.<br/>
 <br/> *It is possible to improve the algorithms using correctly a 'sleep' for some milliseconds; but, because the standard deviation is high, more data are needed to be accurate.*
 
 ### Turbine error
