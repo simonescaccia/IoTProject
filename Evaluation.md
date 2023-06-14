@@ -45,8 +45,18 @@ One of the main problems related to the test is related to synchronization, beca
 The complexity will change depending on the number of FORKs, and we will compare variuous topologies in order to find the best one.
 
 The three algorithms proposed in the design phase have been tested. The test of the Ack algorithm has shown that there is a problem in the code (caused by the use of threads in the program) and that the water flow before our system (that we consider always present) is not stable and this issue has to be solved by the synchronization algorithm. 
+The problem of stability of the initial water flow can be seen in the following image in which there is a segmentation of the lines of the graph.
+![ack](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/ack_flow.png) <br/>
+About the Ack algorithm, it is possible to notice that it is good to detect a leakage but it says that the water flow of the Son is always higher than the water flow of the Source, and this can lead to error, so it is not the worst algorithm implemented.
+![ack1](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/ack_test1.png)
+![ack2](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/ack_test2.png)<br/>
 
-![ack](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/architecture.jpg) <br/>
+About the Hanshake algorithm, it is perfect to detect the leakage and the trend of the Son higher than the Source is disappeared. There still is an error of the turbines, that we will face in the next chapter.
+![h1](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/hanshake_test1.png)
+![h2](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/hanshake_test2.png)<br/>
+
+In the end, about the syncAck algorithm, it is possible to see the same trend of the handshake algorithm but with one less message.
+![s](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_test1.png)<br/>
 
 ### Energy consumption
 Our requirement is not to tolerate a water loss of more than one day, so we wish to detect a leakage within 24 h. Now, since the leakage is an unpredictable event, we cannot define a precise strategy apriori, but we want to indentify the best one in order to minimize power consumption. We compute this strategy analitically. Firstly, for simplicity, we focus on a simple father-child pair, since the same reasoning holds for every adjacent pair of nodes of the tree topology. Now, we define x as the send rate (msg/day) of the father, so the number of messages sent per day, and y as the total listen interval of the child (in hours/day). In order to be sure to correctly listen to at least one message in one day, y should be equal to (24/x + epsilon) hours/day, where epsilon is a neglectable time interval if compared with 24/x hours. Computing the energy consumption, there are three contributions, one related to the sender, one to the receiver and one to the exchange of messages linked to the leakage detection algorithm, so both for synchronization and test. This last component can be omitted in our considerations because it is not influenced by the choice of x, which we wish to know. So, the total energy consumption is given by:
