@@ -109,6 +109,7 @@ A possible solution for the energy harvesting is here: https://www.ebay.it/itm/3
 
 We should for example connect this type of turbine called micro hydro water turbine generator to our water flow sensor.
 ![e](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/sensor_and_energy_image.png)<br/>
+<img src="(https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/sensor_and_energy_image.png"  width="600" height="300"> <br/>
 
 We have analysed if there is the possibility to charge the device using this turbine and it is feasible: 
 1. Esp32 in the active mode consume 240 mA and it is powered at 5 V; so, because in the prototype the duty cicle is not implemented, it consumes 1,2 W.
