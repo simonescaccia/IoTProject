@@ -30,7 +30,7 @@ extern const uint32_t LEAKAGE_TEST_PERIOD;
 extern const uint32_t LISTENING_TIMEOUT;
 
 typedef struct {
-    /* Defining node type: 0 for TNN, 1 for CHIEF, 2 for FORK, 3 for BRANCH */
+    /* Defining node type: 0 for TTN, 1 for CHIEF, 2 for FORK, 3 for BRANCH */
     int node_type;
 
     /* Node father and children */
