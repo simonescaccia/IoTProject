@@ -79,9 +79,9 @@ int source_lora_ttn(node_t node)
     sprintf(json, "{\"Id\": \"flow\", \"Flow\": \"%f\"}", water_flow);
     puts(json);
 
-    char* tx_list[3] = {"loramac", "tx", json};
-    argv = (char**)&tx_list;
-    loramac_handler(3, argv);
+    //char* tx_list[3] = {"loramac", "tx", json};
+    //argv = (char**)&tx_list;
+    //loramac_handler(3, argv);
 
     /* Sleeping for five seconds */
     xtimer_sleep(5);
@@ -147,6 +147,13 @@ int source_lora_ttn(node_t node)
         for (int i = 0; i < node_count; i++) {
             if (nodes[i]->node_self == node_name_1) {
                 node_1_in = 1;
+
+                nodes[i]->children_count++;
+                nodes[i]->node_children = realloc(nodes[i]->node_children, nodes[i]->children_count*sizeof(char*));
+                length = strlen(node_name_2);
+                nodes[i]->node_children[nodes[i]->children_count - 1] = malloc((length + 1)*sizeof(char));
+                strcpy(nodes[i]->node_children[nodes[i]->children_count - 1], node_name_2);
+                nodes[i]->self_children_position = nodes[i]->children_count;
             }
             if (nodes[i]->node_self == node_name_2) {
                 node_2_in = 1;
@@ -158,7 +165,9 @@ int source_lora_ttn(node_t node)
             node_count++;
             nodes = realloc(nodes, node_count*sizeof(node_t*));
             node_t* node = malloc(sizeof(node_t));
-            node->node_self = node_name_1;
+            length = strlen(node_name_1);
+            node->node_self = malloc(sizeof(length +1));
+            strcpy(node->node_self, node_name_1);
 
             if (i == 0) {
                 /* CHIEF node type */
@@ -169,11 +178,11 @@ int source_lora_ttn(node_t node)
                 node->node_type = 2;
             }
 
-            node->children_count++;
+            node->children_count = 1;
             node->node_children = realloc(node->node_children, node->children_count*sizeof(char*));
             length = strlen(node_name_2);
             node->node_children[node->children_count - 1] = malloc((length + 1)*sizeof(char));
-            strncpy(node->node_children[node->children_count - 1], node_name_2, length + 1);
+            strcpy(node->node_children[node->children_count - 1], node_name_2);
             node->self_children_position = node->children_count;
 
             /* Add node to the nodes array */
@@ -187,14 +196,16 @@ int source_lora_ttn(node_t node)
             node_count++;
             nodes = realloc(nodes, node_count*sizeof(node_t*));
             node_t* node = malloc(sizeof(node_t));
-            node->node_self = node_name_2;
+            length = strlen(node_name_2);
+            node->node_self = malloc(sizeof(length +1));
+            strcpy(node->node_self, node_name_2);
 
             /* Default: FORK node type */
             node->node_type = 2;
 
             length = strlen(node_name_1);
             node->node_father = malloc((length + 1)*sizeof(char));
-            strncpy(node->node_father, node_name_1, length + 1);
+            strcpy(node->node_father, node_name_1);
 
             /* Add node to the nodes array */
             nodes[node_count - 1] = malloc(sizeof(node_t));
@@ -274,9 +285,9 @@ int source_lora_ttn(node_t node)
                 sprintf(json, "{\"Id\": \"leakage\", \"Child\": \"%s\", \"Father\": \"%s\", \"Leakage\": \"%f\"}", node_name_2, node_name_1, difference); 
                 puts(json);
 
-                char* lx_list[3] = {"loramac", "tx", json};
-                argv = (char**)&lx_list;
-                loramac_handler(3, argv);
+                //char* lx_list[3] = {"loramac", "tx", json};
+                //argv = (char**)&lx_list;
+                //loramac_handler(3, argv);
 
                 xtimer_sleep(5);
             }
