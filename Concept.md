@@ -54,7 +54,7 @@ LoRa is a suitable technology for different reasons:
 
 ## Simulation
 
-We built a simulation infrastructure on IoT-LAB, in order to provide a large scale irrigation water leakage system and to test distributed interaction between MCUs. In detail, the system scheme is tree-based, with a root node corresponding to the source MCU, intermediate nodes corresponding to fork MCUs and leaf nodes corresponding to MCUs at valve site. The communication between simulated devices is implemented using LoRaMAC, while LoRaWAN and TheThingsNetwork are used to send data to the cloud.
+We built a simulation infrastructure on IoT-LAB, to provide a large-scale irrigation water leakage system and to test distributed interaction between MCUs. The communication between nodes is implemented using LoRaMAC, while LoRaWAN and TheThingsNetwork are used to send data to the cloud. Also, we will use this simulation to makes some experiments on energy consumpion using the IoT-LAB monitoring tool.
 
 ## Prototype
 
