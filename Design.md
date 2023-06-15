@@ -2,7 +2,7 @@
 
 ## Architecture
 
-![field](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/field.jpg) <br/>
+![field](./images/field.jpg)
 
 We propose a tree architecture with a MCU at source site connected to a water flow sensor, a LED and a buzzer. A fork is defined as a site where a single pipe divides itself in two or more output pipes. We place a water flow sensor for each of these diramations, all connected to a single MCU. So. a MCU at each fork site, which can be at different depth levels, is needed. Furthermore, we place a MCU for each pipeline branch, more precisely in correspondence of each irrigation valve, where we place a single water flow sensor connected to the MCU. Our architecture is scalable, so it can be used to control water leakages within a small field with the same crop or to control leakages from pipes irrigating different types of crop in the same field. </br>
 
@@ -10,7 +10,8 @@ Since in the simulation we used a node for each MCU, our tree architecture can b
 
 ## High level diagram
 
-![architecture](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/architecture.jpg) <br/>
+![architecture](./images/architecture.jpg)
+
 Our system is composed of 3 different pieces:
 
 * MCU near the water source (connected through a power cord) called CHIEF
@@ -21,7 +22,7 @@ Our system is composed of 3 different pieces:
 
 Our infrastructure is composed of:
 
-* ESP32 MCU with LoRa support for peer and cloud communication 
+* ESP32 MCU with LoRa support for peer and cloud communication
 * Water flow sensor
 * LED
 * Buzzer
@@ -44,14 +45,16 @@ LoRa is a physical radio communication protocol, based on spread spectrum modula
 
 Water flow sensors are installed at the water source or pipes to measure the flow rate of water. The relative metric is as liters per hour or cubic meters, to be scaled in our context. The structure of the sensor consists of a plastic valve (from which water can pass) and a water rotor along with a Hall effect sensor (a voltage difference is induced in the conductor due to the rotation of the rotor), measuring the sense and the intensity of the flow. When water flows through the valve, it causes a change of speed of the rotor, calculated as output as a pulse signal. The sensor is powered with a 5 V supply voltage of DC.
 
-You can find our water flow sensor here: https://www.amazon.it/dp/B079QYRQT5?psc=1&ref=ppx_yo2ov_dt_b_product_details
+You can find our water flow sensor [here](https://www.amazon.it/dp/B079QYRQT5?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 
 ### Actuators
 
 #### LED
-A LED is used to provide a visual alarm indication through blinking. 
+
+A LED is used to provide a visual alarm indication through blinking.
 
 #### Buzzer
+
 A buzzer is used to provide an acoustic alarm indication through intermitting activation.
 
 ### Cloud system
@@ -59,22 +62,25 @@ A buzzer is used to provide an acoustic alarm indication through intermitting ac
 Data are stored on AWS for long term storage. These data can then be queried by farmers in order to gain insights about water usage and pipeline leakages.
 
 ## Prototype architecture
+
 For our prototype, we used the fllowing objects:
+
 * A 1,5 meters long garden hose (20-25 mm ⌀)
 * A 1/2 inch garden tap
 * A 1/2 inch T-adapter
 * 6 metal adjustable hose clamps (16-25 mm)
-* 2 water flow sensors 
+* 2 water flow sensors
 * 2 ESP32 LoRa MCUs  
 
-We started from a 1,5 meters long garden hose with an inner diameter of 20 mm and an outer one of 25 mm. We cut the garden hose into 4 main segments approximately 35 cm long and a smaller one around 10 cm long. We placed two segments at the endpoints of each water flow sensor and we joined them using the T-adapter. We connected the tap to the last free endpoint of the T-adapter and the smallest pipe segment to the tap dispenser. So we connected the water flow sensors to the MCUs. 
-The tap is used to simulate a leakage and it is initially closed. We did not use clamps at first, but we experienced water leaks in correspondence of joints. Therefore we placed 2 clamps at the endpoints of each water flow sensor and other 2 for the endpoints of the T-adapter not connected to the tap. 
+We started from a 1,5 meters long garden hose with an inner diameter of 20 mm and an outer one of 25 mm. We cut the garden hose into 4 main segments approximately 35 cm long and a smaller one around 10 cm long. We placed two segments at the endpoints of each water flow sensor and we joined them using the T-adapter. We connected the tap to the last free endpoint of the T-adapter and the smallest pipe segment to the tap dispenser. So we connected the water flow sensors to the MCUs.
+The tap is used to simulate a leakage and it is initially closed. We did not use clamps at first, but we experienced water leaks in correspondence of joints. Therefore we placed 2 clamps at the endpoints of each water flow sensor and other 2 for the endpoints of the T-adapter not connected to the tap.
 
 The final protoype architecture is the following.
 
-## Network architecture 
+## Network architecture
 
-![network](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/network.jpg) <br/>
+![network](./images/network.jpg)
+
 The network architecture is focused on checking the actual state of the irrigation system, with a communication between devices based on LoRaWAN and MQTT. We will also make some considerations about the scalability of different possible network schemes.
 
 ## Algorithms
@@ -101,27 +107,40 @@ Test algorithm:
 4. In case of error, child sends an alert to the cloud.
 
 We have tried 3 different algorithms for allow a correct and synchronized test between two diffent nodes. The three algorthms are:
+
 * Ack
 * Handdshake
 * SyncAck
 All the algorithms are available in the directory "code-prototype".
 
 #### Ack
-![ack](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/ack.png) <br/>
-This is the first algorithm that we have implemented and it does not work well. Firstly there is a bug in the code, in fact with this code the Son has an higher flow that the Source, and this is not physically possible (if you find the problem, please tell us where is it), Secondly with the data obtained, we have seen that the water flow arriving to the Source (before our architecture) is not stable and the code was not robust against this problem. <br/>
-In particular the Source controls if there is a water flow, if yes it does the test and sends the value to the Son; the Son obtains the value, sends an "answr" to the Source (used to control the Son is not broken) and starts the test; after that it does the difference between the two values and see if there is a leakage or not, if yes it sends the value of the leakage in L/min to AWS. <br/>
+
+![ack](./images/ack.png)
+
+This is the first algorithm that we have implemented and it does not work well. Firstly there is a bug in the code, in fact with this code the Son has an higher flow that the Source, and this is not physically possible (if you find the problem, please tell us where is it), Secondly with the data obtained, we have seen that the water flow arriving to the Source (before our architecture) is not stable and the code was not robust against this problem.
+
+In particular the Source controls if there is a water flow, if yes it does the test and sends the value to the Son; the Son obtains the value, sends an "answr" to the Source (used to control the Son is not broken) and starts the test; after that it does the difference between the two values and see if there is a leakage or not, if yes it sends the value of the leakage in L/min to AWS.
+
 For the motivation written before, this system is proned to the false positive and we have stopped the analysis on it. 
 
 #### Handshake
-![handshake](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/handshake.png) <br/>
-This is the second algorithm that we have implemented and it works well. <br/>
-In particular the Source controls if there is a water flow, if yes it sends an "heloy" to the Son, the Son sends an "answr" to the Source, Source sends the message "start" and starts the test; when the Son obtains the "start" it also starts the test; the Source sends to the Son the result of the test and, when the Son has both the values, sees if there is a leakage, if yes it sends the value of the leakage in L/min to AWS. <br/>
+
+![handshake](./images/handshake.png)
+
+This is the second algorithm that we have implemented and it works well.
+
+In particular the Source controls if there is a water flow, if yes it sends an "heloy" to the Son, the Son sends an "answr" to the Source, Source sends the message "start" and starts the test; when the Son obtains the "start" it also starts the test; the Source sends to the Son the result of the test and, when the Son has both the values, sees if there is a leakage, if yes it sends the value of the leakage in L/min to AWS.
+
 This system works well but it is uselessly complex and it is less efficient than the next one.
 
 #### SyncAck
-![syncAck](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/syncAck.png) <br/>
-This is the third algorithm that we have implemented and it is the one that will be used in the real scenario. <br/>
-In particular the Source controls if there is a water flow, if yes it sends an "heloy" to the Son, the Son sends an "answr" to the Source and it also starts the test, Source receives the message "answr" and starts the test; Source sends to the Son the result of the test; when the Son has both the values, sees if there is a leakage, if yes it sends the value of the leakage in L/min to AWS. <br/>
+
+![syncAck](./images/syncAck.png)
+
+This is the third algorithm that we have implemented and it is the one that will be used in the real scenario.
+
+In particular the Source controls if there is a water flow, if yes it sends an "heloy" to the Son, the Son sends an "answr" to the Source and it also starts the test, Source receives the message "answr" and starts the test; Source sends to the Son the result of the test; when the Son has both the values, sees if there is a leakage, if yes it sends the value of the leakage in L/min to AWS.
+
 This system works well and uses one less message.
- <br/> <br/>
- In the evaluetion part, it is available the different analysis on the data. 
+
+In the evaluetion part, it is available the different analysis on the data.
