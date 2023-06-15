@@ -21,6 +21,7 @@
 
 /* Leakage */
 #define LEAKAGE_CONDITION 0 /* L/min */
+#define LEAKAGE_THRESHOLD 1.0
 
 /* Setting TTN parameters */
 #define DEV_EUI "70B3D57ED005D1D6"
@@ -71,29 +72,221 @@ int source_lora_ttn(node_t node)
     argv = (char**)&join_list;
     loramac_handler(3,argv);
 
+    /* Get water flow value */
+    float water_flow = get_water_flow(node.node_type, 0, s_time);
+    /* Send source water flow information */
+    sprintf(json, "{\"Id\": \"flow\", \"Flow\": \"%f\"}", water_flow);
+    puts(json);
+
+    char* tx_list[3] = {"loramac", "tx", json};
+    argv = (char**)&tx_list;
+    loramac_handler(3, argv);
+
+    /* Sleeping for five seconds */
+    xtimer_sleep(5);
+
+    /* Extracting configuration information */
+    char* buffer = config();
+    int buf_len = strlen(buffer);
+    char buf[buf_len + 1];
+    strncpy(buf, buffer, buf_len + 1);
+
+    char** pairs = NULL;
+    int pair_count = 0;
+ 
+    /* Do not consider first pair */
+    char* pair = strtok(buf, " ");
+    int length;
+
+    /* Extracting pairs */
+    while (pair != NULL) {
+        pair = strtok(NULL, " ");
+        pair_count++;
+        pairs = realloc(pairs, pair_count*sizeof(char*));
+        length = strlen(pair);
+        pairs[pair_count - 1] = malloc(length + 1);
+        strncpy(pairs[pair_count - 1], pair, length + 1);
+    }
+
+    node_t** nodes = NULL;
+    int node_count = 0;
+
+    /* Retrieving node information from topology pairs */
+    for (int i=0; i < pair_count; i++) {
+
+        /* Separate elements for current pair */
+        char *elem = strtok(pairs[i], "-");
+        length = strlen(elem);
+
+        /* First node code */
+        char *node_code_1 = malloc(length + 1);
+        strncpy(node_code_1, elem, length + 1);
+
+        /* First node name */
+        char* node_name_1 = malloc(15*sizeof(char));
+        strcpy(node_name_1, "st-lrwan1-");
+        strcat(node_name_1, node_code_1);
+
+        /* Getting second element of the pair */
+        elem = strtok(NULL, "-");
+        length = strlen(elem);
+
+        /* Second node code */
+        char *node_code_2 = malloc(length + 1);
+        strncpy(node_code_2, elem, length + 1);
+
+        /* Second node name */
+        char* node_name_2 = malloc(15*sizeof(char));
+        strcpy(node_name_2, "st-lrwan1-");
+        strcat(node_name_2, node_code_2);
+
+        /* Check if the nodes of the pair are already in nodes */
+        int node_1_in = 0, node_2_in = 0;
+
+        for (int i = 0; i < node_count; i++) {
+            if (nodes[i]->node_self == node_name_1) {
+                node_1_in = 1;
+            }
+            if (nodes[i]->node_self == node_name_2) {
+                node_2_in = 1;
+            }
+        }
+
+        if (!node_1_in) {
+
+            node_count++;
+            nodes = realloc(nodes, node_count*sizeof(node_t*));
+            node_t* node = malloc(sizeof(node_t));
+            node->node_self = node_name_1;
+
+            if (i == 0) {
+                /* CHIEF node type */
+                node->node_type = 1;
+            }
+            else {
+                /* Default: BRANCH node type */
+                node->node_type = 2;
+            }
+
+            node->children_count++;
+            node->node_children = realloc(node->node_children, node->children_count*sizeof(char*));
+            length = strlen(node_name_2);
+            node->node_children[node->children_count - 1] = malloc((length + 1)*sizeof(char));
+            strncpy(node->node_children[node->children_count - 1], node_name_2, length + 1);
+            node->self_children_position = node->children_count;
+
+            /* Add node to the nodes array */
+            nodes[node_count - 1] = malloc(sizeof(node_t));
+            memcpy(node, nodes[node_count - 1], sizeof(node_t)); 
+
+        }
+
+        if (!node_2_in) {
+
+            node_count++;
+            nodes = realloc(nodes, node_count*sizeof(node_t*));
+            node_t* node = malloc(sizeof(node_t));
+            node->node_self = node_name_2;
+
+            /* Default: FORK node type */
+            node->node_type = 2;
+
+            length = strlen(node_name_1);
+            node->node_father = malloc((length + 1)*sizeof(char));
+            strncpy(node->node_father, node_name_1, length + 1);
+
+            /* Add node to the nodes array */
+            nodes[node_count - 1] = malloc(sizeof(node_t));
+            memcpy(node, nodes[node_count - 1], sizeof(node_t));
+        }
+        
+        /* Free allocated memory */
+        free(node_code_1);
+        free(node_code_2);
+        free(node_name_1);
+        free(node_name_2);
+        node_code_1 = NULL;
+        node_code_2 = NULL;
+        node_name_1 = NULL;
+        node_name_2 = NULL;
+
+    }
+
+    /* Update node types */
+    for (int i = 0; i < node_count; i++) {
+        if (nodes[i]->node_type != 1 && nodes[i]->node_children == NULL) {
+            /* BRANCH node type */
+            nodes[i]->node_type = 3;
+        }
+    }
+
     while(1) {
         /* Set time for sampling: [0, 60] */
         s_time = (s_time+1) % 10;
 
-        /* Get water flow value */
-        float water_flow = get_water_flow(node.node_type, 0, s_time);
-        /* Send source water flow information */
-        sprintf(json, "{\"Id\": \"flow\", \"Flow\": \"%f\"}", water_flow);
-        puts(json);
 
-        char* tx_list[3] = {"loramac", "tx", json};
-        argv = (char**)&tx_list;
-        loramac_handler(3, argv);
+        for (int i=0; i < pair_count; i++) {
 
-        /* Sleeping for five seconds */
-        xtimer_sleep(5);
+            /* Separate elements for current pair */
+            char *elem = strtok(pairs[i], "-");
+            length = strlen(elem);
+
+            /* First node code */
+            char *node_code_1 = malloc(length + 1);
+            strncpy(node_code_1, elem, length + 1);
+
+            /* First node name */
+            char* node_name_1 = malloc(15*sizeof(char));
+            strcpy(node_name_1, "st-lrwan1-");
+            strcat(node_name_1, node_code_1);
         
-        sprintf(json, "{\"Id\": \"leakage\", \"Child\": \"%s\", \"Father\": \"%s\", \"Leakage\": \"%f\"}", "st-lrwan1-11", "st-lrwan1-12", 10); 
-        puts(json);
-        char* lx_list[3] = {"loramac", "tx", json};
-        argv = (char**)&lx_list;
-        loramac_handler(3, argv);
-        xtimer_sleep(5);
+            /* Second node code */
+            elem = strtok(NULL, "-");
+            length = strlen(elem);
+            char *node_code_2 = malloc(length + 1);
+            strncpy(node_code_2, elem, length + 1);
+
+            /* Second node name */
+            char* node_name_2 = malloc(15*sizeof(char));
+            strcpy(node_name_2, "st-lrwan1-");
+            strcat(node_name_2, node_code_2);
+
+            node_t* father_node = malloc(sizeof(node_t));
+            node_t* child_node = malloc(sizeof(node_t));
+
+            for (int i = 0; i < node_count; i++) {
+                if (nodes[i]->node_self == node_name_1) {
+                    memcpy(father_node, nodes[i], sizeof(node_t));
+                }
+                if (nodes[i]->node_self == node_name_2) {
+                    memcpy(child_node, nodes[i], sizeof(node_t));
+                }
+            }
+
+            /* Get water flow value */
+            float father_water_flow = get_water_flow(father_node->node_type, father_node->self_children_position, s_time);
+            float child_water_flow = get_water_flow(child_node->node_type, child_node->self_children_position, s_time);
+
+            float difference = fabs(child_water_flow - father_water_flow);
+
+            if (difference > LEAKAGE_THRESHOLD) {
+                sprintf(json, "{\"Id\": \"leakage\", \"Child\": \"%s\", \"Father\": \"%s\", \"Leakage\": \"%f\"}", node_name_2, node_name_1, difference); 
+                puts(json);
+
+                char* lx_list[3] = {"loramac", "tx", json};
+                argv = (char**)&lx_list;
+                loramac_handler(3, argv);
+
+                xtimer_sleep(5);
+            }
+        
+            /* Free allocated memory */
+            free(node_name_1);
+            free(node_name_2);
+            node_name_1 = NULL;
+            node_name_2 = NULL;
+
+        }
 
         /* AWS integration */
         /* TTNClient = mqtt.Client()
