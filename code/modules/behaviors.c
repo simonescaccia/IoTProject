@@ -11,6 +11,7 @@
 #include "payload_formatter.h"
 #include "semtech-loramac.h"
 #include "fmt.h"
+#include "config.h"
 
 #include "params.h"
 #include "app_debug.h"
