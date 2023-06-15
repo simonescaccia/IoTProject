@@ -87,89 +87,13 @@ int source_lora_ttn(node_t node)
 
         /* Sleeping for five seconds */
         xtimer_sleep(5);
-
-        /* ------------------------------------------------------------------------------- */
-
-        /* Number of nodes */
-        int n = 4;
-        char **nodes = malloc(n * sizeof(char *));
-
-        /* Starting node number */
-        int  num = 11;
-
-        char number[5];  
-        char* child, *father;
-        float leakage;
-        float threshold = 1.0;
-
-        for (int i = 0; i < n; i++) {
-            if (i == 0) {
-            nodes[i] = malloc(15 * sizeof(char));
-
-            strcpy(nodes[i], "st-lrwan1-"); 
-            sprintf(number,"%d", num);
-            strcat(nodes[i], number);
-
-            num++;
-
-            }
-            
-            if (i < n - 1) {
-                nodes[i + 1] = malloc(15 * sizeof(char));
-
-                strcpy(nodes[i + 1], "st-lrwan1-"); 
-                sprintf(number,"%d", num);
-                strcat(nodes[i + 1], number);
-
-                num++;
-
-                father = malloc(15 * sizeof(char));
-                strcpy(father, nodes[i]);
-                child = malloc(15 * sizeof(char));
-                strcpy(child, nodes[i + 1]);
-
-                float father_water_flow, child_water_flow;
-                
-
-                if (rand() % 2 == 0) {
-                    /* CHIEF - FORK */
-                    father_water_flow = get_water_flow(1, 0, s_time); // 2;
-                    child_water_flow = get_water_flow(2, 0, s_time); //1.5;
-                }
-
-                else {
-                    /* FORK - BRANCH */
-                    father_water_flow = get_water_flow(2, 0, s_time); // 5;
-                    child_water_flow = get_water_flow(3, 0, s_time); // 3;
-                } 
-
-                if (fabs(father_water_flow - child_water_flow) > threshold) {
-
-                    leakage = fabs(father_water_flow - child_water_flow);
-
-                    /* Send leakage information*/
-                    sprintf(json, "{\"Id\": \"leakage\", \"Child\": \"%s\", \"Father\": \"%s\", \"Leakage\": \"%f\"}", child, father, leakage); 
-                    puts(json); 
-
-                    char* lx_list[3] = {"loramac", "tx", json};
-                    argv = (char**)&lx_list;
-                    loramac_handler(3, argv);
-
-                    /* Sleeping for five seconds */
-                    xtimer_sleep(5);    
-
-                }
-            }
-        }
         
-        /* ------------------------------------------- */
-        
-        /* sprintf(json, "{\"Id\": \"leakage\", \"Child\": \"%s\", \"Father\": \"%s\", \"Leakage\": \"%f\"}", "st-lrwan1-11", "st-lrwan1-12", 10); 
+        sprintf(json, "{\"Id\": \"leakage\", \"Child\": \"%s\", \"Father\": \"%s\", \"Leakage\": \"%f\"}", "st-lrwan1-11", "st-lrwan1-12", 10); 
         puts(json);
         char* lx_list[3] = {"loramac", "tx", json};
         argv = (char**)&lx_list;
         loramac_handler(3, argv);
-        xtimer_sleep(5); */
+        xtimer_sleep(5);
 
         /* AWS integration */
         /* TTNClient = mqtt.Client()
