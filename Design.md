@@ -1,5 +1,13 @@
 # Design
 
+## How to detect a leakage
+
+![no_leakage](./images/HowToDetectLeakages-No_leakage_situations.drawio.png)
+![leakage](./images/HowToDetectLeakages-Leakage_situations.drawio.png)
+![distributed_problem](./images/HowToDetectLeakages-Distributed_system_leakage_problem.drawio.png)
+![distributed_solution](./images/HowToDetectLeakages-Distributed_system_leakage_solution.drawio.png)
+![distributed_other](./images/HowToDetectLeakages-Distributed_system_other_leakages.drawio.png)
+
 ## Architecture
 
 ![field](./images/field.jpg)
@@ -121,7 +129,7 @@ This is the first algorithm that we have implemented and it does not work well. 
 
 In particular the Source controls if there is a water flow, if yes it does the test and sends the value to the Son; the Son obtains the value, sends an "answr" to the Source (used to control the Son is not broken) and starts the test; after that it does the difference between the two values and see if there is a leakage or not, if yes it sends the value of the leakage in L/min to AWS.
 
-For the motivation written before, this system is proned to the false positive and we have stopped the analysis on it. 
+For the motivation written before, this system is proned to the false positive and we have stopped the analysis on it.
 
 #### Handshake
 
@@ -144,3 +152,14 @@ In particular the Source controls if there is a water flow, if yes it sends an "
 This system works well and uses one less message.
 
 In the evaluetion part, it is available the different analysis on the data.
+
+## Simulation
+
+### Assumptions
+
+The simulation aims to detect leakages in a scalable distributed infrastructure, while the prototype focus on detecting leakages for a single pipe. For this reason, we have made some assumptions:
+
+* A code function simulates samples to avoid false positives, delays in message propagation, and all the problems discussed in the prototype. Instead, we will use a logic time to simulate the sampling at the same time.
+* Forks on a pipe will divide the water flow into equal parts.
+* Since we are simulating samples, we can set the threshold for leakages to 0.
+
