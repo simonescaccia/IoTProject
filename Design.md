@@ -91,6 +91,9 @@ The final protoype architecture is the following.
 
 The network architecture is focused on checking the actual state of the irrigation system, with a communication between devices based on LoRaWAN and MQTT. We will also make some considerations about the scalability of different possible network schemes.
 
+![AWS](./images/AWS_architecture.png)
+The AWS architecture shows both the link with the cloud of the prototype and the simulation.
+
 ## Algorithms
 
 ### Water leakage detection algorithm
