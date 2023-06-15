@@ -22,4 +22,5 @@ Our project is designed to offer some smart functionalities to an irrigation sys
 
 ## Video
 
-It will be uploaded soon.
+Prototype in the environment: [prototype](https://www.youtube.com/watch?v=hoUJ2N8BXHc)\
+
