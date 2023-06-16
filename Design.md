@@ -1,31 +1,5 @@
 # Design
 
-## How to detect a leakage
-
-![no_leakage](./images/HowToDetectLeakages-No_leakage_situations.drawio.png)
-![leakage](./images/HowToDetectLeakages-Leakage_situations.drawio.png)
-![distributed_problem](./images/HowToDetectLeakages-Distributed_system_leakage_problem.drawio.png)
-![distributed_solution](./images/HowToDetectLeakages-Distributed_system_leakage_solution.drawio.png)
-![distributed_other](./images/HowToDetectLeakages-Distributed_system_other_leakages.drawio.png)
-
-## Architecture
-
-![field](./images/field.jpg)
-
-We propose a tree architecture with a MCU at source site connected to a water flow sensor, a LED and a buzzer. A fork is defined as a site where a single pipe divides itself in two or more output pipes. We place a water flow sensor for each of these diramations, all connected to a single MCU. So. a MCU at each fork site, which can be at different depth levels, is needed. Furthermore, we place a MCU for each pipeline branch, more precisely in correspondence of each irrigation valve, where we place a single water flow sensor connected to the MCU. Our architecture is scalable, so it can be used to control water leakages within a small field with the same crop or to control leakages from pipes irrigating different types of crop in the same field. </br>
-
-Since in the simulation we used a node for each MCU, our tree architecture can be represented in a more understandable way as follows.
-
-## High level diagram
-
-![architecture](./images/architecture.jpg)
-
-Our system is composed of 3 different pieces:
-
-* MCU near the water source (connected through a power cord) called CHIEF
-* MCU near the pipeline fork (using a battery) called FORK, with an ID for the fork and a NUMBER for each branch water flow sensor
-* MCU connected to a water flow sensor at valve site (using a battery) called BRANCH and with a NUMBER (consistent with the NUMBER value in the relative FORK)
-
 ## Components
 
 Our infrastructure is composed of:
@@ -64,6 +38,31 @@ A LED is used to provide a visual alarm indication through blinking.
 #### Buzzer
 
 A buzzer is used to provide an acoustic alarm indication through intermitting activation.
+## How to detect a leakage
+
+![no_leakage](./images/HowToDetectLeakages-No_leakage_situations.drawio.png)
+![leakage](./images/HowToDetectLeakages-Leakage_situations.drawio.png)
+![distributed_problem](./images/HowToDetectLeakages-Distributed_system_leakage_problem.drawio.png)
+![distributed_solution](./images/HowToDetectLeakages-Distributed_system_leakage_solution.drawio.png)
+![distributed_other](./images/HowToDetectLeakages-Distributed_system_other_leakages.drawio.png)
+
+## Architecture
+
+![field](./images/field.jpg)
+
+We propose a tree architecture with a MCU at source site connected to a water flow sensor, a LED and a buzzer. A fork is defined as a site where a single pipe divides itself in two or more output pipes. We place a water flow sensor for each of these diramations, all connected to a single MCU. So. a MCU at each fork site, which can be at different depth levels, is needed. Furthermore, we place a MCU for each pipeline branch, more precisely in correspondence of each irrigation valve, where we place a single water flow sensor connected to the MCU. Our architecture is scalable, so it can be used to control water leakages within a small field with the same crop or to control leakages from pipes irrigating different types of crop in the same field. </br>
+
+Since in the simulation we used a node for each MCU, our tree architecture can be represented in a more understandable way as follows.
+
+## High level diagram
+
+![architecture](./images/architecture.jpg)
+
+Our system is composed of 3 different pieces:
+
+* MCU near the water source (connected through a power cord) called CHIEF
+* MCU near the pipeline fork (using a battery) called FORK, with an ID for the fork and a NUMBER for each branch water flow sensor
+* MCU connected to a water flow sensor at valve site (using a battery) called BRANCH and with a NUMBER (consistent with the NUMBER value in the relative FORK)
 
 ### Cloud system
 
