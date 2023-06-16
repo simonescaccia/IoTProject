@@ -322,9 +322,6 @@ int source_lora_ttn(node_t node)
     }
 
     return 0;
-    }
-
-    return 0;
 }
 
 static void _start_listening (void) 
