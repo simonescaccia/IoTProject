@@ -14,8 +14,8 @@ DEVELHELP ?= 1
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1
 
-WIFI_SSID ?= "Oneplus Nord"
-WIFI_PASS ?= "vivaleti"
+WIFI_SSID ?= "PUT YOUR WI-FI NAME"
+WIFI_PASS ?= "PUT YOUR WI-FI PASSWORD"
 
 # Optionally include remoteDNS support. This includes resolution of names at an
 # upstream DNS server and the handling of RDNSS options in Router Advertisements
