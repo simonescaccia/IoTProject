@@ -41,7 +41,7 @@ static char stack_send[SX127X_STACKSIZE];
 
 int source_lora_ttn(node_t node) 
 {
-    puts("Beahvior: source_lora_ttn");
+    puts("Behavior: source_lora_ttn");
 
     /* json to publish on TTN */
     char json[128];
@@ -95,25 +95,25 @@ int source_lora_ttn(node_t node)
     char** pairs = NULL;
     int pair_count = 0;
  
-    /* Do not consider first pair */
     char* pair = strtok(buf, " ");
     int length;
 
     /* Extracting pairs */
     while (pair != NULL) {
-        pair = strtok(NULL, " ");
         pair_count++;
         pairs = realloc(pairs, pair_count*sizeof(char*));
         length = strlen(pair);
         pairs[pair_count - 1] = malloc(length + 1);
         strncpy(pairs[pair_count - 1], pair, length + 1);
+        pair = strtok(NULL, " ");
     }
 
     node_t** nodes = NULL;
     int node_count = 0;
 
     /* Retrieving node information from topology pairs */
-    for (int i=0; i < pair_count; i++) {
+    /* Do not consider first pair */
+    for (int i = 1; i < pair_count; i++) {
 
         /* Separate elements for current pair */
         char *elem = strtok(pairs[i], "-");
@@ -144,18 +144,15 @@ int source_lora_ttn(node_t node)
         /* Check if the nodes of the pair are already in nodes */
         int node_1_in = 0, node_2_in = 0;
 
-        for (int i = 0; i < node_count; i++) {
-            if (nodes[i]->node_self == node_name_1) {
+        for (int k = 0; k < node_count; k++) {
+            if (nodes[k]->node_self == node_name_1) {
                 node_1_in = 1;
 
-                nodes[i]->children_count++;
-                nodes[i]->node_children = realloc(nodes[i]->node_children, nodes[i]->children_count*sizeof(char*));
-                length = strlen(node_name_2);
-                nodes[i]->node_children[nodes[i]->children_count - 1] = malloc((length + 1)*sizeof(char));
-                strcpy(nodes[i]->node_children[nodes[i]->children_count - 1], node_name_2);
-                nodes[i]->self_children_position = nodes[i]->children_count;
+                nodes[k]->children_count++;
+                nodes[k]->self_children_position = nodes[k]->children_count;
+
             }
-            if (nodes[i]->node_self == node_name_2) {
+            if (nodes[k]->node_self == node_name_2) {
                 node_2_in = 1;
             }
         }
@@ -178,15 +175,8 @@ int source_lora_ttn(node_t node)
                 node->node_type = 2;
             }
 
-            node->children_count = 1;
-            node->node_children = realloc(node->node_children, node->children_count*sizeof(char*));
-            length = strlen(node_name_2);
-            node->node_children[node->children_count - 1] = malloc((length + 1)*sizeof(char));
-            strcpy(node->node_children[node->children_count - 1], node_name_2);
-            node->self_children_position = node->children_count;
-
             /* Add node to the nodes array */
-            nodes[node_count - 1] = malloc(sizeof(node_t));
+            nodes[node_count - 1] = (node_t*)malloc(sizeof(node_t));
             memcpy(node, nodes[node_count - 1], sizeof(node_t)); 
 
         }
@@ -203,12 +193,8 @@ int source_lora_ttn(node_t node)
             /* Default: FORK node type */
             node->node_type = 2;
 
-            length = strlen(node_name_1);
-            node->node_father = malloc((length + 1)*sizeof(char));
-            strcpy(node->node_father, node_name_1);
-
             /* Add node to the nodes array */
-            nodes[node_count - 1] = malloc(sizeof(node_t));
+            nodes[node_count - 1] = (node_t*)malloc(sizeof(node_t));
             memcpy(node, nodes[node_count - 1], sizeof(node_t));
         }
         
@@ -225,10 +211,10 @@ int source_lora_ttn(node_t node)
     }
 
     /* Update node types */
-    for (int i = 0; i < node_count; i++) {
-        if (nodes[i]->node_type != 1 && nodes[i]->node_children == NULL) {
+    for (int k = 0; k < node_count; k++) {
+        if (nodes[k]->node_type != 1 && nodes[k]->children_count == 0) {
             /* BRANCH node type */
-            nodes[i]->node_type = 3;
+            nodes[k]->node_type = 3;
         }
     }
 
@@ -237,7 +223,7 @@ int source_lora_ttn(node_t node)
         s_time = (s_time+1) % 10;
 
 
-        for (int i=0; i < pair_count; i++) {
+        for (int i = 1; i < pair_count; i++) {
 
             /* Separate elements for current pair */
             char *elem = strtok(pairs[i], "-");
@@ -266,12 +252,12 @@ int source_lora_ttn(node_t node)
             node_t* father_node = malloc(sizeof(node_t));
             node_t* child_node = malloc(sizeof(node_t));
 
-            for (int i = 0; i < node_count; i++) {
-                if (nodes[i]->node_self == node_name_1) {
-                    memcpy(father_node, nodes[i], sizeof(node_t));
+            for (int k = 0; k < node_count; k++) {
+                if (nodes[k]->node_self == node_name_1) {
+                    memcpy(father_node, nodes[k], sizeof(node_t));
                 }
-                if (nodes[i]->node_self == node_name_2) {
-                    memcpy(child_node, nodes[i], sizeof(node_t));
+                if (nodes[k]->node_self == node_name_2) {
+                    memcpy(child_node, nodes[k], sizeof(node_t));
                 }
             }
 
@@ -293,8 +279,12 @@ int source_lora_ttn(node_t node)
             }
         
             /* Free allocated memory */
+            free(node_code_1);
+            free(node_code_2);
             free(node_name_1);
             free(node_name_2);
+            node_code_1 = NULL;
+            node_code_2 = NULL;
             node_name_1 = NULL;
             node_name_2 = NULL;
 
