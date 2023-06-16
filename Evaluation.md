@@ -49,7 +49,7 @@ The problem of stability of the initial water flow can be seen in the following 
 ![ack](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/ack_flow.png) <br/>
 About the Ack algorithm, it is possible to notice that it is good to detect a leakage but it says that the water flow of the Son is always higher than the water flow of the Source, and this can lead to error, so it is not the worst algorithm implemented.
 ![ack1](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/ack_test1.png)
-![ack2](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/ack_test2.png)<br/>
+![ack3](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/ack_test3.png)<br/>
 
 About the Hanshake algorithm, it is perfect to detect the leakage and the trend of the Son higher than the Source is disappeared. There still is an error of the turbines, that we will face in the next chapter.
 ![h1](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_test1.png)
