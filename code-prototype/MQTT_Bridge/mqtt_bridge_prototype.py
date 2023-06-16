@@ -64,15 +64,15 @@ def on_connect(_client, _userdata, _flags, result):
 
 
 
-MQTT_BROKER_ADDR = "192.168.92.168"
+MQTT_BROKER_ADDR = "PUT YOUR ADDRESS"
 MQTT_BROKER_PORT = 1883
 MQTT_BROKER_CLIENT_ID = "broker"
-AWS_IOT_ENDPOINT ="a1qrujr4l90wwz-ats.iot.us-east-1.amazonaws.com"
+AWS_IOT_ENDPOINT ="PUT YOUR ENDPOINT"
 AWS_IOT_PORT = 8883
 AWS_IOT_CLIENT_ID = "basicPubSub"
-AWS_IOT_ROOT_CA = "./root-CA.crt"
-AWS_IOT_PRIVATE_KEY = "./water-flow-sensor.private.key"
-AWS_IOT_CERTIFICATE = "./water-flow-sensor.cert.pem"
+AWS_IOT_ROOT_CA = "PUT YOUR AWS_IOT_ROOT_CA"
+AWS_IOT_PRIVATE_KEY = "PUT YOUR AWS_IOT_PRIVATE_KEY"
+AWS_IOT_CERTIFICATE = "PUT YOUR AWS_IOT_CERTIFICATE"
 
 # For certificate based connection
 myMQTTClient = AWSIoTMQTTClient(AWS_IOT_CLIENT_ID)
