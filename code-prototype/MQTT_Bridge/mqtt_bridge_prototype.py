@@ -8,19 +8,33 @@ import signal
 
 def on_message(_client, _userdata, message):
 
+    #a='13/06/2023 17:17:17'
+
     date = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
 
     print(date + ' - Received message: ' + str(message.payload))
 
     payload = json.loads(message.payload)
-    if(payload['id']=='1'):
-        json_payload = json.dumps({
-        'Id': 'leakage',
-        'Datetime': date,
-        'Child': 'Prot_Son',
-        'Father': 'Prot_Source',
-        'Leakage': payload['flow_diff']
-        })
+    if (payload['id']=='1'):
+        if (payload['value']=='LEAKAGE'):
+            json_payload = json.dumps({
+            'Id': 'leakage',
+            'Datetime': date,
+            'Child': 'Prot_Son',
+            'Father': 'Prot_Source',
+            'Leakage': payload['flow_diff']
+            })
+            # Topic will be MQTT_PUB_TOPIC_FIRE
+            topic = MQTT_PUB_TOPIC_WATER
+
+            success = myMQTTClient.publish(topic, json_payload, 0)
+
+            time.sleep(5)
+            if(success):
+                print("published",json_payload)
+        else:
+            print("Not sent")
+
     else:
         json_payload = json.dumps({
         'Id': 'flow',
@@ -28,36 +42,27 @@ def on_message(_client, _userdata, message):
         'Flow': payload['flow source']
         })
 
-    # Topic will be MQTT_PUB_TOPIC_FIRE
-    topic = MQTT_PUB_TOPIC_WATER
+        # Topic will be MQTT_PUB_TOPIC_FIRE
+        topic = MQTT_PUB_TOPIC_WATER
 
-    success = myMQTTClient.publish(topic, json_payload, 0)
+        success = myMQTTClient.publish(topic, json_payload, 0)
 
-    time.sleep(5)
-    if(success):
-        print("published",json_payload)
+        time.sleep(5)
+        if(success):
+            print("published",json_payload)
 
     
 # On connect subscribe to topic
 def on_connect(_client, _userdata, _flags, result):
     """Subscribe to input topic"""
 
-    print('Connected ' + str(result))
-    myMQTTClient.publish(MQTT_PUB_TOPIC_WATER, "FIRST CONNECTION", 0)
-    print("FIRST CONNECTION DONE")
+    myMQTTClient.publish(MQTT_PUB_TOPIC_WATER, "Connection", 0)
+    print("Connection Done")
 
-    print('Subscribing to ' + MQTT_SUB_TOPIC)
     MQTT_CLIENT.subscribe(MQTT_SUB_TOPIC)
+    print('Subscribed to ' + MQTT_SUB_TOPIC)
 
-# Disconnect function
-def disconnect_clients(signum, frame):
-    MQTT_CLIENT.loop_stop()
-    MQTT_CLIENT.disconnect()
-    myMQTTClient.disconnect()
-    print("DISCONNECTION")
-    exit(0)
 
-signal.signal(signal.SIGINT, disconnect_clients)
 
 MQTT_BROKER_ADDR = "192.168.92.168"
 MQTT_BROKER_PORT = 1883
