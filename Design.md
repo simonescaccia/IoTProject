@@ -82,8 +82,8 @@ For our prototype, we used the fllowing objects:
 
 We started from a 1,5 meters long garden hose with an inner diameter of 20 mm and an outer one of 25 mm. We cut the garden hose into 4 main segments approximately 35 cm long and a smaller one around 10 cm long. We placed two segments at the endpoints of each water flow sensor and we joined them using the T-adapter. We connected the tap to the last free endpoint of the T-adapter and the smallest pipe segment to the tap dispenser. So we connected the water flow sensors to the MCUs.
 The tap is used to simulate a leakage and it is initially closed. We did not use clamps at first, but we experienced water leaks in correspondence of joints. Therefore we placed 2 clamps at the endpoints of each water flow sensor and other 2 for the endpoints of the T-adapter not connected to the tap.
+Source node and Son node are 90cm apart.
 
-The final protoype architecture is the following.
 
 ## Network architecture
 
