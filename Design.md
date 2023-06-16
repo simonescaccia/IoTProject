@@ -69,7 +69,7 @@ Our system is composed of 3 different pieces:
 * MCU near the pipeline fork (using a battery) called FORK, with an ID for the fork and a NUMBER for each branch water flow sensor
 * MCU connected to a water flow sensor at valve site (using a battery) called BRANCH and with a NUMBER (consistent with the NUMBER value in the relative FORK)
 
-## Prototype architecture
+## Prototype Environment
 
 For our prototype, we used the fllowing objects:
 
