@@ -41,7 +41,7 @@ static char stack_send[SX127X_STACKSIZE];
 
 int source_lora_ttn(node_t node) 
 {
-    puts("Behavior: source_lora_ttn");
+puts("Behavior: source_lora_ttn");
 
     /* json to publish on TTN */
     char json[128];
@@ -164,6 +164,7 @@ int source_lora_ttn(node_t node)
 
             /* Add node to the nodes array */
             nodes[node_count - 1] = (node_t*)malloc(sizeof(node_t));
+            nodes[node_count - 1]->node_self = malloc(length + 1);
             nodes[node_count - 1]->node_self = node->node_self;
             nodes[node_count - 1]->node_type = node->node_type;
             nodes[node_count - 1]->children_count = node->children_count;
@@ -187,6 +188,7 @@ int source_lora_ttn(node_t node)
 
             /* Add node to the nodes array */
             nodes[node_count - 1] = (node_t*)malloc(sizeof(node_t));
+            nodes[node_count - 1]->node_self = malloc(length + 1);
             nodes[node_count - 1]->node_self = node->node_self;
             nodes[node_count - 1]->node_type = node->node_type;
             nodes[node_count - 1]->children_count = node->children_count;
@@ -234,9 +236,9 @@ int source_lora_ttn(node_t node)
         sprintf(json, "{\"Id\": \"flow\", \"Flow\": \"%s\"}", water_flow);
         puts(json);
 
-        //char* tx_list[3] = {"loramac", "tx", json};
-        //argv = (char**)&tx_list;
-        //loramac_handler(3, argv);
+        char* tx_list[3] = {"loramac", "tx", json};
+        argv = (char**)&tx_list;
+        loramac_handler(3, argv);
 
         free(water_flow);
 
@@ -270,40 +272,48 @@ int source_lora_ttn(node_t node)
             strcpy(node_name_2, "st-lrwan1-");
             strcat(node_name_2, node_code_2);
 
-            node_t* father_node = malloc(sizeof(node_t));
-            node_t* child_node = malloc(sizeof(node_t));
+            node_t* father_node = NULL;
+            node_t* child_node = NULL;
 
-            for (int k = 0; k < node_count; k++) {
-                if (strcmp(nodes[k]->node_self, node_name_1) == 0) {
+            for (int k = 0; k < node_count - 1; k++) {
+                if (strcmp(nodes[k]->node_self, node_name_1) == 0 && strcmp(nodes[k+1]->node_self, node_name_2) == 0) {
+                    father_node = malloc(sizeof(node_t));
+                    int length = strlen(nodes[k]->node_self);
+                    father_node->node_self = malloc(length + 1);
                     father_node->node_self = nodes[k]->node_self;
                     father_node->node_type = nodes[k]->node_type;
                     father_node->children_count = nodes[k]->children_count;
                     father_node->self_children_position = nodes[k]->self_children_position;
-                }
-                if (strcmp(nodes[k]->node_self, node_name_2) == 0) {
-                    child_node->node_self = nodes[k]->node_self;
-                    child_node->node_type = nodes[k]->node_type;
-                    child_node->children_count = nodes[k]->children_count;
-                    child_node->self_children_position = nodes[k]->self_children_position;
+
+                    child_node = malloc(sizeof(node_t));
+                    length = strlen(nodes[k+1]->node_self);
+                    child_node->node_self = malloc(length + 1);
+                    child_node->node_self = nodes[k+1]->node_self;
+                    child_node->node_type = nodes[k+1]->node_type;
+                    child_node->children_count = nodes[k+1]->children_count;
+                    child_node->self_children_position = nodes[k+1]->self_children_position;
                 }
             }
 
             /* Get water flow value */
             float father_water_flow = get_water_flow(father_node->node_type, father_node->self_children_position, s_time);
             float child_water_flow = get_water_flow(child_node->node_type, child_node->self_children_position, s_time);
+            printf("Father flow: "); print_float(father_water_flow,2); printf("\n");
+            printf("Child flow: "); print_float(child_water_flow,2); printf("\n");
+
 
             float difference = fabs(child_water_flow - father_water_flow);
 
             if (difference > LEAKAGE_THRESHOLD) {
                 char* water_leakage = malloc(5*sizeof(char));
-                int chars = fmt_float(water_leakage, value, 2);
+                int chars = fmt_float(water_leakage, difference, 2);
                 water_leakage[chars] = '\0';
-                sprintf(json, "{\"Id\": \"leakage\", \"Child\": \"%s\", \"Father\": \"%s\", \"Leakage\": \"%s\"}", father_node->node_self, child_node->node_self, water_leakage); 
+                sprintf(json, "{\"Id\": \"leakage\", \"Child\": \"%s\", \"Father\": \"%s\", \"Leakage\": \"%s\"}", child_node->node_self, father_node->node_self, water_leakage); 
                 puts(json);
 
-                //char* lx_list[3] = {"loramac", "tx", json};
-                //argv = (char**)&lx_list;
-                //loramac_handler(3, argv);
+                char* lx_list[3] = {"loramac", "tx", json};
+                argv = (char**)&lx_list;
+                loramac_handler(3, argv);
 
                 free(water_leakage);
 
@@ -321,6 +331,9 @@ int source_lora_ttn(node_t node)
             node_code_2 = NULL;
             node_name_1 = NULL;
             node_name_2 = NULL;
+
+            free(father_node);
+            free(child_node);
 
         }
 
