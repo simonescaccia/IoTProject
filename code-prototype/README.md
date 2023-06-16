@@ -37,6 +37,6 @@ This script take the values sent by the ESP32s and redirect them to AWS.
 
 ### Common errors
 For this project you need two different boards, one for the Source and one for the Son. <br/>
-Before launching the code, change the private values of the code like information of the Wifii and AWS properties.
+Before launching the code, change the private values of the code like information of the WI-FI and AWS properties.
 
     
