@@ -129,17 +129,18 @@ int source_lora_ttn(node_t node)
         int node_1_in = 0, node_2_in = 0;
 
         for (int k = 0; k < node_count; k++) {
-            if (nodes[k]->node_self == node_name_1) {
+            if (strcmp(nodes[k]->node_self, node_name_1) == 0) {
                 node_1_in = 1;
 
                 nodes[k]->children_count++;
                 nodes[k]->self_children_position = nodes[k]->children_count;
 
             }
-            if (nodes[k]->node_self == node_name_2) {
+            if (strcmp(nodes[k]->node_self,node_name_2) == 0) {
                 node_2_in = 1;
             }
         }
+
 
         if (!node_1_in) {
 
@@ -147,8 +148,10 @@ int source_lora_ttn(node_t node)
             nodes = realloc(nodes, node_count*sizeof(node_t*));
             node_t* node = malloc(sizeof(node_t));
             length = strlen(node_name_1);
-            node->node_self = malloc(sizeof(length + 1));
+            node->node_self = malloc(length + 1);
             strcpy(node->node_self, node_name_1);
+            node->children_count = 1;
+            node->self_children_position = node->children_count; 
 
             if (i == 1) {
                 /* CHIEF node type */
@@ -163,6 +166,8 @@ int source_lora_ttn(node_t node)
             nodes[node_count - 1] = (node_t*)malloc(sizeof(node_t));
             nodes[node_count - 1]->node_self = node->node_self;
             nodes[node_count - 1]->node_type = node->node_type;
+            nodes[node_count - 1]->children_count = node->children_count;
+            nodes[node_count - 1]->self_children_position = node->self_children_position;
 
         }
 
@@ -172,8 +177,10 @@ int source_lora_ttn(node_t node)
             nodes = realloc(nodes, node_count*sizeof(node_t*));
             node_t* node = malloc(sizeof(node_t));
             length = strlen(node_name_2);
-            node->node_self = malloc(sizeof(length +1));
+            node->node_self = malloc(length +1);
             strcpy(node->node_self, node_name_2);
+            node->children_count = 0;
+            node->self_children_position = node->children_count; 
 
             /* Default: FORK node type */
             node->node_type = 2;
@@ -182,6 +189,8 @@ int source_lora_ttn(node_t node)
             nodes[node_count - 1] = (node_t*)malloc(sizeof(node_t));
             nodes[node_count - 1]->node_self = node->node_self;
             nodes[node_count - 1]->node_type = node->node_type;
+            nodes[node_count - 1]->children_count = node->children_count;
+            nodes[node_count - 1]->self_children_position = node->self_children_position;
         }
         
         /* Free allocated memory */
@@ -204,8 +213,16 @@ int source_lora_ttn(node_t node)
         }
     }
 
+    /*for (int z = 0; z < node_count; z++) {
+        printf("z: %d\n", z);
+        printf("SELF: %s\n", nodes[z]->node_self);
+        printf("TYPE: %d\n", nodes[z]->node_type);
+        printf("COUNT: %d\n", nodes[z]->children_count);
+        printf("POS: %d\n", nodes[z]->self_children_position);
+    }*/
+
     while(1) {
-        /* Set time for sampling: [0, 60] */
+        /* Sampling time update */
         s_time++;
 
         /* Get water flow value */
@@ -226,6 +243,7 @@ int source_lora_ttn(node_t node)
         /* Sleeping for five seconds */
         xtimer_sleep(5);
 
+
         for (int i = 1; i < pair_count; i++) {
 
             /* Separate elements for current pair */
@@ -241,10 +259,9 @@ int source_lora_ttn(node_t node)
             strcpy(node_name_1, "st-lrwan1-");
             strcat(node_name_1, node_code_1);
         
+            /* Second node code */
             elem = strtok(NULL, "-");
             length = strlen(elem);
-
-            /* Second node code */
             char *node_code_2 = malloc(length + 1);
             strncpy(node_code_2, elem, length + 1);
 
@@ -253,17 +270,17 @@ int source_lora_ttn(node_t node)
             strcpy(node_name_2, "st-lrwan1-");
             strcat(node_name_2, node_code_2);
 
-            node_t* father_node = (node_t*)malloc(sizeof(node_t));
-            node_t* child_node = (node_t*)malloc(sizeof(node_t));
+            node_t* father_node = malloc(sizeof(node_t));
+            node_t* child_node = malloc(sizeof(node_t));
 
             for (int k = 0; k < node_count; k++) {
-                if (nodes[k]->node_self == node_name_1) {
+                if (strcmp(nodes[k]->node_self, node_name_1) == 0) {
                     father_node->node_self = nodes[k]->node_self;
                     father_node->node_type = nodes[k]->node_type;
                     father_node->children_count = nodes[k]->children_count;
                     father_node->self_children_position = nodes[k]->self_children_position;
                 }
-                if (nodes[k]->node_self == node_name_2) {
+                if (strcmp(nodes[k]->node_self, node_name_2) == 0) {
                     child_node->node_self = nodes[k]->node_self;
                     child_node->node_type = nodes[k]->node_type;
                     child_node->children_count = nodes[k]->children_count;
@@ -293,20 +310,17 @@ int source_lora_ttn(node_t node)
                 xtimer_sleep(5);
 
             }
-     
+
+        
             /* Free allocated memory */
             free(node_code_1);
             free(node_code_2);
             free(node_name_1);
             free(node_name_2);
-            free(father_node);
-            free(child_node);
             node_code_1 = NULL;
             node_code_2 = NULL;
             node_name_1 = NULL;
             node_name_2 = NULL;
-            father_node = NULL;
-            child_node = NULL;
 
         }
 
