@@ -241,9 +241,10 @@ int source_lora_ttn(node_t node)
             strcpy(node_name_1, "st-lrwan1-");
             strcat(node_name_1, node_code_1);
         
-            /* Second node code */
             elem = strtok(NULL, "-");
             length = strlen(elem);
+
+            /* Second node code */
             char *node_code_2 = malloc(length + 1);
             strncpy(node_code_2, elem, length + 1);
 
@@ -252,8 +253,8 @@ int source_lora_ttn(node_t node)
             strcpy(node_name_2, "st-lrwan1-");
             strcat(node_name_2, node_code_2);
 
-            node_t* father_node = malloc(sizeof(node_t));
-            node_t* child_node = malloc(sizeof(node_t));
+            node_t* father_node = (node_t*)malloc(sizeof(node_t));
+            node_t* child_node = (node_t*)malloc(sizeof(node_t));
 
             for (int k = 0; k < node_count; k++) {
                 if (nodes[k]->node_self == node_name_1) {
@@ -298,10 +299,14 @@ int source_lora_ttn(node_t node)
             free(node_code_2);
             free(node_name_1);
             free(node_name_2);
+            free(father_node);
+            free(child_node);
             node_code_1 = NULL;
             node_code_2 = NULL;
             node_name_1 = NULL;
             node_name_2 = NULL;
+            father_node = NULL;
+            child_node = NULL;
 
         }
 
