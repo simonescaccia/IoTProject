@@ -48,9 +48,6 @@ int source_lora_ttn(node_t node)
 
     /* Sampling time */
     int s_time = -1;
-    /* Current date and time */
-    //char datetime[20];
-    //time_t t;
 
     /* Set TTN application parameters */
     char* deveui_list[4] = {"loramac", "set", "deveui", DEV_EUI};
@@ -72,19 +69,6 @@ int source_lora_ttn(node_t node)
     char* join_list[3] = {"loramac", "join", "otaa"};
     argv = (char**)&join_list;
     loramac_handler(3,argv);
-
-    /* Get water flow value */
-    float water_flow = get_water_flow(node.node_type, 0, s_time);
-    /* Send source water flow information */
-    sprintf(json, "{\"Id\": \"flow\", \"Flow\": \"%f\"}", water_flow);
-    puts(json);
-
-    //char* tx_list[3] = {"loramac", "tx", json};
-    //argv = (char**)&tx_list;
-    //loramac_handler(3, argv);
-
-    /* Sleeping for five seconds */
-    xtimer_sleep(5);
 
     /* Extracting configuration information */
     char* buffer = config();
@@ -163,10 +147,10 @@ int source_lora_ttn(node_t node)
             nodes = realloc(nodes, node_count*sizeof(node_t*));
             node_t* node = malloc(sizeof(node_t));
             length = strlen(node_name_1);
-            node->node_self = malloc(sizeof(length +1));
+            node->node_self = malloc(sizeof(length + 1));
             strcpy(node->node_self, node_name_1);
 
-            if (i == 0) {
+            if (i == 1) {
                 /* CHIEF node type */
                 node->node_type = 1;
             }
@@ -177,7 +161,8 @@ int source_lora_ttn(node_t node)
 
             /* Add node to the nodes array */
             nodes[node_count - 1] = (node_t*)malloc(sizeof(node_t));
-            memcpy(node, nodes[node_count - 1], sizeof(node_t)); 
+            nodes[node_count - 1]->node_self = node->node_self;
+            nodes[node_count - 1]->node_type = node->node_type;
 
         }
 
@@ -195,7 +180,8 @@ int source_lora_ttn(node_t node)
 
             /* Add node to the nodes array */
             nodes[node_count - 1] = (node_t*)malloc(sizeof(node_t));
-            memcpy(node, nodes[node_count - 1], sizeof(node_t));
+            nodes[node_count - 1]->node_self = node->node_self;
+            nodes[node_count - 1]->node_type = node->node_type;
         }
         
         /* Free allocated memory */
@@ -220,8 +206,25 @@ int source_lora_ttn(node_t node)
 
     while(1) {
         /* Set time for sampling: [0, 60] */
-        s_time = (s_time+1) % 10;
+        s_time++;
 
+        /* Get water flow value */
+        float value = get_water_flow(node.node_type, 0, s_time);
+        char* water_flow = malloc(5*sizeof(char));
+        int chars = fmt_float(water_flow, value, 2);
+        water_flow[chars] = '\0';
+        /* Send source water flow information */
+        sprintf(json, "{\"Id\": \"flow\", \"Flow\": \"%s\"}", water_flow);
+        puts(json);
+
+        //char* tx_list[3] = {"loramac", "tx", json};
+        //argv = (char**)&tx_list;
+        //loramac_handler(3, argv);
+
+        free(water_flow);
+
+        /* Sleeping for five seconds */
+        xtimer_sleep(5);
 
         for (int i = 1; i < pair_count; i++) {
 
@@ -254,10 +257,16 @@ int source_lora_ttn(node_t node)
 
             for (int k = 0; k < node_count; k++) {
                 if (nodes[k]->node_self == node_name_1) {
-                    memcpy(father_node, nodes[k], sizeof(node_t));
+                    father_node->node_self = nodes[k]->node_self;
+                    father_node->node_type = nodes[k]->node_type;
+                    father_node->children_count = nodes[k]->children_count;
+                    father_node->self_children_position = nodes[k]->self_children_position;
                 }
                 if (nodes[k]->node_self == node_name_2) {
-                    memcpy(child_node, nodes[k], sizeof(node_t));
+                    child_node->node_self = nodes[k]->node_self;
+                    child_node->node_type = nodes[k]->node_type;
+                    child_node->children_count = nodes[k]->children_count;
+                    child_node->self_children_position = nodes[k]->self_children_position;
                 }
             }
 
@@ -268,16 +277,22 @@ int source_lora_ttn(node_t node)
             float difference = fabs(child_water_flow - father_water_flow);
 
             if (difference > LEAKAGE_THRESHOLD) {
-                sprintf(json, "{\"Id\": \"leakage\", \"Child\": \"%s\", \"Father\": \"%s\", \"Leakage\": \"%f\"}", node_name_2, node_name_1, difference); 
+                char* water_leakage = malloc(5*sizeof(char));
+                int chars = fmt_float(water_leakage, value, 2);
+                water_leakage[chars] = '\0';
+                sprintf(json, "{\"Id\": \"leakage\", \"Child\": \"%s\", \"Father\": \"%s\", \"Leakage\": \"%s\"}", father_node->node_self, child_node->node_self, water_leakage); 
                 puts(json);
 
                 //char* lx_list[3] = {"loramac", "tx", json};
                 //argv = (char**)&lx_list;
                 //loramac_handler(3, argv);
 
+                free(water_leakage);
+
                 xtimer_sleep(5);
+
             }
-        
+     
             /* Free allocated memory */
             free(node_code_1);
             free(node_code_2);
@@ -299,6 +314,9 @@ int source_lora_ttn(node_t node)
         AWSClient.connect()
         TTNClient.username_pw_set("<application-id>", "<access-key>")
         */
+    }
+
+    return 0;
     }
 
     return 0;
