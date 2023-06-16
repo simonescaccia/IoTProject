@@ -38,6 +38,11 @@ A LED is used to provide a visual alarm indication through blinking.
 #### Buzzer
 
 A buzzer is used to provide an acoustic alarm indication through intermitting activation.
+
+### Cloud system
+
+Data are stored on AWS for long term storage. These data can then be queried by farmers in order to gain insights about water usage and pipeline leakages.
+
 ## How to detect a leakage
 
 ![no_leakage](./images/HowToDetectLeakages-No_leakage_situations.drawio.png)
@@ -63,10 +68,6 @@ Our system is composed of 3 different pieces:
 * MCU near the water source (connected through a power cord) called CHIEF
 * MCU near the pipeline fork (using a battery) called FORK, with an ID for the fork and a NUMBER for each branch water flow sensor
 * MCU connected to a water flow sensor at valve site (using a battery) called BRANCH and with a NUMBER (consistent with the NUMBER value in the relative FORK)
-
-### Cloud system
-
-Data are stored on AWS for long term storage. These data can then be queried by farmers in order to gain insights about water usage and pipeline leakages.
 
 ## Prototype architecture
 
