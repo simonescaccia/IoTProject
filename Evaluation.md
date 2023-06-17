@@ -86,10 +86,10 @@ The syncAck is worse than the handshake but it uses one less message. Beacuse th
 
 ### Turbine error
 Another significant error of the architecture is the instrumental error of the water flow sensor. Because of we have not another turbine with the correct value of the water flow or other instruments, we have run the system for several tests and we have analysed the difference between the values of Source and Son. We have observed the difference because the water flow before our application is not costant (decided by the public pipeline). It is important to observ that this error is influenced by the algorithmic error too.
-![h3AB](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_error_AB_3s.png)
-![h3BA](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_error_BA_3s.png)
-![s3AB](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_error_AB_3s.png)
-![s3BA](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_error_BA_3s.png)<br/>
+![h3AB](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_error_AB.png)
+![h3BA](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_error_BA.png)
+![s3AB](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_error_AB.png)
+![s3BA](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_error_BA.png)<br/>
 The system is proned to have the Son with an higher water flow value, if you put turbine A before turbine B, but this happens because the turbine A is less efficient. <br/>
 For our prototype and with a distance of 90cm between the nodes, based on the consideration of the several approssimations, We have initially fought to put a threshold of 1 L/min, but then we have done more considerations.<br/>
 We have first set a fixed scenario: 
