@@ -78,7 +78,7 @@ To find the error of the two algorithm we have to decide the time of testing: no
 If we put the time of the test at 10s, we have that 0,038 : 10 = x : 100 and that 0,180 : 10 = x : 100. So, influence of handshake is x = 0,38% , while influence of syncAck is y = 1,8% .
 Looking at the number of impulses per minute in the datasheet, that is 541 impulses/min, we can find the error of impulses derived by the percentage.<br/>
 541imp / 60s and 30L / 60s -> 30L / 541imp <br/>
-SONO SOLO POSSIBILI NON CERTI
+This error represents the possibility of a changing in the water flow rate before the Source<br/>
 x = 0,38% -> imp/10s = 0,38% * 90 = 0,34imp -> flow = L/min = 0,34 * 30L / 541imp = 0,019 L/min <br/>
 y = 1,80% -> imp/10s = 1,80% * 90 = 1,62imp -> flow = L/min = 1,62 * 30L / 541imp = 0,09 L/min <br/>
 The syncAck is worse than the handshake but it uses one less message. Beacuse the instrumental error is higher, as we will see, the thing that is significant is the number of messages and so the syncACK will be the final algorithm of our application.<br/>
@@ -87,10 +87,25 @@ The syncAck is worse than the handshake but it uses one less message. Beacuse th
 ### Turbine error
 Another significant error of the architecture is the instrumental error of the water flow sensor. Because of we have not another turbine with the correct value of the water flow or other instruments, we have run the system for several tests and we have analysed the difference between the values of Source and Son. We have observed the difference because the water flow before our application is not costant (decided by the public pipeline). It is important to observ that this error is influenced by the algorithmic error too.
 ![err](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/error.png)<br/>
-We have found that the average of the difference is -0.35 L/min ± σ =0.48 L/min the error is 0.48 / root of N (N number of events) = 0,06 error. The system is proned to have the Son with an higher water flow value. In general the instrumental error is higher than the algorithm error and so we have to set the threshold using this observation. <br/>
-For our prototype and with a distance of 90cm between the nodes, based on the consideration of the several approssimations, it is sane to set a **threshold of 1L/min**.
-<br/><br/>
-Another solution, to reduce the calculus, that we have not taken in consideration it is to increment the time of the test to 1min (or more) to make the algorithmic error insignificant. We have not use this approach because we want to reduce the energy consumption.
+The system is proned to have the Son with an higher water flow value, if you put turbine A before turbine B, but this happens because the turbine A is less efficient. <br/>
+For our prototype and with a distance of 90cm between the nodes, based on the consideration of the several approssimations, We have initially fought to put a threshold of 1 L/min, but then we have done more considerations.<br/>
+We have first set a fixed scenario: 
+* turbine B = Source 
+* turbine A = Son
+Then, we have done a lot of tests changing time of sampling and water flow rate. <br/>
+With the analysis of the algorithmic error done before, we thought that an higher sampling was more accurate but the data has not shown this. The tests are done with the use of the syncAck, the table below shows the error rate for the different situation: <br/>
+|Water flow rate| 3s | 5s | 10s |
+|--- |--- |--- |
+| 0-30 L/min | 0.84 L/min | 0.49 L/min | 0.74 L/min |
+| 0-10 L/min | 0.14 L/min | 0.29 L/min | 0.13 L/min |
+| 10-20 L/min | 0.58 L/min | 0.67 L/min | 0.76 L/min |
+| 20-30 L/min | 1.11 L/min | 0.62 L/min | 1.10 L/min |
+The first line is not relevant because there are not enough data and are not distributed well.<br/>
+Then, it is possible to note that the difference is not caused by the different time of sampling, but by the different water flow rate: this lead to say that the main error is the error of the turbines and not the error of the algorithm. <br/>
+So, we can decide to use the syncAck algorithm knowing that it uses one message less, not keeping in mind that the handshake algorithm is more efficient in the algorithmic error (matematically). <br/>
+We have analysed these data to fix a threshold for the detection of the leakages:
+
+
 
 ### Energy consumption
 Our requirement is not to tolerate a water loss of more than one day, so we wish to detect a leakage within 24 h. Now, since the leakage is an unpredictable event, we cannot define a precise strategy apriori, but we want to indentify the best one in order to minimize power consumption. We compute this strategy analitically. Firstly, for simplicity, we focus on a simple father-child pair, since the same reasoning holds for every adjacent pair of nodes of the tree topology. Now, we define x as the send rate (msg/day) of the father, so the number of messages sent per day, and y as the total listen interval of the child (in hours/day). In order to be sure to correctly listen to at least one message in one day, y should be equal to (24/x + epsilon) hours/day, where epsilon is a neglectable time interval if compared with 24/x hours. Computing the energy consumption, there are three contributions, one related to the sender, one to the receiver and one to the exchange of messages linked to the leakage detection algorithm, so both for synchronization and test. This last component can be omitted in our considerations because it is not influenced by the choice of x, which we wish to know. So, the total energy consumption is given by:
