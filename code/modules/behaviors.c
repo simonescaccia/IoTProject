@@ -224,14 +224,6 @@ puts("Behavior: source_lora_ttn");
         }
     }
 
-    /*for (int z = 0; z < node_count; z++) {
-        printf("z: %d\n", z);
-        printf("SELF: %s\n", nodes[z]->node_self);
-        printf("TYPE: %d\n", nodes[z]->node_type);
-        printf("COUNT: %d\n", nodes[z]->children_count);
-        printf("POS: %d\n", nodes[z]->self_children_position);
-    }*/
-
     while(1) {
         /* Sampling time update */
         s_time++;
@@ -277,7 +269,7 @@ puts("Behavior: source_lora_ttn");
             strcpy(node_name_1, "st-lrwan1-");
             strcat(node_name_1, node_code_1);
 
-            * Getting second element of the pair */
+            /* Getting second element of the pair */
             elem = strtok(NULL, "-");
             length = strlen(elem);
         
@@ -301,16 +293,14 @@ puts("Behavior: source_lora_ttn");
                     father_node->node_self = nodes[k]->node_self;
                     father_node->node_type = nodes[k]->node_type;
                     father_node->children_count = nodes[k]->children_count;
-                    //father_node->self_children_position = nodes[k]->self_children_position;
-                    father_node->self_children_position = 0;
+                    father_node->self_children_position = nodes[k]->self_children_position;
 
                     length = strlen(nodes[k+1]->node_self);
                     child_node->node_self = malloc(length + 1);
                     child_node->node_self = nodes[k+1]->node_self;
                     child_node->node_type = nodes[k+1]->node_type;
                     child_node->children_count = nodes[k+1]->children_count;
-                    child_node->self_children_position = nodes[k]->self_children_position - 1;
-                    //child_node->self_children_position = nodes[k+1]->self_children_position;
+                    child_node->self_children_position = nodes[k]->self_children_position;
                 }
             }
 
@@ -355,16 +345,6 @@ puts("Behavior: source_lora_ttn");
             free(child_node);
 
         }
-
-        /* AWS integration */
-        /* TTNClient = mqtt.Client()
-        AWSClient = AWSIoTMQTTClient("TTNbridge")
-
-        // Connect the clients
-        TTNClient.connect("eu.thethings.network", 1883, 60)
-        AWSClient.connect()
-        TTNClient.username_pw_set("<application-id>", "<access-key>")
-        */
     }
 
     return 0;
