@@ -69,14 +69,25 @@ function dataLoading(parsed_data){
       // Convert sample time to Locale format
       var date = datetime.toLocaleString(); 
 
-      // Father-child pair generation
-      value = ("Pair: ").concat(father.slice(-2)).concat("-").concat(child.slice(-2)).concat(" Time: ").concat(date);
-      
-      // Add value to values_x array
-      x_values_leakage.push(value); 
-  
-      value = parsed_leakage_data[i]["Leakage"];
-      y_values_leakage.push(value);
+      var today = new Date();
+      today = today.toLocaleString().substring(0,10);
+      var yesterday = new Date(Date.now() - 86400000);
+      yesterday = yesterday.toLocaleString().substring(0,10);
+
+      if (date.substring(0,10) != today && date.substring(0,10) != yesterday) {
+        continue;
+      }
+      else {
+        // Father-child pair generation
+        value = ("Pair: ").concat(father.slice(-2)).concat("-").concat(child.slice(-2)).concat(" Time: ").concat(date);
+        
+        // Add value to values_x array
+        x_values_leakage.push(value); 
+    
+        value = parsed_leakage_data[i]["Leakage"];
+        y_values_leakage.push(value);
+
+      }
     }
   }
 }
@@ -203,6 +214,12 @@ async function display() {
 
   getLeakageStatistics();
   document.getElementById("avg-leakage").innerHTML = avg_leakage;
+  if (!Array.isArray(y_values_leakage) || !y_values_leakage.length) {
+    document.getElementById("leakage-info").innerHTML = "No recent leakage detected";
+  }
+  else {
+    document.getElementById("leakage-info").innerHTML = "ALERT: recent leakage detected!";
+  }
 
 }
 
