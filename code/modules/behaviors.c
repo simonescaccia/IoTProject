@@ -77,6 +77,7 @@ puts("Behavior: source_lora_ttn");
     strncpy(buf, buffer, buf_len + 1);
 
     char** pairs = NULL;
+    char** pairs_copy = NULL;
     int pair_count = 0;
  
     char* pair = strtok(buf, " ");
@@ -85,10 +86,18 @@ puts("Behavior: source_lora_ttn");
     /* Extracting pairs */
     while (pair != NULL) {
         pair_count++;
+
         pairs = realloc(pairs, pair_count*sizeof(char*));
+        pairs_copy = realloc(pairs_copy, pair_count*sizeof(char*));
+
         length = strlen(pair);
+
         pairs[pair_count - 1] = malloc(length + 1);
         strncpy(pairs[pair_count - 1], pair, length + 1);
+
+        pairs_copy[pair_count - 1] = malloc(length + 1);
+        strncpy(pairs_copy[pair_count - 1], pair, length + 1);
+
         pair = strtok(NULL, " ");
     }
 
@@ -245,6 +254,13 @@ puts("Behavior: source_lora_ttn");
         /* Sleeping for five seconds */
         xtimer_sleep(5);
 
+        pairs = (char**)realloc(pairs, pair_count*sizeof(char*));
+
+        for (int w = 0; w < pair_count; w++) {
+            int length = strlen(pairs_copy[w]);
+            pairs[w] = malloc(length + 1);
+            strncpy(pairs[w], pairs_copy[w], length + 1);
+        }
 
         for (int i = 1; i < pair_count; i++) {
 
@@ -260,10 +276,12 @@ puts("Behavior: source_lora_ttn");
             char* node_name_1 = malloc(15*sizeof(char));
             strcpy(node_name_1, "st-lrwan1-");
             strcat(node_name_1, node_code_1);
-        
-            /* Second node code */
+
+            * Getting second element of the pair */
             elem = strtok(NULL, "-");
             length = strlen(elem);
+        
+            /* Second node code */
             char *node_code_2 = malloc(length + 1);
             strncpy(node_code_2, elem, length + 1);
 
@@ -272,26 +290,27 @@ puts("Behavior: source_lora_ttn");
             strcpy(node_name_2, "st-lrwan1-");
             strcat(node_name_2, node_code_2);
 
-            node_t* father_node = NULL;
-            node_t* child_node = NULL;
+            node_t* father_node = malloc(sizeof(node_t));
+            node_t* child_node = malloc(sizeof(node_t));
 
             for (int k = 0; k < node_count - 1; k++) {
                 if (strcmp(nodes[k]->node_self, node_name_1) == 0 && strcmp(nodes[k+1]->node_self, node_name_2) == 0) {
-                    father_node = malloc(sizeof(node_t));
+                    
                     int length = strlen(nodes[k]->node_self);
                     father_node->node_self = malloc(length + 1);
                     father_node->node_self = nodes[k]->node_self;
                     father_node->node_type = nodes[k]->node_type;
                     father_node->children_count = nodes[k]->children_count;
-                    father_node->self_children_position = nodes[k]->self_children_position;
+                    //father_node->self_children_position = nodes[k]->self_children_position;
+                    father_node->self_children_position = 0;
 
-                    child_node = malloc(sizeof(node_t));
                     length = strlen(nodes[k+1]->node_self);
                     child_node->node_self = malloc(length + 1);
                     child_node->node_self = nodes[k+1]->node_self;
                     child_node->node_type = nodes[k+1]->node_type;
                     child_node->children_count = nodes[k+1]->children_count;
-                    child_node->self_children_position = nodes[k+1]->self_children_position;
+                    child_node->self_children_position = nodes[k]->self_children_position - 1;
+                    //child_node->self_children_position = nodes[k+1]->self_children_position;
                 }
             }
 
@@ -302,7 +321,7 @@ puts("Behavior: source_lora_ttn");
             printf("Child flow: "); print_float(child_water_flow,2); printf("\n");
 
 
-            float difference = fabs(child_water_flow - father_water_flow);
+            float difference = child_water_flow - father_water_flow;
 
             if (difference > LEAKAGE_THRESHOLD) {
                 char* water_leakage = malloc(5*sizeof(char));
