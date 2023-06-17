@@ -34,7 +34,7 @@ We wish to evaluate the power consumption of MCUs that are not attached to a pow
 
 ## Algorithms Performances
 
-### Water leak detection Algorithm
+### Water leak detection Algorithm Problems
 Before designing a water leak detection algorithm, we focused on the dynamics of water in pipes. Since we are dealing with an irrigation system, a reasonable assumption is to consider **water in pipes under pressure**. It means that there are never empty pipes. Now, we can have two conditions, either stationary water or moving water, due to the increasing pressure at the source during irrigation time. This means that we can ignore the specific condition when doing a test, because the difference between adjacent flows will be bounded in both cases if there is no leakage, and not bounded otherwise. The detection algorithm starts from the source and propagates through the tree topology, always with the same logic for every father-child pair. The father sends water flow information to the child, which makes a proper computation and compares the obtained value with the received one, using a specific threshold. In case of leakage detection, it will communicate the leakage to the cloud through the LoRa gateway.
 
 One of the main problems related to the test is related to synchronization, because of the delay related to transmission latency. We thought about an handshaking approach to take into account this discrepancy and to compare water flows starting the sampling process at two close moments.
@@ -55,9 +55,12 @@ About the Hanshake algorithm, it is perfect to detect the leakage and the trend 
 ![h1](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_test1.png)
 ![h2](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_test2.png)<br/>
 
-In the end, about the syncAck algorithm, it is possible to see the same trend of the handshake algorithm but with one less message. 
+In the end, about the syncAck algorithm, it is possible to see the same trend of the handshake algorithm but with one less message. There is also here the error of the turbines.
 ![s1](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_test1.png)<br/>
 ![s2](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_test2.png)<br/>
+
+### Water leak detection Algorithm Solutions
+After several tests, we have found that one water flow sensor has some problems and detect less
 
 ### Water leak detection Threshold
 We have done some analysis to set a correct threshold in our algorithms to limit the presence of false positives and false negatives. We have also thought that a false negative is more serious than a false positive, and so our system will be prone to false positives.<br/>
