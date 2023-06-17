@@ -36,8 +36,10 @@ function dataLoading(parsed_data){
   const parsed_flow_data = JSON.parse(flow_data);
   const parsed_leakage_data = JSON.parse(leakage_data);
 
+  const n = Math.min(parsed_flow_data.length, 10);
+
   // Flow data processing
-  for (let i = 0; i < parsed_flow_data.length; i++) {
+  for (let i = 0; i < n; i++) {
 
     const datetime = parsed_flow_data[i]["Datetime"];
     // Convert sample time to Locale format
@@ -52,10 +54,9 @@ function dataLoading(parsed_data){
   }
 
   var processed_children = [];
-  const n = Math.min(parsed_leakage_data.length,10);
 
   // Leakage data processing
-  for (let i = 0; i < n; i++) {
+  for (let i = 0; i < parsed_leakage_data.length; i++) {
     const child = parsed_leakage_data[i]["Child"];
 
     if (!(processed_children.includes(child))) {
@@ -69,7 +70,7 @@ function dataLoading(parsed_data){
       var date = datetime.toLocaleString(); 
 
       // Father-child pair generation
-      value = ("Pair: ").concat(father.slice(-2)).concat("-").concat(child.slice(-2)).concat(" Time: ").concat(date.slice(-8));
+      value = ("Pair: ").concat(father.slice(-2)).concat("-").concat(child.slice(-2)).concat(" Time: ").concat(date);
       
       // Add value to values_x array
       x_values_leakage.push(value); 
