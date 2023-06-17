@@ -86,7 +86,10 @@ The syncAck is worse than the handshake but it uses one less message. Beacuse th
 
 ### Turbine error
 Another significant error of the architecture is the instrumental error of the water flow sensor. Because of we have not another turbine with the correct value of the water flow or other instruments, we have run the system for several tests and we have analysed the difference between the values of Source and Son. We have observed the difference because the water flow before our application is not costant (decided by the public pipeline). It is important to observ that this error is influenced by the algorithmic error too.
-![err](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/error.png)<br/>
+![h3AB](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_error_AB_3s.png)
+![h3BA](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_error_BA_3s.png)
+![s3AB](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_error_AB_3s.png)
+![s3BA](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_error_BA_3s.png)<br/>
 The system is proned to have the Son with an higher water flow value, if you put turbine A before turbine B, but this happens because the turbine A is less efficient. <br/>
 For our prototype and with a distance of 90cm between the nodes, based on the consideration of the several approssimations, We have initially fought to put a threshold of 1 L/min, but then we have done more considerations.<br/>
 We have first set a fixed scenario: 
@@ -105,9 +108,17 @@ With the analysis of the algorithmic error done before, we thought that an highe
 The first line is not relevant because there are not enough data and are not distributed well.<br/>
 Then, it is possible to note that the difference is not caused by the different time of sampling, but by the different water flow rate: this lead to say that the main error is the error of the turbines and not the error of the algorithm. <br/>
 So, we can decide to use the syncAck algorithm knowing that it uses one message less, not keeping in mind that the handshake algorithm is more efficient in the algorithmic error (matematically). <br/>
-We have analysed these data to fix a threshold for the detection of the leakages:
-
-
+![](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/Comparison_error_syncAck_3s.png)
+![](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/Comparison_error_syncAck_3s_1.png)
+![](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/Comparison_error_syncAck_5s.png)
+![](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/Comparison_error_syncAck_5s_1.png)
+![](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/Comparison_error_syncAck_9s.png)
+![](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/Comparison_error_syncAck_9s_1.png)<br/>
+We have analysed these data to fix a threshold for the detection of the leakages, and we have done the mean of (flowSource-flowSon)x100/flowSource %:
+* 3s -> 4,29%
+* 5s -> 6,34%
+* 9s (done 9s and not 10s because of a problem of MQTT) -> 4,30% <br/>
+We have decide to take 10s for the sampling and this will be similar to 9s result, so in this situation we can put a **fixed threshold of > 2L/min** or **dynamic threshold flowSource-flowSon > 5% flowSource L/min**. The dynamic threshold is more efficient because it is more accurate in the lower water flow rate.
 
 ### Energy consumption
 Our requirement is not to tolerate a water loss of more than one day, so we wish to detect a leakage within 24 h. Now, since the leakage is an unpredictable event, we cannot define a precise strategy apriori, but we want to indentify the best one in order to minimize power consumption. We compute this strategy analitically. Firstly, for simplicity, we focus on a simple father-child pair, since the same reasoning holds for every adjacent pair of nodes of the tree topology. Now, we define x as the send rate (msg/day) of the father, so the number of messages sent per day, and y as the total listen interval of the child (in hours/day). In order to be sure to correctly listen to at least one message in one day, y should be equal to (24/x + epsilon) hours/day, where epsilon is a neglectable time interval if compared with 24/x hours. Computing the energy consumption, there are three contributions, one related to the sender, one to the receiver and one to the exchange of messages linked to the leakage detection algorithm, so both for synchronization and test. This last component can be omitted in our considerations because it is not influenced by the choice of x, which we wish to know. So, the total energy consumption is given by:
