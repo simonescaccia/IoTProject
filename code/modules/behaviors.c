@@ -200,10 +200,11 @@ puts("Behavior: source_lora_ttn");
             node->children_count = 0;
             if (right) {
                 node->self_children_position = 1;
+                right = 0;
             }
             else {
                 node->self_children_position = 0;
-            } 
+            }
 
             /* Default: FORK node type */
             node->node_type = 2;
