@@ -104,6 +104,8 @@ puts("Behavior: source_lora_ttn");
     node_t** nodes = NULL;
     int node_count = 0;
 
+    int right = 0;
+
     /* Retrieving node information from topology pairs */
     /* Do not consider first pair */
     for (int i = 1; i < pair_count; i++) {
@@ -181,6 +183,14 @@ puts("Behavior: source_lora_ttn");
 
         if (!node_2_in) {
 
+            for (int w = 0; w < node_count; w++) {
+                if (strcmp(nodes[w]->node_self, node_name_1) == 0) {
+                    if (nodes[w]->children_count == 2) {
+                        right = 1;
+                    }
+                }
+            }
+
             node_count++;
             nodes = realloc(nodes, node_count*sizeof(node_t*));
             node_t* node = malloc(sizeof(node_t));
@@ -188,7 +198,12 @@ puts("Behavior: source_lora_ttn");
             node->node_self = malloc(length +1);
             strcpy(node->node_self, node_name_2);
             node->children_count = 0;
-            node->self_children_position = 0; 
+            if (right) {
+                node->self_children_position = 1;
+            }
+            else {
+                node->self_children_position = 0;
+            } 
 
             /* Default: FORK node type */
             node->node_type = 2;
