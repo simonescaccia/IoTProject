@@ -60,7 +60,7 @@ function dataLoading(parsed_data){
   var processed_children = [];
 
   // Leakage data processing
-  for (let i = 0; i < parsed_leakage_data.length; i++) {
+  for (let i = parsed_leakage_data.length - 1; i > -1; i--) {
     const child = parsed_leakage_data[i]["Child"];
 
     if (!(processed_children.includes(child))) {
