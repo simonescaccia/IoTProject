@@ -95,7 +95,7 @@ We have first set a fixed scenario:
 Then, we have done a lot of tests changing time of sampling and water flow rate. <br/>
 With the analysis of the algorithmic error done before, we thought that an higher sampling was more accurate but the data has not shown this. The tests are done with the use of the syncAck, the table below shows the error rate for the different situation: <br/>
 
-|Water flow rate| 3s | 5s | 10s |
+|flow x time| 3s | 5s | 10s |
 |--- |--- |--- |--- |
 | 0-30 L/min | 0.84 L/min | 0.49 L/min | 0.74 L/min |
 | 0-10 L/min | 0.14 L/min | 0.29 L/min | 0.13 L/min |
