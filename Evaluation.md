@@ -81,6 +81,7 @@ Looking at the number of impulses per minute in the datasheet, that is 541 impul
 This error represents the possibility of a changing in the water flow rate before the Source<br/>
 x = 0,38% -> imp/10s = 0,38% * 90 = 0,34imp -> flow = L/min = 0,34 * 30L / 541imp = 0,019 L/min <br/>
 y = 1,80% -> imp/10s = 1,80% * 90 = 1,62imp -> flow = L/min = 1,62 * 30L / 541imp = 0,09 L/min <br/>
+
 The syncAck is worse than the handshake but it uses one less message. Beacuse the instrumental error is higher, as we will see, the thing that is significant is the number of messages and so the syncACK will be the final algorithm of our application.<br/>
 <br/> *It is possible to improve the algorithms using correctly a 'sleep' for some milliseconds; but, because the standard deviation is high, more data are needed to be accurate.*
 
@@ -98,7 +99,7 @@ We have first set a fixed scenario:
 Then, we have done a lot of tests changing time of sampling and water flow rate. <br/>
 With the analysis of the algorithmic error done before, we thought that an higher sampling was more accurate but the data has not shown this. The tests are done with the use of the syncAck, the table below shows the error rate for the different situation: <br/>
 
-|flow x time| 3s | 5s | 10s |
+|flow x time| 3s | 5s | 9s |
 |--- |--- |--- |--- |
 | 0-30 L/min | 0.84 L/min | 0.49 L/min | 0.74 L/min |
 | 0-10 L/min | 0.14 L/min | 0.29 L/min | 0.13 L/min |
