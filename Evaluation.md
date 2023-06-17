@@ -78,6 +78,7 @@ To find the error of the two algorithm we have to decide the time of testing: no
 If we put the time of the test at 10s, we have that 0,038 : 10 = x : 100 and that 0,180 : 10 = x : 100. So, influence of handshake is x = 0,38% , while influence of syncAck is y = 1,8% .
 Looking at the number of impulses per minute in the datasheet, that is 541 impulses/min, we can find the error of impulses derived by the percentage.<br/>
 541imp / 60s and 30L / 60s -> 30L / 541imp <br/>
+SONO SOLO POSSIBILI NON CERTI
 x = 0,38% -> imp/10s = 0,38% * 90 = 0,34imp -> flow = L/min = 0,34 * 30L / 541imp = 0,019 L/min <br/>
 y = 1,80% -> imp/10s = 1,80% * 90 = 1,62imp -> flow = L/min = 1,62 * 30L / 541imp = 0,09 L/min <br/>
 The syncAck is worse than the handshake but it uses one less message. Beacuse the instrumental error is higher, as we will see, the thing that is significant is the number of messages and so the syncACK will be the final algorithm of our application.<br/>
