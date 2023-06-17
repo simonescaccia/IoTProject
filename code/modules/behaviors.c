@@ -248,7 +248,7 @@ puts("Behavior: source_lora_ttn");
 
         for (int w = 0; w < pair_count; w++) {
             int length = strlen(pairs_copy[w]);
-            pairs[w] = malloc(length + 1);
+            pairs[w] = realloc(pairs[w], length + 1);
             strncpy(pairs[w], pairs_copy[w], length + 1);
         }
 
@@ -305,8 +305,6 @@ puts("Behavior: source_lora_ttn");
             /* Get water flow value */
             float father_water_flow = get_water_flow(father_node->node_type, father_node->self_children_position, s_time);
             float child_water_flow = get_water_flow(child_node->node_type, child_node->self_children_position, s_time);
-            printf("Father flow: "); print_float(father_water_flow,2); printf("\n");
-            printf("Child flow: "); print_float(child_water_flow,2); printf("\n");
 
             float difference = father_water_flow - child_water_flow;
 
