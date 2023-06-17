@@ -142,7 +142,6 @@ puts("Behavior: source_lora_ttn");
                 node_1_in = 1;
 
                 nodes[k]->children_count++;
-                nodes[k]->self_children_position = nodes[k]->children_count;
 
             }
             if (strcmp(nodes[k]->node_self,node_name_2) == 0) {
@@ -160,8 +159,7 @@ puts("Behavior: source_lora_ttn");
             node->node_self = malloc(length + 1);
             strcpy(node->node_self, node_name_1);
             node->children_count = 1;
-            node->self_children_position = node->children_count; 
-
+            node->self_children_position = 0;
             if (i == 1) {
                 /* CHIEF node type */
                 node->node_type = 1;
@@ -190,7 +188,7 @@ puts("Behavior: source_lora_ttn");
             node->node_self = malloc(length +1);
             strcpy(node->node_self, node_name_2);
             node->children_count = 0;
-            node->self_children_position = node->children_count; 
+            node->self_children_position = 0; 
 
             /* Default: FORK node type */
             node->node_type = 2;
@@ -226,7 +224,7 @@ puts("Behavior: source_lora_ttn");
 
     while(1) {
         /* Sampling time update */
-        s_time++;
+        s_time += 3;
 
         /* Get water flow value */
         float value = get_water_flow(node.node_type, 0, s_time);
@@ -310,8 +308,7 @@ puts("Behavior: source_lora_ttn");
             printf("Father flow: "); print_float(father_water_flow,2); printf("\n");
             printf("Child flow: "); print_float(child_water_flow,2); printf("\n");
 
-
-            float difference = child_water_flow - father_water_flow;
+            float difference = father_water_flow - child_water_flow;
 
             if (difference > LEAKAGE_THRESHOLD) {
                 char* water_leakage = malloc(5*sizeof(char));
