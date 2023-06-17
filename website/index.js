@@ -36,10 +36,14 @@ function dataLoading(parsed_data){
   const parsed_flow_data = JSON.parse(flow_data);
   const parsed_leakage_data = JSON.parse(leakage_data);
 
-  const n = Math.min(parsed_flow_data.length, 10);
+  // Select last 10 values if there are more than 10
+  var start = 0;
+  if (parsed_flow_data.length > 10) {
+    start = parsed_flow_data.length - 10;
+  }
 
   // Flow data processing
-  for (let i = 0; i < n; i++) {
+  for (let i = start; i < parsed_flow_data.length; i++) {
 
     const datetime = parsed_flow_data[i]["Datetime"];
     // Convert sample time to Locale format
