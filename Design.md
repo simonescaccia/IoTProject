@@ -45,6 +45,8 @@ Data are stored on AWS for long term storage. These data can then be queried by 
 
 ## How to detect a leakage
 
+As a first step, we hava to reason about our principal requirement, leakage detection. In particular, we need to do a feasibility study about how to detect a leakage in a pipeline first, and then how to detect it in a distributed system. The following images show our reasoning process.
+
 ![no_leakage](./images/HowToDetectLeakages-No_leakage_situations.drawio.png)
 ![leakage](./images/HowToDetectLeakages-Leakage_situations.drawio.png)
 ![distributed_problem](./images/HowToDetectLeakages-Distributed_system_leakage_problem.drawio.png)
@@ -84,7 +86,6 @@ We started from a 1,5 meters long garden hose with an inner diameter of 20 mm an
 The tap is used to simulate a leakage and it is initially closed. We did not use clamps at first, but we experienced water leaks in correspondence of joints. Therefore we placed 2 clamps at the endpoints of each water flow sensor and other 2 for the endpoints of the T-adapter not connected to the tap.
 Source node and Son node are 90cm apart.
 
-
 ## Network architecture
 
 ![network](./images/network.jpg)
@@ -98,31 +99,24 @@ The AWS architecture shows both the link with the cloud of the prototype and the
 
 ### Water leakage detection algorithm
 
-This is the communication scheme between IoT elements, Edge components, and Cloud components, related to the algorithm for the leakage detection.
+In the following we describe the communication scheme between IoT elements, Edge components, and Cloud components, related to the algorithm for the leakage detection.
 
-We analyse the water flow for each segment, intended as the pipe between two adjacent water flow sensors. Output water flows at fork site will be evaluated according to given paramters as pipe length or slope.
-
-Algorithm idea (CHIEF duty cycle):
-
-(DUE_TEST is set to true every 24 hours, NO_TEST is initialized to 0)
-
-1. If flag DUE_TEST is set or NO_TEST is set, CHIEF checks if there is water flow (regular water usage monitoring).
-2. If there is a water flow, it starts the test and sets the flags to 0.
-3. If there is not a water flow, it sets NO_TEST.
+We analyse the water flow independently for each segment, intended as the pipe between two adjacent water flow sensors. Given a segment, we will call the node near the water source as 'parent' and the other one as 'child'.
+Output water flows at fork site will be evaluated according to given paramters as pipe length or slope.
 
 Test algorithm:
 
-1. Node MCU sends water flow value to its children.
-2. If it is a FORK, child MCU computes expected values of water flow
+1. Node MCU sends water flow value to its children, if any.
+2. If it is a FORK, child MCU computes expected values of water flow, by summing the values of its sensors.
 3. Child MCU compares received value with its own value.
-4. In case of error, child sends an alert to the cloud.
+4. In case of leakage, child sends an alert to the cloud.
 
 We have tried 3 different algorithms for allow a correct and synchronized test between two diffent nodes. The three algorthms are:
 
 * Ack
 * Handdshake
 * SyncAck
-All the algorithms are available in the directory "code-prototype".
+All the algorithms are available in the directory "code-prototype"
 
 #### Ack
 
@@ -160,9 +154,8 @@ In the evaluetion part, it is available the different analysis on the data.
 
 ### Assumptions
 
-The simulation aims to detect leakages in a scalable distributed infrastructure, while the prototype focus on detecting leakages for a single pipe. For this reason, we have made some assumptions:
+The simulation aims to detect leakages in a scalable distributed infrastructure, while the prototype focus on detecting leakages for a single pipe. For this reason, in the simulation we have made some assumptions:
 
-* A code function simulates samples to avoid false positives, delays in message propagation, and all the problems discussed in the prototype. Instead, we will use a logic time to simulate the sampling at the same time.
+* A code function simulates samples to avoid delays in message propagation, false positives, and all the problems discussed in the prototype. Instead, we will use a logic time to simulate the sampling at the same time.
 * Forks on a pipe will divide the water flow into equal parts.
 * Since we are simulating samples, we can set the threshold for leakages to 0.
-
