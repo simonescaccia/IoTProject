@@ -52,16 +52,6 @@ LoRa is a suitable technology for different reasons:
 * We thought about the best battery lifetime for our MCUs and our conclusion was to reason over the needed sampling cycles and the utilization period of the system. So, 1 year of battery life was considered as a good option.
 * We also thought about the possibility to recover energy from water flow sensor dynamics, for example with a dynamo. However, this solution was not feasible for our hardware because of the impossibility to access to the enclosed rotor in a proper way.
 
-## Simulation
-
-We built a simulation infrastructure on IoT-LAB, to provide a large-scale irrigation water leakage system and to test distributed interaction between MCUs. The communication between nodes is implemented using LoRaMAC, while LoRaWAN and TheThingsNetwork are used to send data to the cloud. Also, we will use this simulation to makes some experiments on energy consumpion using the IoT-LAB monitoring tool.
-
-## Prototype
-
-We construct a real prototype to demonstrate the working principle of the system. It is made up of a linear pipe and two MCUs located at its endopoints, with a water flow sensor for each one, together with a water source and an intermediate valve used to simulate a leakage.
-
-Unfortunately, we found some problems working with LoRa with our chosen ESP32, even if it should be officially supported by RIOT. So, in order to overcome this issue, we decided to switch to WiFi technology only for demonstating purposes. The idea is that when LoRa issue will be hopefully solved soon our project can be adapted with minor changes. Even if we will not obiouvsly have the same performance of LoRa, the procedure of evaluation is identical.
-
 ## HOW WE HAVE WORKED
 We have created three subtopic, you can see all this work in [Design](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/Design.md) and [Evaluation](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/Evaluation.md):
 1. Prototype:
