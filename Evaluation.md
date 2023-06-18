@@ -206,7 +206,7 @@ So, for a year:
 $$E_{tot} = E_{tot} \cdot 365 = 2492.22 Wh$$
 
 Here, we have used the power of the sleep of Iot-Lab and indeed the consumption is huge, but in the datasheet of the ESP32 there is the Hibernation Mode whose consumption is 
-P_{sleep_esp32} $$ ~5µA \cdot 5V = 0.000025 W $$
+$$P_{sleep_esp32} $$ ~5µA \cdot 5V = 0.000025 W $$
 $$E_{tot} \approx (0.001391014 Wh) + (0.78 Wh) + (0.000025 W \cdot 21.6 h) Wh \approx 0.78 Wh $$
 So, for a year:
 
