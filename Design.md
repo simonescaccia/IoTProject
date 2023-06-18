@@ -162,6 +162,8 @@ In the evaluetion part, it is available the different analysis on the data.
 
 ## Simulation
 
+We built a simulation infrastructure on IoT-LAB, to provide a large-scale irrigation water leakage system and to test distributed interaction between MCUs. The communication between nodes is implemented using LoRaMAC, while LoRaWAN and TheThingsNetwork are used to send data to the cloud. Also, we will use this simulation to makes some experiments on energy consumpion using the IoT-LAB monitoring tool.
+
 ### Assumptions
 
 The simulation aims to detect leakages in a scalable distributed infrastructure, while the prototype focus on detecting leakages for a single pipe. For this reason, in the simulation we have made some assumptions:
