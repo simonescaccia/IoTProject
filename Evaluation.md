@@ -193,6 +193,7 @@ So the send rate of the father should be 10 messages/day, hence the listen time 
 $$y = \frac{24}{x} = \frac{24}{10} = 2.4 \frac{hours}{day}$$
 
 #### Estimation of system duration
+
 To analyse the duration of our system, we must also consider other energy contributions, mainly the measurement, the sleep and the cloud transmission energy consumptions. We considered the daily worst case, so the case of an intermediate node that measures and sends data to child, 10 times in the worst case, listens for 2.4 hours, receives data from the father once and sends once to the cloud the difference with father water flow. In our analysis,
 
 $$E_{cloud} \approx E_{trans}$$
@@ -236,13 +237,13 @@ $$E_{tot} = E_{tot} \cdot 365 = 2.56 Wh$$
 
 Now, with a battery of 1000 mAh (3.7 V) that gives us 3.7 Wh, we can power the device for at leat one year, that is our user requirement.
 
-
 ### Monitoring of the water flow Algorithm
 
 From the CHIEF MCUs, send periodically a message to the cloud to update the water flow consumed.
 Performances depends on the latency between the cloud and the MCUs.
 
-## Water flow sensor for energy harvesting
+### Water flow sensor for energy harvesting
+
 This water flow sensor can not create energy for our batteries beacuse the electronic part is not connected to the turbine, it is only connected to the Hall Effect sensor.
 
 To allow the harvesting of the energy, we should have an alternator connected to the turbine to transform the mechanical energy into electrical energy.
@@ -259,3 +260,27 @@ We have analysed if there is the possibility to charge the device using this tur
 The generator ideally can charge the device and the sensor beacuse it gives 10 W and they need 1,25 W. Other analysis should be done to know the daily water flow and relative energy produced.<br/>
 
 So the system can be changed creating an algorithm that wake up the node only when there is water flow and so when there is energy. In this way, there will be a relationship between the number of sampling and the water flow rate in a day. The energy obtained by the Micro Water Turbine Hydro Generator can be also stored in a battery to allow the node to wake up in other occasions (this is not our situation because we are interested only when there is water flow).
+
+### Simulation energy consumption experiments
+
+In order to understand better the monitoring profile of IoT-Lab, we have done some experiments:
+
++ As a first exeriment we have launched an experiment without flashing the firmware to understand the minimum energy consumption of the node.
+
+![no_firmware](./energy_consumption/1-No-firmware-flash.png)
+
++ Then we have flashed the firmware and we have launched an experiment with an empty main, and we observe a single peek of energy consumption.
+
+![flash](./energy_consumption/2-Flash-empty-main.png)
+
++ After that, we have questioned about the consumption of the sleep mode, so we have launched an experiment with a main that only sleep for 300 seconds and then we have observed the consumption of the sleep mode. We have observed that the sleep mode is like the no flash firmware graph.
+
+![sleep](./energy_consumption/3-xtimer_sleep(300)-example.png)
+
++ We say in the above section the energy consumption of LoRa listening and transmitting.
+
++ Finally we have put all together and we have launched an experiment implementing a duty cycle for all the three node types (CHIEF, FORK and BRANCH).
+
+![chief](./energy_consumption/9-Lora-p2p-CHIEF-dutyCycle-60sec-1day-3invii.png)<br> <br>
+![fork](./energy_consumption/8-Lora-p2p-FORK-dutyCycle-60sec-1day-3invii-crash-riavvio-padre-a-meta.png)<br> <br>
+![branch](./energy_consumption/7-Lora-p2p-BRANCH-dutyCycle-60sec-1day-3invii.png)<br> <br>
