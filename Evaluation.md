@@ -44,17 +44,17 @@ One of the main problems related to the test is related to synchronization, beca
 The complexity will change depending on the number of FORKs, and we will compare variuous topologies in order to find the best one.
 
 The three algorithms proposed in the design phase have been tested. The test of the Ack algorithm has shown that there is a problem in the code (caused by the use of threads in the program) and that the water flow before our system (that we consider always present) is not stable and this issue has to be solved by the synchronization algorithm. 
-The problem of stability of the initial water flow can be seen in the following image in which there is a segmentation of the lines of the graph.
+The problem of stability of the initial water flow can be seen in the following image in which there is a segmentation of the lines of the graph.<br/>
 ![ack](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/ack_flow.png) <br/>
-About the Ack algorithm, it is possible to notice that it is good to detect a leakage but it says that the water flow of the Son is always higher than the water flow of the Source, and this can lead to error, so it is not the worst algorithm implemented.
-![ack1](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/ack_test1.png)
+About the Ack algorithm, it is possible to notice that it is good to detect a leakage but it says that the water flow of the Son is always higher than the water flow of the Source, and this can lead to error, so it is not the worst algorithm implemented.<br/>
+![ack1](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/ack_test1.png)<br/>
 ![ack3](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/ack_test3.png)<br/>
 
-About the Hanshake algorithm, it is perfect to detect the leakage and the trend of the Son higher than the Source is disappeared. There still is an error of the turbines, that we will face in the next chapter.
-![h1](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_test1.png)
+About the Hanshake algorithm, it is perfect to detect the leakage and the trend of the Son higher than the Source is disappeared. There still is an error of the turbines, that we will face in the next chapter.<br/>
+![h1](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_test1.png)<br/>
 ![h2](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_test2.png)<br/>
 
-In the end, about the syncAck algorithm, it is possible to see the same trend of the handshake algorithm but with one less message. There is also here the error of the turbines.
+In the end, about the syncAck algorithm, it is possible to see the same trend of the handshake algorithm but with one less message. There is also here the error of the turbines.<br/><br/>
 ![s1](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_test1.png)<br/>
 ![s2](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_test2.png)<br/>
 
