@@ -59,17 +59,13 @@ function dataLoading(parsed_data){
 
   var processed_children = [];
 
-  // Leakage data processing
+    // Leakage data processing
   for (let i = parsed_leakage_data.length - 1; i > -1; i--) {
     const child = parsed_leakage_data[i]["Child"];
 
     if (!(processed_children.includes(child))) {
-      
-      processed_children.push(child);
 
-      const father = parsed_leakage_data[i]["Father"]; 
-
-      const datetime = new Date(parsed_leakage_data[i]["Datetime"]);
+      const datetime = parsed_leakage_data[i]["Datetime"];
       // Convert sample time to Locale format
       var date = datetime.toLocaleString(); 
 
@@ -78,10 +74,12 @@ function dataLoading(parsed_data){
       var yesterday = new Date(Date.now() - 86400000);
       yesterday = yesterday.toLocaleString().substring(0,10);
 
-      if (date.substring(0,10) != today && date.substring(0,10) != yesterday) {
-        continue;
-      }
-      else {
+      if (date.substring(0,10) == today || date.substring(0,10) == yesterday) {
+
+        processed_children.push(child);
+
+        const father = parsed_leakage_data[i]["Father"]; 
+
         // Father-child pair generation
         value = ("Pair: ").concat(father.slice(-2)).concat("-").concat(child.slice(-2)).concat(" Time: ").concat(date);
         
