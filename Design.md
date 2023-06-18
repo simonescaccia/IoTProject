@@ -178,18 +178,18 @@ The minimal architecture of the system should be the following:
 
 ![simulation_goal](./images/Simulation-Goal.drawio.png)
 
-Node configuration:
+Node configuration
 
 * Due to the fact that the firmware is distributed, we need to use the same firmware for all the nodes. For this reason, we need to build a configuration file named config.c that can be used for all the nodes, to understand which type of node is and who are its children.
 ![config_structure](./images/config_structure.png)
 * After flashing the firmware we need to assign an ID to each node compliant with the configuration file.
 ![config_command](./images/config_command.png)
 
-Parameters:
+Parameters
 
 * Since requirements want to detect leakages in a day, we have decided to simulate a day in 60 seconds. Also, we have introduced a parameter called NUMBER_OF_SENDING_PER_DAY that represents the number of samples sent by the node in a day, in order to implement the duty cycle. For the simplicity of the demo, we have set this parameter to 3 but the value for the real application it is discussed in the Evaluation page.
 
-Sample generator:
+Sample generator
 
 * The sample generator is a function that simulates the sampling of the water flow. Its aim is also to test the various leakage scenario discussed in the 'How to detect a leakge' paragraph.
 
@@ -202,7 +202,7 @@ Sample generator:
 * logic_time in [12, 14]: Simulate a LEAKAGE between the CHIEF and the FORK without water usage
 * logic_time in [15, 17]: Simulate a LEAKAGE between the FORK and a BRANCH without water usage
 
-Comunication protocols:
+Comunication protocols
 
 * The nodes communicate with each other using RIOT-OS Semtech SX127x radios drivers implementation, sending asynchronous messages containing the water flow value.
 * Each node sends leakage messages to The Things Network (TTN) using a RIOT adaption of Semtech LoRaMAC implementation.
@@ -214,4 +214,26 @@ So, our implementation is the following:
 
 ![simulation_implementation](./images/Simulation-Implementation.drawio.png)
 
-* Messages:
+Messages
+
+* Semtech SX127x radios drivers implementation allows to send messages of at most 32 bytes in broadcast mode. This implies that a node in the listen mode can receive messages from all the nodes in the range. For this reason, we have decided to use a message structure that contains the following information:
+
+  * The app id: 0000
+  * The id of sender node
+  * The id of receiver node
+  * A flag that indicates if the message is a value
+  * The value of the water flow
+  * The logic time
+
+* When a node receives a message, it checks if the message is sent by our infrustructure and if the message is directed to it.
+* We have observed that RIOT SX127x drivers fails to handle messages with a payload higher than 32 bytes which causes a stack overflow and the crash of the node. That's a critical problem because messages sent by external nodes can cause the crash of our infrastructure.
+
+Radio
+
+* The radio can't be used to send a message and listen at the same time. Then, with a certain probability that increases with the number of sending messages per day, during the message transmission, incoming messages can be lost.
+
+### Open Issues
+
+* Integration of lora sx127x drivers for p2p communication and loramac for ttn communication.
+* Using real samples instead of simulated ones.
+* Crash of the node when receiving messages with a payload higher than 32 bytes.

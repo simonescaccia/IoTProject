@@ -24,7 +24,7 @@ const int COMMA_NUMBERS = 5;
 
 
 /**
- * @brief Return the message to send by lora p2p, using the following formatting: <0000 app_id>,<node from>,<node to>,<L for leakage or V for value>,<value>
+ * @brief Return the message to send by lora p2p, using the following formatting: <0000 app_id>,<node from>,<node to>,<V for value>,<value>
  * Maximum lenght of the payload is 31, since the maximum lenght of the lora message is 32
  * 5 comma chars, 2 chars for from and to, 4 chars for the APP_ID, 1 char for leakage info, 13 chars for the value, 4 chars for the logic time
  * 
