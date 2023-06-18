@@ -59,33 +59,31 @@ In the end, about the syncAck algorithm, it is possible to see the same trend of
 ![s2](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_test2.png)<br/>
 
 ### Water leak detection Algorithm Solutions
-After several tests, we have found that one water flow sensor has some problems and detect less
+After several tests, we have found that one water flow sensor has some problems and detect less impulses.
 
 ### Water leak detection Threshold
 We have done some analysis to set a correct threshold in our algorithms to limit the presence of false positives and false negatives. We have also thought that a false negative is more serious than a false positive, and so our system will be prone to false positives.<br/>
-We have analysed the time of the Handshake and SyncAck algorithm to understand the error that can be created and to use this values for the calucus of the energy consumption.
-We have analysed that the standard deviation is high and this means that there is a large distribution of the data, in particular this means that the time taken by the messages and the code is fluctuating. Looking at the scheme, it is possible to understand the time of the messages and also the quality of the synchronization of the algorithms. <br/>**Hanshake**<br/>
-![s](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/handshake_time1.png)<br/>
-Here there are 0,476s in the Son between the end of the test and the arrival of the value of the Source, knowing that in average the message takes 0,457s from the sender to the receiver, this means that the Source has ended the test 0,019s before the Son. We double it (also for the difference in starting time) and we obtain 0,038s.
-
+We have chosen the syncAck as the final algorithm because it uses one message less.
+We have analysed the time of the SyncAck algorithm to understand the error that can be created and to use this values for the calucus of the energy consumption.
+We have analysed that the standard deviation is high and this means that there is a large distribution of the data, in particular this means that the time taken by the messages and the code is fluctuating. Looking at the scheme, it is possible to understand the time of the messages and also the quality of the synchronization of the algorithms.
 <br/>**SyncAck**<br/>
 ![s](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/syncAck_time1.png)<br/>
 Here there are 0,462(message) + 0,374(difference) in the Son between the end of the test and the arrival of the value of the Source, knowing that in average the message takes 0,462s from the sender to the receiver, this means that the Source has ended the test 0,090s before the Son. We double it (also for the difference in starting time) and we obtain 0,180s. 
 
 <br/>**Difference**<br/>
 To find the error of the two algorithm we have to decide the time of testing: now is 3s but if we increase it, the influence of the error derived by the synchronization problem is less.
-If we put the time of the test at 10s, we have that 0,038 : 10 = x : 100 and that 0,180 : 10 = x : 100. So, influence of handshake is x = 0,38% , while influence of syncAck is y = 1,8% .
+If we put the time of the test at 10s, we have that 0,180 : 10 = x : 100. So, influence of syncAck is y = 1,8% .
 Looking at the number of impulses per minute in the datasheet, that is 541 impulses/min, we can find the error of impulses derived by the percentage.<br/>
 541imp / 60s and 30L / 60s -> 30L / 541imp <br/>
 This error represents the possibility of a changing in the water flow rate before the Source<br/>
-x = 0,38% -> imp/10s = 0,38% * 90 = 0,34imp -> flow = L/min = 0,34 * 30L / 541imp = 0,019 L/min <br/>
 y = 1,80% -> imp/10s = 1,80% * 90 = 1,62imp -> flow = L/min = 1,62 * 30L / 541imp = 0,09 L/min <br/>
 
-The syncAck is worse than the handshake but it uses one less message. Beacuse the instrumental error is higher, as we will see, the thing that is significant is the number of messages and so the syncACK will be the final algorithm of our application.<br/>
-<br/> *It is possible to improve the algorithms using correctly a 'sleep' for some milliseconds; but, because the standard deviation is high, more data are needed to be accurate.*
+Beacuse the instrumental error is higher, as we will see, the thing that is significant is the number of messages and so the syncACK will be the final algorithm of our application.<br/>
+
+*It is possible to improve the algorithms using correctly a 'sleep' for some milliseconds; but, because the standard deviation is high, more data are needed to be accurate.*
 
 ### Turbine error
-Another significant error of the architecture is the instrumental error of the water flow sensor. Because of we have not another turbine with the correct value of the water flow or other instruments, we have run the system for several tests and we have analysed the difference between the values of Source and Son. We have observed the difference because the water flow before our application is not costant (decided by the public pipeline). It is important to observ that this error is influenced by the algorithmic error too.
+Another significant error of the architecture is the instrumental error of the water flow sensor. Because of we have not another turbine with the correct value of the water flow or other instruments, we have run the system for several tests and we have analysed the difference between the values of Source and Son. We have observed the difference because the water flow before our application is not costant (decided by the public pipeline). It is important to observ that this error is influenced by the algorithmic error too. We have taken in consideration also the handshake algorithm.
 ![h3AB](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_error_AB.png)
 ![h3BA](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_error_BA.png)
 ![s3AB](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_error_AB.png)
@@ -107,7 +105,7 @@ With the analysis of the algorithmic error done before, we thought that an highe
 
 The first line is not relevant because there are not enough data and are not distributed well.<br/>
 Then, it is possible to note that the difference is not caused by the different time of sampling, but by the different water flow rate: this lead to say that the main error is the error of the turbines and not the error of the algorithm. <br/>
-So, we can decide to use the syncAck algorithm knowing that it uses one message less, not keeping in mind that the handshake algorithm is more efficient in the algorithmic error (matematically). <br/>
+So, we can decide to use the syncAck algorithm knowing that it uses one message less, not keeping in mind the algorithmic error. <br/>
 ![](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/Comparison_error_syncAck_3s.png)
 ![](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/Comparison_error_syncAck_3s_1.png)
 ![](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/Comparison_error_syncAck_5s.png)
