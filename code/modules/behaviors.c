@@ -477,9 +477,10 @@ void _check_leakage (node_t node, payload_t* payload) {
         str_difference[printed_chars] = '\0';
 
         /* Send a the leakage message to the source */
-        char* json[128];
+        char json[128];
         sprintf(json, "{\"Id\": \"leakage\", \"Child\": \"%s\", \"Father\": \"%s\", \"Leakage\": \"%s\"}", node.node_self, node.node_father, str_difference); 
-        printf("Sending message to TTN: %s\n\n", json);
+        printf("Sending the leakage message to TTN: ");
+        puts(json);
 
     } else {
         puts("No leakage detected\n");
