@@ -6,8 +6,7 @@ Our infrastructure is composed of:
 
 * ESP32 MCU with LoRa support for peer and cloud communication
 * Water flow sensor
-* LED
-* Buzzer
+* Led & Buzzer
 * Cloud system (AWS) to collect and store data
 
 ### ESP32
@@ -21,22 +20,15 @@ The ESP32 manages the different sensors and actuators in the infrastructure and 
 
 LoRa is a physical radio communication protocol, based on spread spectrum modulation techniques derived from chirp spread spectrum (CSS) technology. The protocol is supported by our chosen ESP32 MCUs, allowing a low power and long range communication between microcontrollers in order to accomplish distributed tasks.
 
-### Sensors
-
-#### Water flow sensors
+### Water flow sensors
 
 Water flow sensors are installed at the water source or pipes to measure the flow rate of water. The chosen metric for flow measurement is liters per minute. The structure of the sensor consists of a plastic valve (from which water can pass) and a water rotor along with a Hall effect sensor (a voltage difference is induced in the conductor due to the rotation of the rotor), measuring the sense and the intensity of the flow. When water flows through the valve, it causes a change of speed of the rotor, calculated as output as a pulse signal. The sensor is powered with a 5 V supply voltage of DC.
 
 Water flow sensors used for our protoype can be found [here](https://www.amazon.it/dp/B079QYRQT5?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 
-### Actuators
+### Led & Buzzer
 
-#### LED
-
-A LED is used to provide a visual alarm indication through blinking.
-
-#### Buzzer
-
+A LED is used to provide a visual alarm indication through blinking.</br>
 A buzzer is used to provide an acoustic alarm indication through intermitting activation.
 
 ### Cloud system
