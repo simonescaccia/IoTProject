@@ -118,17 +118,91 @@ We have analysed these data to fix a threshold for the detection of the leakages
 We have decide to take 10s for the sampling and this will be similar to 9s result, so in this situation we can put a **fixed threshold of > 2L/min** or **dynamic threshold flowSource-flowSon > 5% flowSource L/min**. The dynamic threshold is more efficient because it is more accurate in the lower water flow rate.
 
 ### Energy consumption
-Our requirement is not to tolerate a water loss of more than one day, so we wish to detect a leakage within 24 h. Now, since the leakage is an unpredictable event, we cannot define a precise strategy apriori, but we want to indentify the best one in order to minimize power consumption. We compute this strategy analitically. Firstly, for simplicity, we focus on a simple father-child pair, since the same reasoning holds for every adjacent pair of nodes of the tree topology. Now, we define x as the send rate (msg/day) of the father, so the number of messages sent per day, and y as the total listen interval of the child (in hours/day). In order to be sure to correctly listen to at least one message in one day, y should be equal to (24/x + epsilon) hours/day, where epsilon is a neglectable time interval if compared with 24/x hours. Computing the energy consumption, there are three contributions, one related to the sender, one to the receiver and one to the exchange of messages linked to the leakage detection algorithm, so both for synchronization and test. This last component can be omitted in our considerations because it is not influenced by the choice of x, which we wish to know. So, the total energy consumption is given by:
+Our requirement is not to tolerate a water loss of more than one day, so we wish to detect a leakage within 24 h. Now, since the leakage is an unpredictable event, we cannot define a precise strategy apriori, but we want to indentify the best one in order to minimize power consumption. We compute this strategy analitically. Firstly, for simplicity, we focus on a simple father-child pair, since the same reasoning holds for every adjacent pair of nodes of the tree topology. Now, we define x as the send rate (msg/day) of the father, so the number of messages sent per day, and y as the total listen interval of the child (in hours/day). 
+
+
+![dutycycle](./images/duty_cycle.png)
+
+
+In order to be sure to correctly listen to at least one message in one day, y should be equal to (24/x + epsilon) hours/day, where epsilon is a neglectable time interval if compared with 24/x hours. Computing the energy consumption, there are three contributions, one related to the sender, one to the receiver and one to the exchange of messages linked to the leakage detection algorithm, so both for synchronization and test. This last component can be omitted in our considerations because it is not relevant for our estimation of x, which we wish to know. So, the energy consumption to minimize is given by:
 
 
 $$E(x,y) = E(x) + E(y) + E(algorithm) \approx E(x) + E(y)$$
 
 The two components are: 
-$$E(x) = P_{trans} \cdot t_{trans} + (P_{on} \cdot t_{on}) \cdot x +(P_{off} \cdot t_{off}) \cdot x$$
+$$E(x) = (P_{trans} \cdot t_{trans}) \cdot x + (P_{on} \cdot t_{on}) \cdot x +(P_{off} \cdot t_{off}) \cdot x$$
 
 $$E(y) = P_{listen} \cdot y + P_{on} \cdot t_{on} + P_{off} \cdot t_{off}$$
 
-Our analysis is hence focused on finding the integer value of x (number of messages per day of the father) such that the total energy consumption is minimized. The listen time of the child will depends on x value. 
+Our analysis is hence focused on finding the integer value of x (number of messages per day of the father) such that the energy consumption is minimized. The listen time of the child will depends on x value. 
+
+In order to estimate the value of x to minimize energy consumption, we analysed some graphs from IoT-Lab simulation.
+First, we considered the transmission parameters of LoRa:
+
+![trans_energy](./energy_consumption/10-Lora-TTN-sending-one-message.png)
+
+The transmission time and power are:
+$$P_{trans} = (0.455 - 0.270) W = 0.185 W$$ 
+$$t_{trans} = (0.17 - 0.080) s = 0.090 s$$
+
+The effective transmission effectively starts at 0.085 seconds, however, we considered all the interval time where some variation is revealed. In this way we also considered the contribution of the energy for switching on and off the transmission. Hence:
+
+$$E(x) = (P_{trans} \cdot t_{trans}) \cdot x + (P_{on} \cdot t_{on}) \cdot x +(P_{off} \cdot t_{off}) \cdot x$$
+$$E(x) \approx (P_{trans} \cdot t_{trans}) \cdot x = (0.185 W) \cdot (0.090 s) \cdot x = 0.00765 J \cdot x$$
+
+The power consumption due to listening can be found analysing the listening process:
+
+![listen_energy](./energy_consumption/4-Lora-p2p-listen.png)
+
+So the average listening power is:
+
+$$P_{listen} = 0.325 W$$
+
+While the average sleeping power, useful for further considerations, is:
+
+$$P_{sleep} = 0.28 W$$
+
+Also, for this case, we do not consider the small constributions due to the a single on and a single off switching, so:
+
+$$E(y) = P_{listen} \cdot y + P_{on} \cdot t_{on} + P_{off} \cdot t_{off}$$
+$$E(y) \approx P_{listen} \cdot y $$
+
+So, the final analysis is on the function:
+
+$$E(x) + E(y) = 0.00765 \cdot x + (0.325 \cdot \frac{24}{x}) $$
+
+So the function to minimize is:
+
+$$f(x) = 0.00765 \cdot x + \frac{7.8}{x}$$
+
+The minimum of the function, considering the domain of $$x \geq 1$$
+because we have to send at least one message per day. Solving the function analytically, we found a global minimum for:
+
+$$x = 10.0976 \approx 10$$
+
+So the send rate of the father should be 10 messages/day, hence the listen time will be:
+
+$$y = \frac{24}{x} = \frac{24}{10} = 2.4 \frac{hours}{day}$$
+
+#### Estimation of system duration
+To analyse the duration of our system, we must also consider other energy contributions, mainly the measurement, the sleep and the cloud transmission energy consumptions. We considered the daily worst case, so the case of an intermediate node that measures and sends data to child, 10 times in the worst case, listens for 2.4 hours, receives data from the father once and sends once to the cloud the difference with father water flow. In our analysis,
+
+$$E_{cloud} \approx E_{trans}$$
+
+The energy of measurement has been computed from the prototype, since water flow values are simply simulated and not measured in IoT-Lab simulation. Hence:
+
+$$E_{measure} = P_{sensor} * t_{sampling} = (0.05W) \cdot (10 s) = 0.5 J$$
+
+Daily energy consumption is computed as:
+
+$$E_{tot} = (E_{measure} + E_{trans})\cdot 10 + E_{cloud} + P_{listen} \cdot 2.4h + P_{sleep} \cdot (24 - 2.4) h$$
+
+$$E_{tot} = [(0.5 J) + (0.00765 J)] \cdot 10 + (0.00765 J) + (0.325 W) \cdot 2.4h + (0.28 W) \cdot 21.6h$$
+$$E_{tot} \approx (0.001391014 Wh) + (0.78 Wh) + (6.048) Wh \approx 6.828 Wh $$
+
+So, for a year:
+
+$$E_{tot} = E_{tot} \cdot 365 = 2492.22 Wh$$
 
 
 ### Monitoring of the water flow Algorithm
