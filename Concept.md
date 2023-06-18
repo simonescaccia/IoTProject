@@ -61,3 +61,22 @@ We built a simulation infrastructure on IoT-LAB, to provide a large-scale irriga
 We construct a real prototype to demonstrate the working principle of the system. It is made up of a linear pipe and two MCUs located at its endopoints, with a water flow sensor for each one, together with a water source and an intermediate valve used to simulate a leakage.
 
 Unfortunately, we found some problems working with LoRa with our chosen ESP32, even if it should be officially supported by RIOT. So, in order to overcome this issue, we decided to switch to WiFi technology only for demonstating purposes. The idea is that when LoRa issue will be hopefully solved soon our project can be adapted with minor changes. Even if we will not obiouvsly have the same performance of LoRa, the procedure of evaluation is identical.
+
+## HOW WE HAVE WORKED
+We have created three subtopic, you can see all this work in [Design](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/Design.md) and [Evaluation](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/Evaluation.md):
+1. Prototype:
+* build the physical prototype, solving the technical problems
+* create different algorithms to synchronize the nodes
+* connect prototype and AWS with MQTT
+* take data to choose the best algorithm
+* take data to set a correct threshold
+2. Simulation in IoT-Lab:
+* build the infrastructure of the simulation, solving the technical problems
+* send data between nodes with lora-semtech
+* create a sample generator function to simulate water flow rates and leakages
+* take data of the energy consumption
+3. Connection of IoT-Lab and AWS:
+* create a node that send data to TTN using the sample generator function
+* integrate TTN and AWS
+* create the rules, the dynamoDB and the lambda functions to work with the data
+* create the website page with Amplify
