@@ -34,6 +34,7 @@ We wish to evaluate the power consumption of MCUs that are not attached to a pow
 ## Algorithms Performances
 
 ### Water leak detection Algorithm Problems
+
 Before designing a water leak detection algorithm, we focused on the dynamics of water in pipes. Since we are dealing with an irrigation system, a reasonable assumption is to consider **water in pipes under pressure**. It means that there are never empty pipes. Now, we can have two conditions, either stationary water or moving water, due to the increasing pressure at the source during irrigation time. This means that we can ignore the specific condition when doing a test, because the difference between adjacent flows will be bounded in both cases if there is no leakage, and not bounded otherwise. The detection algorithm starts from the source and propagates through the tree topology, always with the same logic for every father-child pair. The father sends water flow information to the child, which makes a proper computation and compares the obtained value with the received one, using a specific threshold. In case of leakage detection, it will communicate the leakage to the cloud through the LoRa gateway.
 
 One of the main problems related to the test is related to synchronization, because of the delay related to transmission latency. We thought about an handshaking approach to take into account this discrepancy and to compare water flows starting the sampling process at two close moments.
@@ -43,30 +44,32 @@ One of the main problems related to the test is related to synchronization, beca
 
 The complexity will change depending on the number of FORKs, and we will compare variuous topologies in order to find the best one.
 
-The three algorithms proposed in the design phase have been tested. The test of the Ack algorithm has shown that there is a problem in the code (caused by the use of threads in the program) and that the water flow before our system (that we consider always present) is not stable and this issue has to be solved by the synchronization algorithm. 
+The three algorithms proposed in the design phase have been tested. The test of the Ack algorithm has shown that there is a problem in the code (caused by the use of threads in the program) and that the water flow before our system (that we consider always present) is not stable and this issue has to be solved by the synchronization algorithm.
 The problem of stability of the initial water flow can be seen in the following image in which there is a segmentation of the lines of the graph.<br/>
-![ack](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/ack_flow.png) <br/>
+![ack](./graph/ack_flow.png) <br/>
 About the Ack algorithm, it is possible to notice that it is good to detect a leakage but it says that the water flow of the Son is always higher than the water flow of the Source, and this can lead to error, so it is not the worst algorithm implemented.<br/>
-![ack1](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/ack_test1.png)<br/>
-![ack3](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/ack_test3.png)<br/>
+![ack1](./graph/ack_test1.png)<br/>
+![ack3](./graph/ack_test3.png)<br/>
 
 About the Hanshake algorithm, it is perfect to detect the leakage and the trend of the Son higher than the Source is disappeared. There still is an error of the turbines, that we will face in the next chapter.<br/>
-![h1](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_test1.png)<br/>
-![h2](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_test2.png)<br/>
+![h1](./graph/handshake_test1.png)<br/>
+![h2](./graph/handshake_test2.png)<br/>
 
 In the end, about the syncAck algorithm, it is possible to see the same trend of the handshake algorithm but with one less message. There is also here the error of the turbines.<br/><br/>
-![s1](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_test1.png)<br/>
-![s2](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_test2.png)<br/>
+![s1](./graph/syncAck_test1.png)<br/>
+![s2](./graph/syncAck_test2.png)<br/>
 
 ### Water leak detection Algorithm Solutions
+
 After several tests, we have found that one water flow sensor has some problems and detect less impulses.
 
 ### Water leak detection Threshold
+
 We have done some analysis to set a correct threshold in our algorithms to limit the presence of false positives and false negatives. We have also thought that a false negative is more serious than a false positive, and so our system will be prone to false positives.<br/>
 We have chosen the syncAck as the final algorithm because it uses one message less.
 We have analysed the time of the SyncAck algorithm to understand the error that can be created and to use this values for the calucus of the energy consumption.
 We have analysed that the standard deviation is high and this means that there is a large distribution of the data, in particular this means that the time taken by the messages and the code is fluctuating. Looking at the scheme, it is possible to understand the time of the messages and also the quality of the synchronization of the algorithms.<br/>
-![s](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/syncAck_time1.png)<br/>
+![s](./images/syncAck_time1.png)<br/>
 Here there are 0,462(message) + 0,374(difference) in the Son between the end of the test and the arrival of the value of the Source, knowing that in average the message takes 0,462s from the sender to the receiver, this means that the Source has ended the test 0,090s before the Son. We double it (also for the difference in starting time) and we obtain 0,180s. 
 
 <br/>**Difference**<br/>
@@ -82,11 +85,12 @@ Beacuse the instrumental error is higher, as we will see, the thing that is sign
 *It is possible to improve the algorithms using correctly a 'sleep' for some milliseconds; but, because the standard deviation is high, more data are needed to be accurate.*
 
 ### Turbine error
+
 Another significant error of the architecture is the instrumental error of the water flow sensor. Because of we have not another turbine with the correct value of the water flow or other instruments, we have run the system for several tests and we have analysed the difference between the values of Source and Son. We have observed the difference because the water flow before our application is not costant (decided by the public pipeline). It is important to observ that this error is influenced by the algorithmic error too. We have taken in consideration also the handshake algorithm.
-![h3AB](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_error_AB.png)
-![h3BA](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/handshake_error_BA.png)
-![s3AB](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_error_AB.png)
-![s3BA](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/syncAck_error_BA.png)<br/>
+![h3AB](./graph/handshake_error_AB.png)
+![h3BA](./graph/handshake_error_BA.png)
+![s3AB](./graph/syncAck_error_AB.png)
+![s3BA](./graph/syncAck_error_BA.png)<br/>
 The system is proned to have the Son with an higher water flow value, if you put turbine A before turbine B, but this happens because the turbine A is less efficient. <br/>
 For our prototype and with a distance of 90cm between the nodes, based on the consideration of the several approssimations, We have initially fought to put a threshold of 1 L/min, but then we have done more considerations.<br/>
 We have first set a fixed scenario: 
@@ -112,13 +116,16 @@ So, we can decide to use the syncAck algorithm knowing that it uses one message 
 ![](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/Comparison_error_syncAck_9s.png)
 ![](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/Comparison_error_syncAck_9s_1.png)<br/>
 We have analysed these data to fix a threshold for the detection of the leakages, and we have done the mean of (flowSource-flowSon)x100/flowSource %:
+
 * 3s -> 4,29%
 * 5s -> 6,34%
 * 9s (done 9s and not 10s because of a problem of MQTT) -> 4,30% <br/>
 We have decide to take 10s for the sampling and this will be similar to 9s result, so in this situation we can put a **fixed threshold of > 2L/min** or **dynamic threshold flowSource-flowSon > 5% flowSource L/min**. The dynamic threshold is more efficient because it is more accurate in the lower water flow rate.
 
 ### Energy consumption
+
 #### Duty cycle
+
 Our requirement is not to tolerate a water loss of more than one day, so we wish to detect a leakage within 24 h. Now, since the leakage is an unpredictable event, we cannot define a precise strategy apriori, but we want to indentify the best one in order to minimize power consumption. We compute this strategy analitically. Firstly, for simplicity, we focus on a simple father-child pair, since the same reasoning holds for every adjacent pair of nodes of the tree topology. Now, we define x as the send rate (msg/day) of the father, so the number of messages sent per day, and y as the total listen interval of the child (in hours/day). 
 
 
@@ -205,8 +212,8 @@ So, for a year:
 
 $$E_{tot} = E_{tot} \cdot 365 = 2492.22 Wh$$
 
-Here, we have used the power of the sleep of Iot-Lab and indeed the consumption is huge, but in the datasheet of the ESP32 there is the Hibernation Mode whose consumption is 
-$$P_{sleep_esp32} $$ ~5µA \cdot 5V = 0.000025 W $$
+Here, we have used the power of the sleep of Iot-Lab and indeed the consumption is huge, but in the datasheet of the ESP32 there is the Hibernation Mode whose consumption is:
+$$P_{sleep} \sim 5µA \cdot 5V = 0.000025 W $$
 $$E_{tot} \approx (0.001391014 Wh) + (0.78 Wh) + (0.000025 W \cdot 21.6 h) Wh \approx 0.78 Wh $$
 So, for a year:
 
@@ -240,7 +247,7 @@ This water flow sensor can not create energy for our batteries beacuse the elect
 
 To allow the harvesting of the energy, we should have an alternator connected to the turbine to transform the mechanical energy into electrical energy.
 
-A possible solution for the energy harvesting is here: https://www.ebay.it/itm/322724692568 with the tutorial of the turbine https://www.youtube.com/watch?v=mtMO3VmCmiQ .
+A possible solution for the energy harvesting can be found [here](https://www.ebay.it/itm/322724692568) with the [tutorial](https://www.youtube.com/watch?v=mtMO3VmCmiQ) of the turbine.
 
 We should for example connect this type of turbine called micro hydro water turbine generator to our water flow sensor.
 <img src="https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/sensor_and_energy_image.png"  width="40%" height="40%"> <br/>
