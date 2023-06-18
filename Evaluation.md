@@ -218,14 +218,14 @@ Also here the consumption is too huge, because the time of listening is too high
 
 Starting from the output of the chapter before, we use another approach doing a synchronization of the nodes between themselves. We have observed that for these environments, battery of 1000-2000 mAh are used.
 
-The time of listening is reduced while the power of it remains the same, in particular we have to synchronize the nodes in pairs and for each node there will be a situation in which it will be the passive one (waiting in listening) and another situation in which it will be active (send the message for starting the test). We use hibernation mode and sot the drift rate is 1.7 sec per day, so if we do a listening of 30s (start 5s before the previous day)
+The time of listening is reduced while the power of it remains the same, in particular we have to synchronize the nodes in pairs and for each node there will be a situation in which it will be the passive one (waiting in listening) and another situation in which it will be active (send the message for starting the test). We use hibernation mode and sot the drift rate is 1.7 sec per day, so if we do a listening of 20s (start 5s before the previous day), we have to double it because each node has to do two communications:
 
-$$E_{tot} = (E_{measure} + E_{trans})\cdot 10 + E_{cloud} + P_{listen} \cdot 30s  + P_{sleep_esp32} \cdot (24h - 30s) h$$
-$$E_{tot} = [(0.5 J) + (0.00765 J)] \cdot 10 + (0.00765 J) + (0.325 W) \cdot 0,00833h + (0.000025 W) \cdot 24h$$
-$$E_{tot} \approx (0.001391014 Wh) + (0.002708 Wh) + (0.0006) Wh \approx  0.0045Wh $$
+$$E_{tot} = (E_{measure} \cdot 10 )\cdot 2 + E_{cloud} + E_{trans1} + E_{trans2} + E_{trans3} + P_{listen} \cdot 40  + P_{sleecdot p_esp32} \cdot (24h - 40) h$$
+$$E_{tot} = [(0.5 J) \cdot 10 ] \cdot 2 + 0.0306 J + (0.325 W) \cdot 0.0111111h \cdot + (0.000025 W) \cdot 24h \cdot 2$$
+$$E_{tot} \approx (0.0028 Wh) + (0.0000084 Wh) + (0.00361 Wh) + (0.0006 Wh) \approx  0.007 Wh $$
 So, for a year:
 
-$$E_{tot} = E_{tot} \cdot 365 = 1.69 Wh$$
+$$E_{tot} = E_{tot} \cdot 365 = 2.56 Wh$$
 
 Now, with a battery of 1000 mAh (3.7 V) that gives us 3.7 Wh, we can power the device for at leat one year, that is our user requirement.
 
