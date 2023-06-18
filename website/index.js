@@ -66,14 +66,24 @@ function dataLoading(parsed_data){
     if (!(processed_children.includes(child))) {
 
       const datetime = parsed_leakage_data[i]["Datetime"];
-      // Convert sample time to Locale format
       var date = datetime.toLocaleString(); 
 
-      var today = new Date();
-      today = today.toLocaleString().substring(0,10);
-      var yesterday = new Date(Date.now() - 86400000);
-      yesterday = yesterday.toLocaleString().substring(0,10);
+      const now = new Date();
 
+      var day = ("0" + now.getDate()).slice(-2);
+      var month = ("0" + (now.getMonth() + 1)).slice(-2);
+      var year = now.getFullYear();
+
+      let today = day + '/' + month + '/' + year;
+
+      var y_date = new Date(Date.now() - 86400000);
+
+      day = ("0" + y_date.getDate()).slice(-2);
+      month = ("0" + (y_date.getMonth() + 1)).slice(-2);
+      year = y_date.getFullYear();
+      
+      let yesterday = day + '/' + month + '/' + year;
+     
       if (date.substring(0,10) == today || date.substring(0,10) == yesterday) {
 
         processed_children.push(child);
