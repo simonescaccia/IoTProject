@@ -443,8 +443,10 @@ static void _send_water_flow_to_children(node_t node, int time)
             }
         }
 
-        /* Restart listening */
-        _restart_listening();
+        if (node.node_type != 1) {
+            /* Restart listening */
+            _restart_listening();
+        }
 
         free(str_payload);
         /* Free memory */
