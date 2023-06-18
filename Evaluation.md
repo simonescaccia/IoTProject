@@ -205,6 +205,30 @@ So, for a year:
 
 $$E_{tot} = E_{tot} \cdot 365 = 2492.22 Wh$$
 
+Here, we have used the power of the sleep of Iot-Lab and indeed the consumption is huge, but in the datasheet of the ESP32 there is the Hibernation Mode whose consumption is 
+P_{sleep_esp32} $$ ~5µA \cdot 5V = 0.000025 W $$
+$$E_{tot} \approx (0.001391014 Wh) + (0.78 Wh) + (0.000025 W \cdot 21.6 h) Wh \approx 0.78 Wh $$
+So, for a year:
+
+$$E_{tot} = E_{tot} \cdot 365 = 284 Wh$$
+
+Also here the consumption is too huge, because the time of listening is too high. So we propose another approach.
+
+#### Drift rate clock
+
+Starting from the output of the chapter before, we use another approach doing a synchronization of the nodes between themselves. We have observed that for these environments, battery of 1000-2000 mAh are used.
+
+The time of listening is reduced while the power of it remains the same, in particular we have to synchronize the nodes in pairs and for each node there will be a situation in which it will be the passive one (waiting in listening) and another situation in which it will be active (send the message for starting the test). We use hibernation mode and sot the drift rate is 1.7 sec per day, so if we do a listening of 30s (start 5s before the previous day)
+
+$$E_{tot} = (E_{measure} + E_{trans})\cdot 10 + E_{cloud} + P_{listen} \cdot 30s  + P_{sleep_esp32} \cdot (24h - 30s) h$$
+$$E_{tot} = [(0.5 J) + (0.00765 J)] \cdot 10 + (0.00765 J) + (0.325 W) \cdot 0,00833h + (0.000025 W) \cdot 24h$$
+$$E_{tot} \approx (0.001391014 Wh) + (0.002708 Wh) + (0.0006) Wh \approx  0.0045Wh $$
+So, for a year:
+
+$$E_{tot} = E_{tot} \cdot 365 = 1.69 Wh$$
+
+Now, with a battery of 1000 mAh (3.7 V) that gives us 3.7 Wh, we can power the device for at leat one year, that is our user requirement.
+
 
 ### Monitoring of the water flow Algorithm
 
