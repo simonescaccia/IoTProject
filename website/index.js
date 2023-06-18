@@ -1,7 +1,7 @@
 // Configuration of the API endpoint 
 const config = {
    // AWS API Gateway URL to be inserted here
-    api_url: 'https://ll9tfou6n5.execute-api.us-east-1.amazonaws.com/dev' 
+    api_url: 'https://g5eogj8zkb.execute-api.us-east-1.amazonaws.com/dev' 
   };
 
 /* Global Data */
