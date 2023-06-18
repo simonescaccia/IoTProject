@@ -218,14 +218,14 @@ static void _event_cb(netdev_t *dev, netdev_event_t event)
             int stop_listen = (*callback_on_msg_receive)(node, message);
             if (stop_listen && DUTY_CYCLE && node.node_type != 1) {
                 sx127x_set_sleep(&sx127x); 
-                puts("Rx power off");
+                puts("Rx power off\n");
             }
             break;
 
         case NETDEV_EVENT_RX_TIMEOUT:
             if (DUTY_CYCLE && node.node_type != 1) {
                 sx127x_set_sleep(&sx127x);
-                puts("Rx timeout");
+                puts("Rx timeout\n");
             }
             break;
 

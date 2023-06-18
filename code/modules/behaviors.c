@@ -583,7 +583,7 @@ void *_periodic_sending(void *arg) {
 
 int lora_p2p(node_t node) {
 
-    puts("Behavior: lora_p2p");
+    puts("Behavior: lora_p2p\n");
 
     /* Start listening: periodic if DUTY_CYCLE is setted, else continuous listening */
     if (!node.node_type == 0 && node.node_type != 1) {
