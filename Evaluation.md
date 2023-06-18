@@ -4,19 +4,18 @@
 
 ### During the development of the project
 
-General performance evaluation of the system:
-We want to detect if a water leak occur within 24h, in order to detect water leakages without tolerating more than one day of water losses. We want also to know wich pipe is leaking.
+As a general performance evaluation of the system, we wanted to detect if a water leak occurs within 24 hours, in order to detect water leakages without tolerating more than one day of water losses. We wanted also to know wich pipe is leaking.
 
-We will use the following metrics to evaluate the performance of the system:
+We used the following metrics to evaluate the performance of the system:
 
-1. Leak is dectected within 24h
+1. Leak is dectected within 24 hours
 2. The pipe is correctly identified
 
-### When the first complete version of the system will be ready for use
+### After system completion
 
-We want to detect if a water leak occur within 24h, in order to detect water leakages without tolerating more than one day of water losses. We want also to know wich pipe is leaking, providing information about the quantity of water leakage in a second.
+We want to detect if a water leak occurs within 24 hours, in order to detect water leakages without tolerating more than one day of water losses. We want also to know wich pipe is leaking, providing information about the quantity of water leakage in liters per minute. Finally, we also manage to evaluate the sensor precision error in order to specify a proper leakage threshold.
 
-1. Leak is dectected within 24h
+1. Leak is dectected within 24 hours
 2. The pipe is correctly identified
 3. The quantity of water leaked per second with an accuracy of 95% (sensor precision error)
 
