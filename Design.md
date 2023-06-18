@@ -14,7 +14,7 @@ Our infrastructure is composed of:
 
 The ESP32 manages the different sensors and actuators in the infrastructure and exchanges messages with the other microcontrollers and with the cloud. The main technical issue is that the device will be attached to every object of interest and thus should be battery powered:
 
-* CHIEF is connected to a power cord and does not have energy problems
+* CHIEF is connected to a power cord and does not have energy constraints, however a duty cycle is implemented as well
 * FORK and BRANCH wakes up only when a test is needed, so we modulated a proper duty cicle in order to provide a longer battery lifetime
 
 ### LoRa
@@ -25,9 +25,9 @@ LoRa is a physical radio communication protocol, based on spread spectrum modula
 
 #### Water flow sensors
 
-Water flow sensors are installed at the water source or pipes to measure the flow rate of water. The relative metric is as liters per hour or cubic meters, to be scaled in our context. The structure of the sensor consists of a plastic valve (from which water can pass) and a water rotor along with a Hall effect sensor (a voltage difference is induced in the conductor due to the rotation of the rotor), measuring the sense and the intensity of the flow. When water flows through the valve, it causes a change of speed of the rotor, calculated as output as a pulse signal. The sensor is powered with a 5 V supply voltage of DC.
+Water flow sensors are installed at the water source or pipes to measure the flow rate of water. The chosen metric for flow measurement is liters per minute. The structure of the sensor consists of a plastic valve (from which water can pass) and a water rotor along with a Hall effect sensor (a voltage difference is induced in the conductor due to the rotation of the rotor), measuring the sense and the intensity of the flow. When water flows through the valve, it causes a change of speed of the rotor, calculated as output as a pulse signal. The sensor is powered with a 5 V supply voltage of DC.
 
-You can find our water flow sensor [here](https://www.amazon.it/dp/B079QYRQT5?psc=1&ref=ppx_yo2ov_dt_b_product_details)
+Water flow sensors used for our protoype can be found [here](https://www.amazon.it/dp/B079QYRQT5?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 
 ### Actuators
 
@@ -41,16 +41,20 @@ A buzzer is used to provide an acoustic alarm indication through intermitting ac
 
 ### Cloud system
 
-Data are stored on AWS for long term storage. These data can then be queried by farmers in order to gain insights about water usage and pipeline leakages.
+Data are stored on AWS for long term storage. Then these data can be displayed by farmers in order to gain insights about water usage, in detail the water flow at the source, and pipeline leakages, with the indication of detected location.
 
 ## How to detect a leakage
 
-As a first step, we hava to reason about our principal requirement, leakage detection. In particular, we need to do a feasibility study about how to detect a leakage in a pipeline first, and then how to detect it in a distributed system. The following images show our reasoning process.
+As a first step, we have to reason about our main requirement, leakage detection. In particular, we need to do a feasibility study about how to detect a leakage in a pipeline first, and then how to detect it in a distributed system. The following images show our reasoning process. <br> </br>
 
 ![no_leakage](./images/HowToDetectLeakages-No_leakage_situations.drawio.png)
+<br> </br>
 ![leakage](./images/HowToDetectLeakages-Leakage_situations.drawio.png)
+<br> </br>
 ![distributed_problem](./images/HowToDetectLeakages-Distributed_system_leakage_problem.drawio.png)
+<br> </br>
 ![distributed_solution](./images/HowToDetectLeakages-Distributed_system_leakage_solution.drawio.png)
+<br> </br>
 ![distributed_other](./images/HowToDetectLeakages-Distributed_system_other_leakages.drawio.png)
 
 ## Architecture
@@ -61,6 +65,8 @@ We propose a tree architecture with a MCU at source site connected to a water fl
 
 Since in the simulation we used a node for each MCU, our tree architecture can be represented in a more understandable way as follows.
 
+![tree]()
+
 ## High level diagram
 
 ![architecture](./images/architecture.jpg)
@@ -68,8 +74,10 @@ Since in the simulation we used a node for each MCU, our tree architecture can b
 Our system is composed of 3 different pieces:
 
 * MCU near the water source (connected through a power cord) called CHIEF
-* MCU near the pipeline fork (using a battery) called FORK, with an ID for the fork and a NUMBER for each branch water flow sensor
-* MCU connected to a water flow sensor at valve site (using a battery) called BRANCH and with a NUMBER (consistent with the NUMBER value in the relative FORK)
+* MCU near the pipeline fork (using a battery) called FORK
+* MCU connected to a water flow sensor at valve site (using a battery) called BRANCH
+
+Every node has an identificative number (in the case of the simulation given by IoT-Lab) and we designed a properly configuration function to extract the information for each node from the topology, given as father-child pairs.
 
 ## Prototype Environment
 
@@ -82,9 +90,8 @@ For our prototype, we used the fllowing objects:
 * 2 water flow sensors
 * 2 ESP32 LoRa MCUs  
 
-We started from a 1,5 meters long garden hose with an inner diameter of 20 mm and an outer one of 25 mm. We cut the garden hose into 4 main segments approximately 35 cm long and a smaller one around 10 cm long. We placed two segments at the endpoints of each water flow sensor and we joined them using the T-adapter. We connected the tap to the last free endpoint of the T-adapter and the smallest pipe segment to the tap dispenser. So we connected the water flow sensors to the MCUs.
-The tap is used to simulate a leakage and it is initially closed. We did not use clamps at first, but we experienced water leaks in correspondence of joints. Therefore we placed 2 clamps at the endpoints of each water flow sensor and other 2 for the endpoints of the T-adapter not connected to the tap.
-Source node and Son node are 90cm apart.
+We started from a 1,5 meters long garden hose with an inner diameter of 20 mm and an outer one of 25 mm. We cut the garden hose into 4 main segments approximately 35 cm long. We placed two segments at the inner endpoints of each water flow sensor and we joined them using the T-adapter. So we connected the tap to the last free endpoint of the T-adapter and the last two segments to the outer endpoints of water flow sensor. We defined a direction for the flow placing the water flow sensors in the correct flow measurement direction. Finally, we connected the water flow sensors to the MCUs and the MCUs to a battery.
+The tap is used to simulate a leakage and it is initially closed. We did not use clamps at first, but we experienced water leaks in correspondence of joints. Therefore we placed 2 clamps at the outer endpoints of each water flow sensor and other 2 for the endpoints of the T-adapter not connected to the tap. In this way we solved the problem of leakages at joints. The water flow sensor of father MCU and the water flow sensor of child MCU are 90cm apart.
 
 ## Network architecture
 
@@ -119,7 +126,6 @@ We have tried 3 different algorithms for allow a correct and synchronized test b
 All the algorithms are available in the directory "code-prototype"
 
 #### Ack
-
 ![ack](./images/ack.png)
 
 This is the first algorithm that we have implemented and it does not work well. Firstly there is a bug in the code, in fact with this code the Son has an higher flow that the Source, and this is not physically possible (if you find the problem, please tell us where is it), Secondly with the data obtained, we have seen that the water flow arriving to the Source (before our architecture) is not stable and the code was not robust against this problem.
@@ -129,7 +135,6 @@ In particular the Source controls if there is a water flow, if yes it does the t
 For the motivation written before, this system is proned to the false positive and we have stopped the analysis on it.
 
 #### Handshake
-
 ![handshake](./images/handshake.png)
 
 This is the second algorithm that we have implemented and it works well.
