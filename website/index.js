@@ -211,11 +211,11 @@ async function display() {
   plot("leakagechart", x_values_leakage, y_values_leakage);
 
   getFlowStatistics();
-  document.getElementById("avg-measured-flow").innerHTML =  avg_measured_flow;
-  document.getElementById("avg-daily-flow").innerHTML = avg_daily_flow;
+  document.getElementById("avg-measured-flow").innerHTML = Number((avg_measured_flow).toFixed(1)); 
+  document.getElementById("avg-daily-flow").innerHTML = Number((avg_daily_flow).toFixed(1));
 
   getLeakageStatistics();
-  document.getElementById("avg-leakage").innerHTML = avg_leakage;
+  document.getElementById("avg-leakage").innerHTML = Number((avg_leakage).toFixed(1));
   if (!Array.isArray(y_values_leakage) || !y_values_leakage.length) {
     document.getElementById("leakage-info").innerHTML = "No recent leakage detected";
   }
