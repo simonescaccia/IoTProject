@@ -128,6 +128,7 @@ We have tried 3 different algorithms for allow a correct and synchronized test b
 All the algorithms are available in the directory "code-prototype"
 
 #### Ack
+
 ![ack](./images/ack.png)
 
 This is the first algorithm that we have implemented and it does not work well. Firstly there is a bug in the code, in fact with this code the Son has an higher flow that the Source, and this is not physically possible (if you find the problem, please tell us where is it), Secondly with the data obtained, we have seen that the water flow arriving to the Source (before our architecture) is not stable and the code was not robust against this problem.
@@ -137,6 +138,7 @@ In particular the Source controls if there is a water flow, if yes it does the t
 For the motivation written before, this system is proned to the false positive and we have stopped the analysis on it.
 
 #### Handshake
+
 ![handshake](./images/handshake.png)
 
 This is the second algorithm that we have implemented and it works well.
@@ -177,7 +179,13 @@ The minimal architecture of the system should be the following:
 Node configuration:
 
 * Due to the fact that the firmware is distributed, we need to use the same firmware for all the nodes. For this reason, we need to build a configuration file named config.c that can be used for all the nodes, to understand which type of node is and who are its children.
-After flashing the firmware we need to assign an ID to each node compliant with the configuration file.
+![config_structure](./images/config_structure.png)
+* After flashing the firmware we need to assign an ID to each node compliant with the configuration file.
+![config_command](./images/config_command.png)
+
+Parameters:
+
+* 
 
 Sample generator:
 
