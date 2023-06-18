@@ -4,7 +4,8 @@
 
 Our infrastructure is composed of:
 
-* ESP32 MCU with LoRa support for peer and cloud communication
+* ESP32 MCU 
+* LoRa support for peer and cloud communication
 * Water flow sensor
 * Led & Buzzer
 * Cloud system (AWS) to collect and store data
