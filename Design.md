@@ -193,11 +193,20 @@ Node configuration:
 
 Parameters:
 
-* 
+* Since requirements want to detect leakages in a day, we have decided to simulate a day in 60 seconds. Also, we have introduced a parameter called NUMBER_OF_SENDING_PER_DAY that represents the number of samples sent by the node in a day, in order to implement the duty cycle. For the simplicity of the demo, we have set this parameter to 3 but the value for the real application it is discussed in the Evaluation page.
 
 Sample generator:
 
 * The sample generator is a function that simulates the sampling of the water flow. Its aim is also to test the various leakage scenario discussed in the 'How to detect a leakge' paragraph.
+
+![sample_generator](./graph/sample_generator.png)
+
+* logic_time in [0, 2]: Simulate no LEAKAGE with water usage - Test also float water flow mesurements
+* logic_time in [3, 5]: Simulate no LEAKAGE without water usage
+* logic_time in [6, 8]: Simulate a LEAKAGE between the CHIEF and the FORK with water usage
+* logic_time in [9, 11]: Simulate a LEAKAGE between the FORK and a BRANCH with water usage
+* logic_time in [12, 14]: Simulate a LEAKAGE between the CHIEF and the FORK without water usage
+* logic_time in [15, 17]: Simulate a LEAKAGE between the FORK and a BRANCH without water usage
 
 Comunication protocols:
 
@@ -210,3 +219,5 @@ For this reason we have decided to use another node to connect our infrastructur
 So, our implementation is the following:
 
 ![simulation_implementation](./images/Simulation-Implementation.drawio.png)
+
+* Messages:
