@@ -476,22 +476,10 @@ void _check_leakage (node_t node, payload_t* payload) {
         printed_chars = fmt_float(str_difference, difference, 2);
         str_difference[printed_chars] = '\0';
 
-        /* Wait for source switch to listen mode */
-        if (strcmp(node.node_father, node.node_source_p2p) == 0) {
-            xtimer_msleep(100);
-        }
-
-        /* Send a message to the source */
-        char* str_payload = format_payload(str_difference, node.node_self, node.node_source_p2p, "L", payload->logic_time);
-        char* list[2] = {"send_cmd", str_payload};
-        char** argv = (char**)&list;
-        send_cmd(2, argv);
-
-        /* Restart listening */
-        _restart_listening();
-
-        /* Free memory */
-        free(str_payload);
+        /* Send a the leakage message to the source */
+        char* json[128];
+        sprintf(json, "{\"Id\": \"leakage\", \"Child\": \"%s\", \"Father\": \"%s\", \"Leakage\": \"%s\"}", node.node_self, node.node_father, str_difference); 
+        printf("Sending message to TTN: %s\n\n", json);
 
     } else {
         puts("No leakage detected\n");
@@ -542,16 +530,6 @@ int message_received_clb (node_t node, char message[32]) {
 
         free_payload(payload);
         return 1;
-    }
-
-    /* The CHIEF receive all the leakage messages */
-    if (node.node_type == 1 && strcmp(payload->is_leak, "L") == 0) {
-        printf("Message of leakage received: %s\n\n", message);
-
-        /* UART send message to SOURCE TTN*/
-
-        free_payload(payload);
-        return 0;        
     }
 
     return 0;
@@ -605,17 +583,19 @@ int lora_p2p(node_t node) {
     puts("Behavior: lora_p2p");
 
     /* Start listening: periodic if DUTY_CYCLE is setted, else continuous listening */
-    if (DUTY_CYCLE && node.node_type != 1) {
-        kernel_pid_t _listen_pid = thread_create(stack_listen, sizeof(stack_listen), THREAD_PRIORITY_MAIN - 1,
-                                THREAD_CREATE_STACKTEST, _periodic_listening, NULL,
-                                "_periodic_listening");
-
-        if (_listen_pid <= KERNEL_PID_UNDEF) {
-            puts("Creation of _periodic_listening thread failed");
-            return 1;
+    if (!node.node_type == 0 && node.node_type != 1) {
+        /* Source nodes doesn't receive messages */
+        if (DUTY_CYCLE) {
+            kernel_pid_t _listen_pid = thread_create(stack_listen, sizeof(stack_listen), THREAD_PRIORITY_MAIN - 1,
+                                    THREAD_CREATE_STACKTEST, _periodic_listening, NULL,
+                                    "_periodic_listening");
+            if (_listen_pid <= KERNEL_PID_UNDEF) {
+                puts("Creation of _periodic_listening thread failed");
+                return 1;
+            }
+        } else {
+            _start_listening();
         }
-    } else {
-        _start_listening();
     }
 
     /* Start sending: only if the current node is not a BRANCH */
