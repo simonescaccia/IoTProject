@@ -173,7 +173,7 @@ int listen_cmd(int argc, char **argv)
     netdev->driver->set(netdev, NETOPT_SINGLE_RECEIVE, &single, sizeof(single));
 
     // Set liisten timeout
-    if (APP_DEBUG) printf("Listen timeout setted to %" PRIu32 "\n", timeout);
+    if (APP_DEBUG) printf("Listen timeout setted to %" PRIu32 " ms\n", timeout);
     netdev->driver->set(netdev, NETOPT_RX_TIMEOUT, &timeout, sizeof(timeout));
 
     // Switch to RX state
