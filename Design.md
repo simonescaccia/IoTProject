@@ -56,14 +56,6 @@ As a first step, we have to reason about our main requirement, leakage detection
 
 We propose a tree architecture with a MCU at source site connected to a water flow sensor, a LED and a buzzer. A fork is defined as a site where a single pipe divides itself in two or more output pipes. We place a water flow sensor for each of these diramations, all connected to a single MCU. So. a MCU at each fork site, which can be at different depth levels, is needed. Furthermore, we place a MCU for each pipeline branch, more precisely in correspondence of each irrigation valve, where we place a single water flow sensor connected to the MCU. Our architecture is scalable, so it can be used to control water leakages within a small field with the same crop or to control leakages from pipes irrigating different types of crop in the same field. </br>
 
-Since in the simulation we used a node for each MCU, our tree architecture can be represented in a more understandable way as follows.
-
-![tree](./images/tree.png )
-
-In our architecture we preferred to focus our attention on things, with computation performed at nodes rather than in the cloud. So, the cloud only receives (from TTN) data about water flow and leakages that are simply displayed in the GUI. For some techical reasons explained in detail in the description of our simulation, we used a simple node communicating with TTN for demonstrating purposes. However, in the designed architecture each node receiving a flow from the father computes the difference between this flow and its own one and sends data to TTN.
-
-## High level diagram
-
 ![architecture](./images/architecture.jpg)
 
 Our system is composed of 3 different pieces:
@@ -73,8 +65,13 @@ Our system is composed of 3 different pieces:
 * MCU connected to a water flow sensor at valve site (using a battery) called BRANCH
 
 Every node has an identificative number (in the case of the simulation given by IoT-Lab) and we designed a properly configuration function to extract the information for each node from the topology, given as father-child pairs.
+Since in the simulation we used a node for each MCU, our tree architecture can be represented in a more understandable way as follows. </br>
 
-## Prototype Environment
+![tree](./images/tree.png )
+
+In our architecture we preferred to focus our attention on things, with computation performed at nodes rather than in the cloud. So, the cloud only receives (from TTN) data about water flow and leakages that are simply displayed in the GUI. For some techical reasons explained in detail in the description of our simulation, we used a simple node communicating with TTN for demonstrating purposes. However, in the designed architecture each node receiving a flow from the father computes the difference between this flow and its own one and sends data to TTN.
+
+## Prototype 
 We construct a real prototype to demonstrate the working principle of the system. It is made up of a linear pipe and two MCUs located at its endopoints, with a water flow sensor for each one, together with a water source and an intermediate valve used to simulate a leakage.
 
 Unfortunately, we found some problems working with LoRa with our chosen ESP32, even if it should be officially supported by RIOT. So, in order to overcome this issue, we decided to switch to WiFi technology only for demonstating purposes. The idea is that when LoRa issue will be hopefully solved soon our project can be adapted with minor changes. Even if we will not obiouvsly have the same performance of LoRa, the procedure of evaluation is identical.
