@@ -35,7 +35,9 @@ float get_water_flow(int self_node_type, int position, int time) {
 
     if (self_node_type == 0 || self_node_type == 1) {
         /* SOURCE data */
-        if ((logic_time >= 0 && logic_time <= 2) || (logic_time >= 6 && logic_time <= 11))
+        if (logic_time >= 6 && logic_time <= 11)
+            return 40.0;
+        if (logic_time >= 0 && logic_time <= 2)
             return 35.6; /* Maximum flow rate*/
         if (logic_time >= 12 && logic_time <= 17)
             return 20.0;
@@ -47,7 +49,7 @@ float get_water_flow(int self_node_type, int position, int time) {
         if (logic_time >= 0 && logic_time <= 2)
             return 17.8;
         if ((logic_time >= 9 && logic_time <= 11) || (logic_time >= 15 && logic_time <= 17))
-            return 20;
+            return 20.0;
         if (logic_time >= 6 && logic_time <= 8)
             return 10.0;
         if ((logic_time >= 3 && logic_time <= 5) || (logic_time >= 12 && logic_time <= 14))
@@ -58,7 +60,7 @@ float get_water_flow(int self_node_type, int position, int time) {
         if (logic_time >= 0 && logic_time <= 2)
             return 17.8;
         if (logic_time >= 9 && logic_time <= 11)
-            return 20;
+            return 20.0;
         if (logic_time >= 6 && logic_time <= 8)
             return 10.0;
         if ((logic_time >= 3 && logic_time <= 5) || (logic_time >= 12 && logic_time <= 17))
