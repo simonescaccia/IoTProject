@@ -2,8 +2,6 @@
 
 ## Evaluation methodology: Overall System
 
-### During the development of the project
-
 As a general performance evaluation of the system, we wanted to detect if a water leak occurs within 24 hours, in order to detect water leakages without tolerating more than one day of water losses. We wanted also to know wich pipe is leaking.
 
 We used the following metrics to evaluate the performance of the system:
@@ -11,25 +9,12 @@ We used the following metrics to evaluate the performance of the system:
 1. Leak is dectected within 24 hours
 2. The pipe is correctly identified
 
-### After system completion
-
-We want to detect if a water leak occurs within 24 hours, in order to detect water leakages without tolerating more than one day of water losses. We want also to know wich pipe is leaking, providing information about the quantity of water leakage in liters per minute. Finally, we also manage to evaluate the sensor precision error in order to specify a proper leakage threshold.
-
-1. Leak is dectected within 24 hours
-2. The pipe is correctly identified
-3. The quantity of water leaked per second with an accuracy of 95% (sensor precision error)
-
 ## Evaluation methodology: Individual Components
 
 We wish to evaluate the power consumption of MCUs that are not attached to a power cord, so for the FORK and the BRANCH MCUs.
 
 + Power supply of source site MCU is provided by a power cord, hence there are no specific constraints on power consumption.
 + MCUs at fork sites and crop site, due to the limited workload, we wish to obtain a battery life equal to the total period of irrigation.
-
-## Network Technologies Performances
-
-+ Latency (s)
-+ Throughput (bit/s)
 
 ## Algorithms Performances
 
@@ -70,7 +55,7 @@ We have chosen the syncAck as the final algorithm because it uses one message le
 We have analysed the time of the SyncAck algorithm to understand the error that can be created and to use this values for the calucus of the energy consumption.
 We have analysed that the standard deviation is high and this means that there is a large distribution of the data, in particular this means that the time taken by the messages and the code is fluctuating. Looking at the scheme, it is possible to understand the time of the messages and also the quality of the synchronization of the algorithms.<br/>
 ![s](./images/syncAck_time1.png)<br/>
-Here there are 0,462(message) + 0,374(difference) in the Son between the end of the test and the arrival of the value of the Source, knowing that in average the message takes 0,462s from the sender to the receiver, this means that the Source has ended the test 0,090s before the Son. We double it (also for the difference in starting time) and we obtain 0,180s. 
+Here there are 0.462 s (message) + 0.090 s (difference) in the Son between the end of the test and the arrival of the value of the Source. This means that the Source has ended the test 0,090s before the Son. We double it (also for the difference in starting time) and we obtain 0,180s. 
 
 <br/>**Difference**<br/>
 To find the error of the two algorithm we have to decide the time of testing: now is 3s but if we increase it, the influence of the error derived by the synchronization problem is less.
@@ -252,9 +237,9 @@ Now, with a battery of $2500 mAh$, we can power the device for at least one year
 
 ### Water flow sensor for energy harvesting
 
-This water flow sensor can not create energy for our batteries beacuse the electronic part is not connected to the turbine, it is only connected to the Hall Effect sensor.
+Our water flow sensor can not create energy for our batteries because the electronic part is not connected to the turbine, it is only connected to the Hall Effect sensor.
 
-To allow the harvesting of the energy, we should have an alternator connected to the turbine to transform the mechanical energy into electrical energy.
+To allow energy harvesting, we should have an alternator connected to the turbine to transform the mechanical energy into electrical energy.
 
 A possible solution for the energy harvesting can be found [here](https://www.ebay.it/itm/322724692568) with the [tutorial](https://www.youtube.com/watch?v=mtMO3VmCmiQ) of the turbine.
 
@@ -262,10 +247,10 @@ We should for example connect this type of turbine called micro hydro water turb
 <img src="https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/images/sensor_and_energy_image.png"  width="40%" height="40%"> <br/>
 
 We have analysed if there is the possibility to charge the device using this turbine and it is feasible: 
-1. Esp32 in the active mode consume 240 mA and it is powered at 5 V; so, because in the prototype the duty cicle is not implemented, it consumes 1,2 W.
-2. The Water Flow Sensor consume 10 mA (max) and it is powered at 5 V (because it is connected with the Esp32); so it consumes 0,05 W.
-3. The Micro Water Turbine Hydro Generator works at 12 V, the power is 10 W and the intensity is 1,2 A; beacuse the diameter is lower than the diameter of the Water Flow Sensor, we do a proportion: if the sensor works with max 30 L/min (diameter=15,24mm), the generator work with max 25,6 L/min (diameter=13mm). 
-The generator ideally can charge the device and the sensor beacuse it gives 10 W and they need 1,25 W. Other analysis should be done to know the daily water flow and relative energy produced.<br/>
+1. From previous analysis, ESP32 and water flow sensor are powered with $0.33 W$. 
+
+2. The Micro Water Turbine Hydro Generator works at 12 V and gives a power of $10 W$. Since the diameter is lower than the diameter of the Water Flow Sensor, we do a proportion: if the sensor works with max 30 L/min (diameter=15,24mm), the generator work with max 25,6 L/min (diameter=13mm). 
+The generator ideally can charge the device and the sensor beacuse it gives $10 W$ and needed power is $0.33 W$. Other analysis should be done to know the daily water flow and relative energy produced.<br/>
 
 So the system can be changed creating an algorithm that wake up the node only when there is water flow and so when there is energy. In this way, there will be a relationship between the number of sampling and the water flow rate in a day. The energy obtained by the Micro Water Turbine Hydro Generator can be also stored in a battery to allow the node to wake up in other occasions (this is not our situation because we are interested only when there is water flow).
 
