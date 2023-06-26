@@ -150,13 +150,13 @@ First, we considered the transmission parameters of LoRa:
 ![trans_energy](./energy_consumption/10-Lora-TTN-sending-one-message.png)
 
 The transmission time and power are:
-$$P_{trans} = (0.455 - 0.270) W = 0.185 W$$ 
+$$P_{trans} = 0.455 W$$ 
 $$t_{trans} = (0.17 - 0.080) s = 0.090 s = 2.5 \cdot 10^{-5} h$$
 
 The effective transmission effectively starts at 0.085 seconds, however, we considered all the interval time where some variation is revealed. In this way we also considered the contribution of the energy for switching on and off the transmission. Hence:
 
 $$E(x) = (P_{trans} \cdot t_{trans}) \cdot x + (P_{on} \cdot t_{on}) \cdot x +(P_{off} \cdot t_{off}) \cdot x$$
-$$E(x) \approx (P_{trans} \cdot t_{trans}) \cdot x = (0.185 W) \cdot (2.5 \cdot 10^{-5} h) \cdot x = 4.625 \cdot 10^{-6} Wh \cdot x$$
+$$E(x) \approx (P_{trans} \cdot t_{trans}) \cdot x = (0.455 W) \cdot (2.5 \cdot 10^{-5} h) \cdot x = 1.14 \cdot 10^{-5} Wh \cdot x$$
 
 The power consumption due to listening can be found analysing the listening process:
 
@@ -177,26 +177,26 @@ $$E(y) \approx P_{listen} \cdot y $$
 
 So, the final analysis is on the function:
 
-$$E(x) + E(y) = 4.625 \cdot 10^{-6} \cdot x + (0.325 \cdot \frac{24}{x}) $$
+$$E(x) + E(y) = 1.14 \cdot 10^{-5} \cdot x + (0.325 \cdot \frac{24}{x}) $$
 
 So the function to minimize is:
 
-$$f(x) = 4.625 \cdot 10^{-6} \cdot x + \frac{7.8}{x}$$
+$$f(x) = 1.14 \cdot 10^{-5} \cdot x + \frac{7.8}{x}$$
 
 The minimum of the function, considering the domain of $$x \geq 1$$
 because we have to send at least one message per day. Solving the function analytically, we found a global minimum for:
 
-$$x = 1298.65 \approx 1300$$
+$$x \approx 828$$
 
 So the send rate of the father should be 10 messages/day, hence the listen time will be:
 
-$$y = \frac{24}{x} = \frac{24}{10} \approx 0.01846  \frac{hours}{day} \approx 1 \frac{min}{day}$$
+$$y = \frac{24}{x} = \frac{24}{828} \approx 0.029 \frac{hours}{day} \approx 1.74 \frac{min}{day} \approx 104 \frac{s}{day}$$
 
 #### Estimation of system duration
 
 To analyse the duration of our system, we must also consider other energy contributions, mainly the measurement, the sleep and the cloud transmission energy consumptions. We considered the daily worst case, so the case of an intermediate node that measures twice and sends data to child 1300 times, listens for 1 minute, receives data from the father once after algorithm execution and sends once to the cloud the difference with father water flow. In our analysis,
 
-$$E_{cloud} \approx E_{trans}$$
+$$E_{cloud} \approx E_{trans} = 1.14 \cdot 10^{-5} Wh$$
 
 The energy of measurement has been computed from the prototype, since water flow values are simply simulated and not measured in IoT-Lab simulation. Hence:
 
@@ -204,34 +204,35 @@ $$E_{measure} = (P_{sensor} + P_{active}) * t_{sampling} = [(0.05W) + (0.28 W)] 
 
 Daily energy consumption is computed as:
 
-$$E_{tot} = 2 \cdot E_{measure} + E_{trans}\cdot 1300 + 2 \cdot E_{trans} + E_{cloud} + P_{listen} \cdot (0.01846 h) + P_{sleep} \cdot (24 - 0.01846) h$$
+$$E_{tot} = 2 \cdot E_{measure} + E_{trans}\cdot 828 + 2 \cdot E_{trans} + E_{cloud} + P_{listen} \cdot (0.029h) + P_{sleep} \cdot (24 - 0.029) h$$
 
-$$E_{tot} = 2 \cdot (9.174 \cdot 10^{-4} Wh) + (4.625 \cdot 10^{-6} Wh) \cdot 1300 + 3 \cdot (4.625 \cdot 10^{-6} Wh) + (0.325 W) \cdot (0.01846 h) + (0.28 W) \cdot (23.98 h)$$
-$$E_{tot} \approx (1.835 \cdot 10^{-3} Wh) + (6.026 \cdot 10^{-3} Wh) + (6 \cdot 10^{-3} Wh) + (6.71 Wh) \approx 6.71 Wh $$
+$$E_{tot} = 2 \cdot (9.174 \cdot 10^{-4} Wh) + (1.14 \cdot 10^{-5} Wh) \cdot 828 + 3 \cdot (1.14 \cdot 10^{-5} Wh) + (0.325 W) \cdot (0.029 h) + (0.28 W) \cdot (23.971 h)$$
+$$E_{tot} \approx (1.835 \cdot 10^{-3} Wh) + (9.47 \cdot 10^{-3} Wh) + (9.425 \cdot 10^{-3} Wh) + (6.71 Wh) \approx 6.73 Wh $$
 
 So, for a year:
 
-$$E_{tot} = E_{tot} \cdot 365 = 2449.15 Wh$$
+$$E_{tot} = E_{tot} \cdot 365 = 2456.71 Wh$$
 
 Here, we have used the power of the sleep monitored from Iot-Lab and indeed the consumption is huge, but in the datasheet of our [Heltec ESP32 Lora v2](https://heltec.org/project/wifi-lora-32/) it is reported the power consumption of the Deep Sleep Mode:
 $$P_{deepSleep} \approx 800µA \cdot 5V =  0.004 W $$
-$$E_{tot} \approx (9.174 \cdot 10^{-4} Wh) + (6.026 \cdot 10^{-3} Wh) + (6 \cdot 10^{-3} Wh) + (0.096 Wh) \approx 0.109 Wh $$
+$$E_{tot} \approx (1.835 \cdot 10^{-3} Wh) + (9.47 \cdot 10^{-3} Wh) + (9.425 \cdot 10^{-3} Wh) + (0.096 Wh) \approx 0.117 Wh $$
+
 So, for a year:
 
-$$E_{tot} = E_{tot} \cdot 365 = 39 Wh$$
+$$E_{tot} = E_{tot} \cdot 365 = 42.61 Wh$$
 
 Also here the consumption is too huge, because the time of listening is too high. So we propose another approach.
 
-#### Drift rate clock
+### Drift rate clock
 
 Starting from the output of the chapter before, we use another approach with node synchronization. We have observed that for these environments, battery of 1000-2000 mAh are used.
 
 The listening time is reduced, in particular we have to synchronize the nodes in pairs and for each node there will be a situation in which it will be the passive one (waiting in listening) and another situation in which it will be active (send the message for starting the test). As before, we consider the worst case, in which a node is both passive and active. We use Deep sleep mode. The drift rate for ESP32 is 1.7 sec per day. Assuming a resynchronization for each day, we need to set a listening time per day such that the drift rate over the day is not a problem. An acceptable solution is 10 seconds/day.
 
-$$E_{tot} = 2 \cdot E_{measure} + E_{trans}\cdot 1300 + 2 \cdot E_{trans} + E_{cloud} + P_{listen} \cdot (2.76 \cdot 10^{-3} h) + P_{deepSleep} \cdot (24 - 2.76 \cdot 10^{-3}) h$$
+$$E_{tot} = 2 \cdot E_{measure} + E_{trans}\cdot 1 + 2 \cdot E_{trans} + E_{cloud} + P_{listen} \cdot (2.76 \cdot 10^{-3}h) + P_{deepSleep} \cdot (23.99) h$$
 
-$$E_{tot} = 2 \cdot (9.174 \cdot 10^{-4} Wh) + (4.625 \cdot 10^{-6} Wh) \cdot 1 + 3 \cdot (4.625 \cdot 10^{-6} Wh) + (0.325 W) \cdot (2.76 \cdot 10^{-3} h) + (0.004 W) \cdot (23.997 h)$$
-$$E_{tot} \approx (1.835 \cdot 10^{-3} Wh) + (1.85 \cdot 10^{-5} Wh) + (8.97 \cdot 10^{-4} Wh) + (0.096 Wh) \approx 0.098 Wh $$
+$$E_{tot} = 2 \cdot (9.174 \cdot 10^{-4} Wh) + (1.14 \cdot 10^{-5} Wh) \cdot 1 + 3 \cdot (1.14 \cdot 10^{-5} Wh) + (0.325 W) \cdot (2.76 \cdot 10^{-3}h) + (0.004 W) \cdot (23.99 h)$$
+$$E_{tot} \approx (1.835 \cdot 10^{-3} Wh) + (4.56 \cdot 10^{-5} Wh) + (8.97 \cdot 10^{-4} Wh) + (0.096 Wh) \approx 0.099 Wh $$
 
 So, for a year:
 
@@ -242,12 +243,12 @@ In this situation, we would use a $5000mAh$ battery (for example, a phone batter
 So, we noticed that the energy consumption bottleneck is given by the energy consumed during sleep time. However, in the official documentation of [ESP32 Series](https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf), we found another value for the Deep sleep mode:
 
 $$P_{deepSleep} \approx 150µA \cdot 5V =  0.00075 W $$
-$$E_{tot} \approx (1.835 \cdot 10^{-3} Wh) + (1.85 \cdot 10^{-5} Wh) + (8.97 \cdot 10^{-4} Wh) + (0.018 Wh) \approx 0.021 Wh $$
+$$E_{tot} \approx (1.835 \cdot 10^{-3} Wh) + (4.56 \cdot 10^{-5} Wh) + (8.97 \cdot 10^{-4} Wh) + (0.018 Wh) \approx 0.021 Wh $$
 So, for a year:
 
-$$E_{tot} = E_{tot} \cdot 365 = 6.57 Wh$$
+$$E_{tot} = E_{tot} \cdot 365 = 7.58 Wh$$
 
-Now, with a battery of $1000 mAh$, we can power the device for at leat one year, that is our user requirement.
+Now, with a battery of $2500 mAh$, we can power the device for at least one year, that is our user requirement.
 
 ### Water flow sensor for energy harvesting
 
