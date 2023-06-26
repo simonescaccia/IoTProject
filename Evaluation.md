@@ -85,10 +85,12 @@ Then we have choose a **sampling time of 10 seconds** to have a longer analysis 
 ### Turbine error
 
 Another significant error of the architecture is the instrumental error of the water flow sensor. Because of we have not another turbine with the correct value of the water flow or other instruments, we have run the system for several tests and we have analysed the difference between the values of Source and Son. We have observed the difference because the water flow before our application is not costant (decided by the public pipeline). It is important to observ that this error is influenced by the algorithmic error too. We have taken in consideration also the handshake algorithm.
+
 ![h3AB](./graph/handshake_error_AB.png)<br/>
 ![h3BA](./graph/handshake_error_BA.png)<br/>
 ![s3AB](./graph/syncAck_error_AB.png)<br/>
 ![s3BA](./graph/syncAck_error_BA.png)<br/>
+
 The system is proned to have the Son with an higher water flow value, if you put turbine A before turbine B, but this happens because the turbine A is less efficient. <br/>
 For our prototype and with a distance of 90cm between the nodes, based on the consideration of the several approssimations, We have initially fought to put a threshold of 1 L/min, but then we have done more considerations.<br/>
 We have first set a fixed scenario: 
@@ -102,7 +104,7 @@ With the analysis of the algorithmic error done before, we thought that an highe
 | 0-30 L/min | 0.84 L/min | 0.49 L/min | 0.74 L/min |
 | 0-10 L/min | 0.14 L/min | 0.29 L/min | 0.13 L/min |
 | 10-20 L/min | 0.58 L/min | 0.67 L/min | 0.76 L/min |
-| 20-30 L/min | 1.11 L/min | 0.62 L/min | 1.10 L/min |
+| 20-30 L/min | 1.11 L/min | 1.16 L/min | 1.10 L/min |
 
 The first line is not relevant because there are not enough data and are not distributed well.<br/>
 Then, it is possible to note that the difference is not caused by the different time of sampling, but by the different water flow rate: this lead to say that the main error is the error of the turbines and not the error of the algorithm. <br/>
