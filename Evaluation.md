@@ -75,7 +75,7 @@ In the last days, we have also analysed the time of the handshake algorithm.
 Here the difference is 0.476 s, but there is interesting observation. <br/>
 Because the Source starts before the testing, the water has to flow on the pipeline and arrives after in the second turbine. So if the water is slower than the time of latency, the water of the first turbine not taken by the sampling of the Source arrives after the end of the sampling of the Son. It is important to analyse the speed of the water and the time from the Source to the Son. In particular:  
 * diameter of pipeline: 0.015m
-* area of circle: 0.00018 m^{2}
+* area of circle: 0.00018 $m^{2}$
 * water flow of water max (worst case): 30 L/min = 0.5 L/s
 * distance: 0.9 m
 
