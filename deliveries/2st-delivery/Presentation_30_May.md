@@ -1,5 +1,11 @@
 # Problems
 
+## Algorithms to avoid false positives on leakage detection
+
+![ack](./images/ack.png) <br>
+![handshake](./images/handshake.png) <br>
+![syncAck](./images/syncAck.png) <br>
+
 ## Simulation on IoT-Lab
 
 ### Goals
