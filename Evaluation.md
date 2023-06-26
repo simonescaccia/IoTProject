@@ -55,26 +55,38 @@ We have chosen the syncAck as the final algorithm because it uses one message le
 We have analysed the time of the SyncAck algorithm to understand the error that can be created and to use this values for the calucus of the energy consumption.
 We have analysed that the standard deviation is high and this means that there is a large distribution of the data, in particular this means that the time taken by the messages and the code is fluctuating. Looking at the scheme, it is possible to understand the time of the messages and also the quality of the synchronization of the algorithms.<br/>
 ![s](./images/syncAck_time1.png)<br/>
-Here there are 0.462 s (message) + 0.090 s (difference) in the Son between the end of the test and the arrival of the value of the Source. This means that the Source has ended the test 0,090s before the Son. We double it (also for the difference in starting time) and we obtain 0,180s. 
+Here there are 0.462 s (message) + 0.090 s (difference) in the Son between the end of the test and the arrival of the value of the Source. This means that the Source has ended the test 0.090s before the Son. We double it (also for the difference in starting time) and we obtain 0.180s. 
 
 <br/>**Difference**<br/>
-To find the error of the two algorithm we have to decide the time of testing: now is 3s but if we increase it, the influence of the error derived by the synchronization problem is less.
-If we put the time of the test at 10s, we have that 0,180 : 10 = x : 100. So, influence of syncAck is y = 1,8% .
-Looking at the number of impulses per minute in the datasheet, that is 541 impulses/min, we can find the error of impulses derived by the percentage.<br/>
-541imp / 60s and 30L / 60s -> 30L / 541imp <br/>
-This error represents the possibility of a changing in the water flow rate before the Source<br/>
-y = 1,80% -> imp/10s = 1,80% * 90 = 1,62imp -> flow = L/min = 1,62 * 30L / 541imp = 0,09 L/min <br/>
+To find the error of the algorithm we have to decide the time of testing: now is 3s but if we increase it, the influence of the error derived by the synchronization problem is less. The proportion is 0.180 : TimeSampling = x : 100. We have analysed three times of testing.
+* 3s: 6% of influence, 1.8 L/min difference of water
+* 5s: 3.6% of influence 1.08 L/min difference of water
+* 10s: 1.8% of influence 0.54 L/min difference of water
+So we take 10s of sampling time to limit the possible error. We do not increase more the sampling time because there will be a trade off with the energy.
 
-Beacuse the instrumental error is higher, as we will see, the thing that is significant is the number of messages and so the syncACK will be the final algorithm of our application.<br/>
+Now it is important to discuss this values. The 0.54 L/min is the possible difference of L/min between the Source and the Son, if, when the Source ends the sampling, the water flow goes directly to zero. This is the worst case scenario but it is important to analyse the algoritmic error in the worst case.<br/> 
+The problem happens only if the water is faster than the latency, but we have found that this is not the case, in fact:
+* diameter of pipeline: 0.015m
+* area of circle: 0.00018 m^{2}
+* water flow of water max (worst case): 30 L/min = 0.5 L/s
+* distance: 0.9 m
 
-*It is possible to improve the algorithms using correctly a 'sleep' for some milliseconds; but, because the standard deviation is high, more data are needed to be accurate.*
+$$speed of water=  \frac{0.5 \cdot 10^{-3}}{0.00018} = 2.83 \frac{m}{s}$$
+$$time=  \frac{2.83}{0.9} = 0.32 s$$
+
+This time is higher than 0.090 s and this means that the two water flow sensors sample the same water. Increasing the distance between the two turbines, there will be an higher time and so the observation still holds.
+
+So the algorithmic error is not significant, it is important to focus on the instrumental error.
+
+In conclusion, at this point we have choose the **SyncAck algorithm** because it uses one message less. <br/>
+Then we have choose a **sampling time of 10 seconds** to have a longer analysis of the environment, but this is unrelated with the algorithmin error.
 
 ### Turbine error
 
 Another significant error of the architecture is the instrumental error of the water flow sensor. Because of we have not another turbine with the correct value of the water flow or other instruments, we have run the system for several tests and we have analysed the difference between the values of Source and Son. We have observed the difference because the water flow before our application is not costant (decided by the public pipeline). It is important to observ that this error is influenced by the algorithmic error too. We have taken in consideration also the handshake algorithm.
-![h3AB](./graph/handshake_error_AB.png)
-![h3BA](./graph/handshake_error_BA.png)
-![s3AB](./graph/syncAck_error_AB.png)
+![h3AB](./graph/handshake_error_AB.png)<br/>
+![h3BA](./graph/handshake_error_BA.png)<br/>
+![s3AB](./graph/syncAck_error_AB.png)<br/>
 ![s3BA](./graph/syncAck_error_BA.png)<br/>
 The system is proned to have the Son with an higher water flow value, if you put turbine A before turbine B, but this happens because the turbine A is less efficient. <br/>
 For our prototype and with a distance of 90cm between the nodes, based on the consideration of the several approssimations, We have initially fought to put a threshold of 1 L/min, but then we have done more considerations.<br/>
