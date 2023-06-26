@@ -72,7 +72,8 @@ The problem happens only if the water is faster than the latency, but we have fo
 * distance: 0.9 m
 
 $$speed of water=  \frac{0.5 \cdot 10^{-3}}{0.00018} = 2.83 \frac{m}{s}$$
-$$time=  \frac{2.83}{0.9} = 0.32 s$$
+
+$$time =  \frac{2.83}{0.9} = 0.32 s$$
 
 This time is higher than 0.090 s and this means that the two water flow sensors sample the same water. Increasing the distance between the two turbines, there will be an higher time and so the observation still holds.
 
