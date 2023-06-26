@@ -76,3 +76,5 @@ There are some possible improvements for the future of this project:
 * Fixing the problem of the libraries lora-semtech and lora-wan to remove the redundant Source TTN
 * Transpose the code of the simulation in a real environment using some boards with a working lora-wan library
 * Adding the buzzer and the led
+* Using real samples instead of simulated ones, in IoT-Lab
+* Crash of the node when receiving messages with a payload higher than 32 bytes, in IoT-Lab
