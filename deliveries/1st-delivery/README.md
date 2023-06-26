@@ -14,9 +14,9 @@ Our project is designed in order to offer some smart functionalities to an irrig
 
 ## Links
 
-[Concept](https://github.com/simonescaccia/IoTProject/blob/main/Concept.md)\
-[Design](https://github.com/simonescaccia/IoTProject/blob/main/Design.md)\
-[Evaluation](https://github.com/simonescaccia/IoTProject/blob/main/Evaluation.md)
+[Concept](./Concept.md)\
+[Design](./Design.md)\
+[Evaluation](./Evaluation.md)
 
 ## Video
 
