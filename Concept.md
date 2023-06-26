@@ -73,8 +73,6 @@ We have created three subtopic, you can see all this work in [Design](https://gi
 
 ## Possible improvements
 There are some possible improvements for the future of this project:
-* Implementation of UART in IoT-Lab to connect the Source TTN and the Source simulation
 * Fixing the problem of the libraries lora-semtech and lora-wan to remove the redundant Source TTN
 * Transpose the code of the simulation in a real environment using some boards with a working lora-wan library
 * Adding the buzzer and the led
-* Change the actual duty cycle with a drift rate approach (using clock)
