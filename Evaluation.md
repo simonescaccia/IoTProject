@@ -267,7 +267,7 @@ We have analysed if there is the possibility to charge the device using this tur
 2. The Micro Water Turbine Hydro Generator works at 12 V and gives a power of $10 W$. Since the diameter is lower than the diameter of the Water Flow Sensor, we do a proportion: if the sensor works with max 30 L/min (diameter=15,24mm), the generator work with max 25,6 L/min (diameter=13mm). 
 The generator ideally can charge the device and the sensor beacuse it gives $10 W$ and needed power is $0.33 W$. Other analysis should be done to know the daily water flow and relative energy produced.<br/>
 
-So the system can be changed creating an algorithm that wake up the node only when there is water flow and so when there is energy. In this way, there will be a relationship between the number of sampling and the water flow rate in a day. The energy obtained by the Micro Water Turbine Hydro Generator can be also stored in a battery to allow the node to wake up in other occasions (this is not our situation because we are interested only when there is water flow).
+For this situation, the problem is different, indeed the question is what is the water flow rate on average. Answering this question it is possible to understand if the system can be survive with the turbine generator or not. A interesting observation is that, cause of the fact that the system will be huge, the nodes near to the Source will have an higher water flow rate and so more energy, while the Son in the tail of the pipeline will have some energy in relationship to the crop. Cause of this fact, the complete harvesting of the energy depends on the crops of the environment.
 
 ### Simulation energy consumption experiments
 
