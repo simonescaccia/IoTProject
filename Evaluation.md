@@ -65,7 +65,15 @@ To find the error of the algorithm we have to decide the time of testing: now is
 So we take 10s of sampling time to limit the possible error. We do not increase more the sampling time because there will be a trade off with the energy.
 
 Now it is important to discuss this values. The 0.54 L/min is the possible difference of L/min between the Source and the Son, if, when the Source ends the sampling, the water flow goes directly to zero. This is the worst case scenario but it is important to analyse the algoritmic error in the worst case.<br/> 
-The problem happens only if the water is faster than the latency, but we have found that this is not the case, in fact:
+
+It is important to focus also on the instrumental error.
+
+In the last days, we have also analysed the time of the handshake algorithm.
+
+![s](./images/handshake_time1.png)<br/>
+
+Here the difference is 0.476 s, but there is interesting observation. <br/>
+Because the Source starts before the testing, the water has to flow on the pipeline and arrives after in the second turbine. So if the water is slower than the time of latency, the water of the first turbine not taken by the sampling of the Source arrives after the end of the sampling of the Son. It is important to analyse the speed of the water and the time from the Source to the Son. In particular:  
 * diameter of pipeline: 0.015m
 * area of circle: 0.00018 m^{2}
 * water flow of water max (worst case): 30 L/min = 0.5 L/s
@@ -75,11 +83,14 @@ $$speed of water=  \frac{0.5 \cdot 10^{-3}}{0.00018} = 2.83 \frac{m}{s}$$
 
 $$time =  \frac{2.83}{0.9} = 0.32 s$$
 
-This time is higher than 0.090 s and this means that the two water flow sensors sample the same water. Increasing the distance between the two turbines, there will be an higher time and so the observation still holds.
+The difference time is 0.476 s, and so for 0.126 s there is a different water. But this is valid for 0.9 m, for an higher distance (double for example) the water is the same.
 
-So the algorithmic error is not significant, it is important to focus on the instrumental error.
+Increasing the distance between the two turbines, there will be an higher time and so the observation still holds.
 
-In conclusion, at this point we have choose the **SyncAck algorithm** because it uses one message less. <br/>
+With this observation, the algorithmic error is not significant, we can approssimate it to zero.
+
+In conclusion, the handshake algorithmic error is almost zero and better than the SyncAck algorithmic error. <br/>
+But, because we have done this observation lately, at this point we have choose the **SyncAck algorithm** because it uses one message less. We will see after that the handshake algorithm is not too much more consuming than the SyncAck. <br/>
 Then we have choose a **sampling time of 10 seconds** to have a longer analysis of the environment, but this is unrelated with the algorithmin error.
 
 ### Turbine error
