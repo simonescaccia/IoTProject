@@ -20,12 +20,6 @@ Our system allows to do the following tasks:
 
 The starting point of our analysis is the collection of user requirements. In our context, there are some fixed parameters, mainly related to the chosen infrastructure, while other parameters should be finetuned according to the specific final user of the application, ideally a farmer owning a variable field. To cope with this issue, we made reasonable assumptions about these parameters, and we also guaranteed the scalability of the system according to user needs.
 
-### Detect water leakages
-
-* How can we detect leakages? Conceptually, we measure the water flow at different adjacent sites of the irrigation system and we compare these measurements in order to detect anomalies, according to a specific detection algorithm.
-* The accuracy is computed considering the percentage of correct leakage identification on the total number of experiments.
-* We also thought about the possibility to binary classify every state as faulty or as correct, focusing on the analysis of False Positive and False Negative events.
-
 ### Alarm system
 
 We thought about suitable actuators to use in order to indicate an alarm condition. A simple LED with a buzzer are certainly a good option.
