@@ -4,7 +4,7 @@
 
 Our infrastructure is composed of:
 
-* ESP32 MCU 
+* ESP32 MCU
 * LoRa support for peer and cloud communication
 * Water flow sensor
 * Led & Buzzer
@@ -41,8 +41,16 @@ As a first step, we have to reason about our main requirement, leakage detection
 <br> </br>
 ![leakage](./images/HowToDetectLeakages-Leakage_situations.drawio.png)
 <br> </br>
+So, by putting the water flow sensors at the extremity of the pipe we can compute the difference of water flow and check if there is a leakage.
+If a leakage occur we expect that the water flow at the end of a pipe is different than the water flow at the start.
+
+Our first attempt to detect leakages in distributed infrastructure is the following:
+by putting a waterflow sensor befor the fork, we can correctly detect a leakage by computing the difference between the fork water flow and the sum of the branch waterflows. But, it is not enough to satisfy the requirements since we cannot detect which pipe is leaking as in the picture, you can see the same waterflow in both cases but different pipes are leaking.
+</br> </br>
 ![distributed_problem](./images/HowToDetectLeakages-Distributed_system_leakage_problem.drawio.png)
-<br> </br>
+<br> <br>
+Our proposed solution is to put two water flow sensors insead of one at the fork site. Indeed, in this case, we can detect also the pipe which has a leak.
+</br> <br>
 ![distributed_solution](./images/HowToDetectLeakages-Distributed_system_leakage_solution.drawio.png)
 <br> </br>
 ![distributed_other](./images/HowToDetectLeakages-Distributed_system_other_leakages.drawio.png)
@@ -74,7 +82,8 @@ In our architecture we preferred to focus our attention on things, with computat
 
 The network architecture is focused on checking the actual state of the irrigation system, with a communication between devices based on LoRaWAN and MQTT.
 
-## Prototype 
+## Prototype
+
 We constructed a real prototype to demonstrate the working principle of the system. It is made up of a linear pipe and two MCUs located at its endopoints, with a water flow sensor for each one, together with a water source and an intermediate valve used to simulate a leakage.
 
 Unfortunately, we found some problems working with LoRa with our chosen ESP32, even if it should be officially supported by RIOT. So, in order to overcome this issue, we decided to switch to WiFi technology only for demonstating purposes. The idea is that when LoRa issue will be hopefully solved soon our project can be adapted with minor changes.
@@ -91,7 +100,6 @@ We started from a 1,5 meters long garden hose with an inner diameter of 20 mm an
 The tap is used to simulate a leakage and it is initially closed. We did not use clamps at first, but we experienced water leaks in correspondence of joints. Therefore we placed 2 clamps at the outer endpoints of each water flow sensor and other 2 for the endpoints of the T-adapter not connected to the tap. In this way we solved the problem of leakages at joints. The water flow sensor of father MCU and the water flow sensor of child MCU are 90cm apart.
 
 ![prototype](./images/prototype.jpg)
-
 
 ## Algorithms
 
@@ -228,14 +236,16 @@ Radio
 * Crash of the node when receiving messages with a payload higher than 32 bytes.
 
 ## Dashboard
+
 ### AWS Architecture
+
 ![AWS](./images/AWS_architecture.png)
 The AWS architecture above shows our cloud design. In detail, data are generated both from the prototype and the simulation, but sent to AWS through a MQTT-Bridge for the prototype and TTN for the simulation. Data are sent to AWS IoT Core, using also AWS CloudFormation in the case of TTN. With two proper AWS Lambda functions data are stored in two NoSQL DBs, one for the water flow at the source and one for water leakages. With a separate unique Lambda function, data are retrieved form DBs and associated to an API deployed with AWS API Gateway. The website frontend, taken data dynamically from API endpoint, has been deployed with AWS Amplify.
 
 ### Website
+
 Here it is a demonstration of website content:
 
 ![website](./images/website.png)
 
 From the website user can monitor water flow at the source looking at last 10 measurements displayed in the upper graph and checking some statistics about average water flow. A proper alert is shown in case of leakage, with leakages displayed in the lower graph with correct location and quantity. Also here, some statistics can be retrieved.
-
