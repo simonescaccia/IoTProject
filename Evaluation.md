@@ -166,8 +166,6 @@ We have decide to take 10s for the sampling and this will be similar to 9s resul
 
 #### Conclusions on the threshold
 
-
-### Energy consumption
 Finally, for the threshold, we will give this observation:
 1. We did some tests and considering the average, we observed that in a No leakage situation there is a 5% difference between Source and Son, due to the error of a turbine (instrumental error).
 2. We then observed that, based on the changes in the flow before the source (therefore on the stability of the flow rate of the pipeline), there may be an average possible error of 1.8%, due to the algorithmic error.
@@ -179,6 +177,8 @@ Finally, for the threshold, we will give this observation:
 * The standard deviation is high and we have understood it as an unreliability of the mean. 
 * Finally, the conduct of the test affects the result: the position of the cell phone and the turbines varies the times of the messages (and therefore the algorithmic error).
 * The stability of water flow rate before the Source has been probably good during the training of the threshold and bad in the test.
+
+### Energy consumption
 
 #### Duty cycle
 
