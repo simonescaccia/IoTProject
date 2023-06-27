@@ -69,43 +69,42 @@ We have chosen the syncAck as the final algorithm because it uses one message le
 We have analysed the time of the SyncAck algorithm to understand the error that can be created and to use this values for the calucus of the energy consumption.
 We have analysed that the standard deviation is high and this means that there is a large distribution of the data, in particular this means that the time taken by the messages and the code is fluctuating. Looking at the scheme, it is possible to understand the time of the messages and also the quality of the synchronization of the algorithms.<br/>
 ![s](./images/syncAck_time1.png)<br/>
-Here the messages take 0.462 s while the latency of the two samplings is 0.552 s (time in the Son between the end of the test and the arrival of the value of the Source). This means that the Source has ended the test 0.090s before the Son. We double it (also for the difference in starting time) and we obtain 0.180s. 
+Here the messages take 0.462 s while the latency of the two samplings is 0.552 s (time in the Son between the end of the test and the arrival of the value of the Source). This means that the Source has ended the test 0.090 s before the Son. So Son and Source have an error of synchronization of 0.090 s. 
 
 <br/>**Difference**<br/>
-To find the error of the algorithm we have to decide the time of testing: now is 3s but if we increase it, the influence of the error derived by the synchronization problem is less.The proportion is 0.180 : TimeSampling = x : 100. The FlowMax is 30 l/min.
+To find the error of the algorithm we have to decide the time of testing: now is 3s but if we increase it, the influence of the error derived by the synchronization problem is less.The proportion is 0.090s : (TimeSampling) = x : 100. The FlowMax is 30 l/min.
 
-With influence we mean: **$FlowMax \cdot \frac{0.180 \cdot 100}{TimeSampling}$**:
+With influence we mean: **$FlowMax \cdot \frac{0.090 \cdot 100}{TimeSampling}$**:
 
 We have analysed three times of testing. 
-* TimeSampling of 3s: 6% of influence, 1.8 L/min difference of water
-* TimeSampling of 5s: 3.6% of influence 1.08 L/min difference of water
-* TimeSampling of 10s: 1.8% of influence 0.54 L/min difference of water
+* TimeSampling of 3s: 3% of influence, 0.90 L/min difference of water
+* TimeSampling of 5s: 1.8% of influence 0.54 L/min difference of water
+* TimeSampling of 10s: 0.9% of influence 0.27 L/min difference of water
 
 So we take 10s of sampling time to limit the possible error. We do not increase more the sampling time because there will be a trade off with the energy.
 
-Now it is important to discuss this values. The 0.54 L/min is the possible difference of L/min between the Source and the Son, if, when the Source ends the sampling, the water flow goes directly to zero. This is the worst case scenario but it is important to analyse the algoritmic error in the worst case.<br/> 
+Now it is important to discuss this values. The 0.27 L/min is the **possible difference of L/min** between the Source and the Son. This is the worst case scenario but it is important to analyse the algoritmic error in the worst case.<br/> 
 
 It is important to focus also on the instrumental error.
 
-In the last days, we have also analysed the time of the handshake algorithm. We have not take the time, but we have done an interesting observation.
+In the last days, we have also thought that this holds also for the time of the handshake algorithm. But we have not checked sperimentally.
 
-Because the Source starts before the testing, the water has to flow on the pipeline and arrives after in the second turbine. So if the water is slower than the time of latency, the water of the first turbine not taken by the sampling of the Source arrives after the end of the sampling of the Son. It is important to analyse the speed of the water and the time from the Source to the Son. In particular:  
-* diameter of pipeline: 0.015m
-* area of circle: 0.00018 $m^{2}$
-* water flow of water max (worst case): 30 L/min = 0.5 L/s
-* distance: 0.9 m
+In conclusion, because we have done this observation lately, at this point we have choose the **SyncAck algorithm** because it uses one message less. We will see after that the handshake algorithm is not too much more consuming than the SyncAck. <br/>
+Then we have choose a **sampling time of 10 seconds** to have a longer analysis of the environment and to reduce the algorithmin error.
 
-$$speed of water=  \frac{0.5 \cdot 10^{-3}}{0.00018} = 2.83 \frac{m}{s}$$
+We have done another consideration.
 
-$$time =  \frac{2.83}{0.9} = 0.32 s$$
+The water enter in the first turbine, then it has to flow on the pipeline and arrives in the second turbine. So if the water is too muxh slower than the time of latency, the water of the first turbine taken by the sampling is different from the water of the sampling of the Son. It is important to analyse the speed of the water and the time from the Source to the Son. In particular in our case, the water takes:
 
-This is valid for 0.9 m. Teoreticallu, increasing the distance between the two turbines, there will be an higher time and so the observation still holds. It is needed to do test with higher distance to see if this still holds and if the relationship is linear.
+* diameter of pipeline: 0.015m * area of circle: 0.00018 $m^{2}$ * water flow of water max (worst case): 30 L/min = 0.5 L/s * distance: 0.9 m 
+$$speed of water= \frac{0.5 \cdot 10^{-3}}{0.00018} = 2.83 \frac{m}{s}$$ 
+$$time = \frac{2.83}{0.9} = 0.32 s$$
 
-With this observation, the algorithmic error is not significant, we can approssimate it to zero.
+Meanwhile the water is complete different for a distance of:
+$$time = \frac{2.83}{distance} = 10 s$$
+$$distance = 2.83 \cdot 10s = 28.3 m$$
 
-In conclusion, the handshake algorithmic error is almost zero and better than the SyncAck algorithmic error. <br/>
-But, because we have done this observation lately, at this point we have choose the **SyncAck algorithm** because it uses one message less. We will see after that the handshake algorithm is not too much more consuming than the SyncAck. <br/>
-Then we have choose a **sampling time of 10 seconds** to have a longer analysis of the environment, but this is unrelated with the algorithmin error.
+With this observation, to deal with the algorithmic error, we have to assume a constant water flow rate before the Source.  .
 
 ### Turbine error
 
@@ -161,7 +160,7 @@ We have decide to take 10s for the sampling and this will be similar to 9s resul
 
 Finally, for the threshold, we will give this observation:
 1. We did some tests and considering the average, we observed that in a No leakage situation there is a 5% difference between Source and Son, due to the error of a turbine (instrumental error).
-2. We then observed that, based on the changes in the flow before the source (therefore on the stability of the flow rate of the pipeline), there may be an average possible error of 1.8%, due to the algorithmic error.
+2. We then observed that, based on the changes in the flow before the source (therefore on the stability of the flow rate of the pipeline), there may be an average possible error of 0.9%, due to the algorithmic error.
 3. We have observed that in the handshake this algorithmic error is teoretical less, but for time constraints we have not focus on it.
 4. We have tried to apply the 5% threshold but experimentally we found too many false positives. We tried 7% and 10%. We have judged that 10% is acceptable.
 5. Finally considering that the turbines in a NO leakage situation have an unexpected 5% error; assuming that there is not the same problem for the future system, we will have a threshold of 5%.
