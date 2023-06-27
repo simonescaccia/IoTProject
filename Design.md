@@ -97,9 +97,13 @@ For our prototype, we used the fllowing objects:
 * 2 ESP32 LoRa MCUs  
 
 We started from a 1,5 meters long garden hose with an inner diameter of 20 mm and an outer one of 25 mm. We cut the garden hose into 4 main segments approximately 35 cm long. We placed two segments at the inner endpoints of each water flow sensor and we joined them using the T-adapter. So we connected the tap to the last free endpoint of the T-adapter and the last two segments to the outer endpoints of water flow sensor. We defined a direction for the flow placing the water flow sensors in the correct flow measurement direction. Finally, we connected the water flow sensors to the MCUs and the MCUs to a battery.
-The tap is used to simulate a leakage and it is initially closed. We did not use clamps at first, but we experienced water leaks in correspondence of joints. Therefore we placed 2 clamps at the outer endpoints of each water flow sensor and other 2 for the endpoints of the T-adapter not connected to the tap. In this way we solved the problem of leakages at joints. The water flow sensor of father MCU and the water flow sensor of child MCU are 90cm apart.
 
 ![prototype](./images/prototype.jpg)
+
+The tap is used to simulate a leakage and it is initially closed. We did not use clamps at first, but we experienced water leaks in correspondence of joints. Therefore we placed 2 clamps at the outer endpoints of each water flow sensor and other 2 for the endpoints of the T-adapter not connected to the tap. In this way we solved the problem of leakages at joints. The water flow sensor of father MCU and the water flow sensor of child MCU are 90cm apart.
+
+![prototype](./images/fritzing.png)
+
 
 ## Algorithms
 
