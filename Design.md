@@ -12,10 +12,7 @@ Our infrastructure is composed of:
 
 ### ESP32
 
-The ESP32 manages the different sensors and actuators in the infrastructure and exchanges messages with the other microcontrollers and with the cloud. The main technical issue is that the device will be attached to every object of interest and thus should be battery powered:
-
-* CHIEF is connected to a power cord and does not have energy constraints, however a duty cycle is implemented as well
-* FORK and BRANCH wakes up only when a test is needed, so we modulated a proper duty cicle in order to provide a longer battery lifetime
+The ESP32 manages the different sensors and actuators in the infrastructure and exchanges messages with the other microcontrollers and with the cloud. The main technical issue is that the device will be attached to every object of interest and, apart from the source site, they should be battery powered. MCUs wakes up only when a test is needed, so we modulated a proper duty cicle in order to provide a longer battery lifetime. MCU at the source, instead, is connected to a power cord and does not have energy constraints, but a duty cycle is implemented as well.
 
 ### LoRa
 
@@ -23,7 +20,7 @@ LoRa is a physical radio communication protocol, based on spread spectrum modula
 
 ### Water flow sensors
 
-Water flow sensors are installed at the water source or pipes to measure the flow rate of water. The chosen metric for flow measurement is liters per minute. The structure of the sensor consists of a plastic valve (from which water can pass) and a water rotor along with a Hall effect sensor (a voltage difference is induced in the conductor due to the rotation of the rotor), measuring the sense and the intensity of the flow. When water flows through the valve, it causes a change of speed of the rotor, calculated as output as a pulse signal. The sensor is powered with a 5 V supply voltage of DC.
+Water flow sensors are installed at the water source or pipes to measure the flow rate of water. The chosen metric for flow measurement is liters per minute. The structure of the sensor consists of a valve (from which water can pass) and a water rotor along with a Hall effect sensor (a voltage difference is induced in the conductor due to the rotation of the rotor), measuring the sense and the intensity of the flow. When water flows through the valve, it causes a change of speed of the rotor, calculated as output as a pulse signal. The sensor is powered with a 5 V supply voltage of DC.
 
 Water flow sensors used for our protoype can be found [here](https://www.amazon.it/dp/B079QYRQT5?psc=1&ref=ppx_yo2ov_dt_b_product_details)
 
