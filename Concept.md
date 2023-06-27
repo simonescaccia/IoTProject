@@ -33,7 +33,7 @@ The main events we are interested in are certainly water flow changes. We wish t
 
 LoRa is a suitable technology for different reasons:
 
-* It uses low bandwidth, and this is a great advantage in our context. In fact, we need to exhange simple data, namely water flow measurements, so LoRa is certainly a good option.
+* It uses low bandwidth, and this is a great advantage in our context. In fact, we need to exchange simple data, namely water flow measurements, so LoRa is certainly a good option.
 * It can send data on long ranges. It is not an immediate advantage in our architecture, because we implemented a peer-to-peer communication with adjacent nodes. However, it can be very useful firstly to reach also far LoRa gateways and on large scale systems to exchange data between distant nodes, if needed.
 * It works with low power consumption, and this is a crucial added value to the protocol since we use battery-powered MCUs.
 
