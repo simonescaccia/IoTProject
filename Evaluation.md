@@ -27,41 +27,64 @@ One of the main problems related to the test is related to synchronization, beca
 1. Test propagation phase
 2. Leak notification
 
-The complexity will change depending on the number of FORKs, and we will compare variuous topologies in order to find the best one.
+The complexity will change depending on the number of FORKs, we have choose the topology of the Design.
 
-The three algorithms proposed in the design phase have been tested. The test of the Ack algorithm has shown that there is a problem in the code (caused by the use of threads in the program) and that the water flow before our system (that we consider always present) is not stable and this issue has to be solved by the synchronization algorithm.
+The three algorithms proposed in the design phase have been tested. 
+
+The test of the Ack algorithm has shown that there is a problem in the code (intially we thought it is caused by the use of threads in the program, after we understood is linked to the water flow sensor) and that the water flow before our system (that we consider always present) is not stable and this issue has to be solved by the synchronization algorithm.<br/>
+
 The problem of stability of the initial water flow can be seen in the following image in which there is a segmentation of the lines of the graph.<br/>
+
 ![ack](./graph/ack_flow.png) <br/>
 About the Ack algorithm, it is possible to notice that it is good to detect a leakage but it says that the water flow of the Son is always higher than the water flow of the Source, and this can lead to error, so it is not the worst algorithm implemented.<br/>
+
+The following image shows the test of the ack algorithm and it is possible to observ the big difference between Source and Son.
 ![ack1](./graph/ack_test1.png)<br/>
+
+The following graph shows again the test of the ack algorithm with the same result.
 ![ack3](./graph/ack_test3.png)<br/>
 
 About the Hanshake algorithm, it is perfect to detect the leakage and the trend of the Son higher than the Source is disappeared. There still is an error of the turbines, that we will face in the next chapter.<br/>
+
+The following image shows the test of the Handshake algorithm and it is possible to observ a smaller difference between Source and Son. But there still is a trend in which the Son is higher than the Source.
 ![h1](./graph/handshake_test1.png)<br/>
+
+The following graph shows the same observations before.
 ![h2](./graph/handshake_test2.png)<br/>
 
-In the end, about the syncAck algorithm, it is possible to see the same trend of the handshake algorithm but with one less message. There is also here the error of the turbines.<br/><br/>
+In the end, about the syncAck algorithm, it is possible to see the same trend of the handshake algorithm but with one less message. There is also here the error of the turbines.<br/>
+
+The following image shows the test of the SyncAck algorithm and it is possible to observ a smaller difference between Source and Son. Here the trend is that the Source is higher than the Son.
 ![s1](./graph/syncAck_test1.png)<br/>
+The following image shows another the test of the SyncAck algorithm, but here the trend is the opposite. This suggests a problem in the water flow sensor.
 ![s2](./graph/syncAck_test2.png)<br/>
 
 ### Water leak detection Algorithm Solutions
 
-After several tests, we have found that one water flow sensor has some problems and detect less impulses.
+After several tests, and using the considerations done before, we have found that one water flow sensor has some problems and detect less impulses. 
+
+Not having other sensors, we have decided to put the best sensor in the Source and the worst in the Son, so we will have an higher Source in a NO leakage situation.
 
 ### Water leak detection Threshold
 
-We have done some analysis to set a correct threshold in our algorithms to limit the presence of false positives and false negatives. We have also thought that a false negative is more serious than a false positive, and so our system will be prone to false positives.<br/>
+We have done some analysis to set a correct threshold in our algorithms to limit the presence of false positives and false negatives.<br/>
+
 We have chosen the syncAck as the final algorithm because it uses one message less.
 We have analysed the time of the SyncAck algorithm to understand the error that can be created and to use this values for the calucus of the energy consumption.
 We have analysed that the standard deviation is high and this means that there is a large distribution of the data, in particular this means that the time taken by the messages and the code is fluctuating. Looking at the scheme, it is possible to understand the time of the messages and also the quality of the synchronization of the algorithms.<br/>
 ![s](./images/syncAck_time1.png)<br/>
-Here there are 0.462 s (message) + 0.090 s (difference) in the Son between the end of the test and the arrival of the value of the Source. This means that the Source has ended the test 0.090s before the Son. We double it (also for the difference in starting time) and we obtain 0.180s. 
+Here the messages take 0.462 s while the latency of the two samplings is 0.552 s (time in the Son between the end of the test and the arrival of the value of the Source). This means that the Source has ended the test 0.090s before the Son. We double it (also for the difference in starting time) and we obtain 0.180s. 
 
 <br/>**Difference**<br/>
-To find the error of the algorithm we have to decide the time of testing: now is 3s but if we increase it, the influence of the error derived by the synchronization problem is less. The proportion is 0.180 : TimeSampling = x : 100. We have analysed three times of testing.
-* 3s: 6% of influence, 1.8 L/min difference of water
-* 5s: 3.6% of influence 1.08 L/min difference of water
-* 10s: 1.8% of influence 0.54 L/min difference of water
+To find the error of the algorithm we have to decide the time of testing: now is 3s but if we increase it, the influence of the error derived by the synchronization problem is less.The proportion is 0.180 : TimeSampling = x : 100. The flow_max is 30 l/min.
+
+With influence we mean: **flow_max $\cdot \frac{0.180 \cdot 100}{TimeSampling}**:
+
+We have analysed three times of testing. 
+* TimeSampling of 3s: 6% of influence, 1.8 L/min difference of water
+* TimeSampling of 5s: 3.6% of influence 1.08 L/min difference of water
+* TimeSampling of 10s: 1.8% of influence 0.54 L/min difference of water
+
 So we take 10s of sampling time to limit the possible error. We do not increase more the sampling time because there will be a trade off with the energy.
 
 Now it is important to discuss this values. The 0.54 L/min is the possible difference of L/min between the Source and the Son, if, when the Source ends the sampling, the water flow goes directly to zero. This is the worst case scenario but it is important to analyse the algoritmic error in the worst case.<br/> 
@@ -83,9 +106,7 @@ $$speed of water=  \frac{0.5 \cdot 10^{-3}}{0.00018} = 2.83 \frac{m}{s}$$
 
 $$time =  \frac{2.83}{0.9} = 0.32 s$$
 
-The difference time is 0.476 s, and so for 0.126 s there is a different water. But this is valid for 0.9 m, for an higher distance (double for example) the water is the same.
-
-Increasing the distance between the two turbines, there will be an higher time and so the observation still holds.
+The difference time is 0.476 s, and so for 0.126 s there is a different water. But this is valid for 0.9 m. Increasing the distance between the two turbines, there will be an higher time and so the observation still holds.
 
 With this observation, the algorithmic error is not significant, we can approssimate it to zero.
 
@@ -97,9 +118,16 @@ Then we have choose a **sampling time of 10 seconds** to have a longer analysis 
 
 Another significant error of the architecture is the instrumental error of the water flow sensor. Because of we have not another turbine with the correct value of the water flow or other instruments, we have run the system for several tests and we have analysed the difference between the values of Source and Son. We have observed the difference because the water flow before our application is not costant (decided by the public pipeline). It is important to observ that this error is influenced by the algorithmic error too. We have taken in consideration also the handshake algorithm.
 
+The following image shows the test of the Handshake algorithm with the best water flow sensor in the Son.
 ![h3AB](./graph/handshake_error_AB.png)<br/>
+
+The following image shows the test of the Handshake algorithm with the best water flow sensor in the Source.
 ![h3BA](./graph/handshake_error_BA.png)<br/>
+
+The following image shows the test of the SyncAck algorithm with the best water flow sensor in the Son.
 ![s3AB](./graph/syncAck_error_AB.png)<br/>
+
+The following image shows the test of the SyncAck algorithm with the best water flow sensor in the Source.
 ![s3BA](./graph/syncAck_error_BA.png)<br/>
 
 The system is proned to have the Son with an higher water flow value, if you put turbine A before turbine B, but this happens because the turbine A is less efficient. <br/>
@@ -126,14 +154,31 @@ So, we can decide to use the syncAck algorithm knowing that it uses one message 
 ![](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/Comparison_error_syncAck_5s_1.png)
 ![](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/Comparison_error_syncAck_9s.png)
 ![](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/graph/Comparison_error_syncAck_9s_1.png)<br/>
-We have analysed these data to fix a threshold for the detection of the leakages, and we have done the mean of (flowSource-flowSon)x100/flowSource %:
+We have analysed these data to fix a threshold for the detection of the leakages, and we have done the mean of **(flowSource-flowSon)x100/flowSource** %:
 
 * 3s -> 4,29%
 * 5s -> 6,34%
 * 9s (done 9s and not 10s because of a problem of MQTT) -> 4,30% <br/>
-We have decide to take 10s for the sampling and this will be similar to 9s result, so in this situation we can put a **fixed threshold of > 2L/min** or **dynamic threshold flowSource-flowSon > 5% flowSource L/min**. The dynamic threshold is more efficient because it is more accurate in the lower water flow rate.
+
+
+We have decide to take 10s for the sampling and this will be similar to 9s result, so in this situation we can put a fixed threshold of > 2L/min or dynamic threshold flowSource-flowSon > 5% flowSource L/min. The dynamic threshold is more efficient because it is more accurate in the lower water flow rate. We have done some sperimental test but the system was proned to false positives. So below there are our conclusions.
+
+
+#### Conclusions on the threshold
+
 
 ### Energy consumption
+Finally, for the threshold, we will give this observation:
+1. We did some tests and considering the average, we observed that in a No leakage situation there is a 5% difference between Source and Son, due to the error of a turbine (instrumental error).
+2. We then observed that, based on the changes in the flow before the source (therefore on the stability of the flow rate of the pipeline), there may be an average possible error of 1.8%, due to the algorithmic error.
+3. We have observed that in the handshake this algorithmic error is teoretical less, but for time constraints we have not focus on it.
+4. We have tried to apply the 5% threshold but experimentally we found too many false positives. We tried 7% and 10%. We have judged that 10% is acceptable.
+5. Finally considering that the turbines in a NO leakage situation have an unexpected 5% error; assuming that there is not the same problem for the future system, we will have a threshold of 5%.
+6. Why did it happen? 
+* First of all we have done many approximations.
+* The standard deviation is high and we have understood it as an unreliability of the mean. 
+* Finally, the conduct of the test affects the result: the position of the cell phone and the turbines varies the times of the messages (and therefore the algorithmic error).
+* The stability of water flow rate before the Source has been probably good during the training of the threshold and bad in the test.
 
 #### Duty cycle
 
@@ -181,7 +226,7 @@ While the average sleeping power, useful for further considerations, is:
 
 $$P_{sleep} = 0.28 W$$
 
-Also for this case, we do not consider the small constributions due to the a single on and a single off switching, so:
+Also, for this case, we do not consider the small constributions due to the a single on and a single off switching, so:
 
 $$E(y) = P_{listen} \cdot y + P_{on} \cdot t_{on} + P_{off} \cdot t_{off}$$
 $$E(y) \approx P_{listen} \cdot y $$
@@ -194,18 +239,18 @@ So the function to minimize is:
 
 $$f(x) = 1.14 \cdot 10^{-5} \cdot x + \frac{7.8}{x}$$
 
-So we wish to find the minimum of the function, considering the domain of $$x \geq 1$$
+The minimum of the function, considering the domain of $$x \geq 1$$
 because we have to send at least one message per day. Solving the function analytically, we found a global minimum for:
 
 $$x \approx 828$$
 
-So the send rate of the father should be 828 messages/day, hence the listen time will be:
+So the send rate of the father should be 10 messages/day, hence the listen time will be:
 
 $$y = \frac{24}{x} = \frac{24}{828} \approx 0.029 \frac{hours}{day} \approx 1.74 \frac{min}{day} \approx 104 \frac{s}{day}$$
 
 #### Estimation of system duration
 
-To analyse the duration of our system, we must also consider other energy contributions, mainly the measurement, the sleep and the cloud transmission energy consumptions. We considered the daily worst case, so the case of an intermediate node that measures twice and sends data to child 828 times, listens for 104 seconds, receives data from the father once after algorithm execution and sends once to the cloud the difference with father water flow. In our analysis,
+To analyse the duration of our system, we must also consider other energy contributions, mainly the measurement, the sleep and the cloud transmission energy consumptions. We considered the daily worst case, so the case of an intermediate node that measures twice and sends data to child 1300 times, listens for 1 minute, receives data from the father once after algorithm execution and sends once to the cloud the difference with father water flow. In our analysis,
 
 $$E_{cloud} \approx E_{trans} = 1.14 \cdot 10^{-5} Wh$$
 
