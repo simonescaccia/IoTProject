@@ -78,7 +78,7 @@ Here the messages take 0.462 s while the latency of the two samplings is 0.552 s
 <br/>**Difference**<br/>
 To find the error of the algorithm we have to decide the time of testing: now is 3s but if we increase it, the influence of the error derived by the synchronization problem is less.The proportion is 0.180 : TimeSampling = x : 100. The flow_max is 30 l/min.
 
-With influence we mean: **flow_max $\cdot \frac{0.180 \cdot 100}{TimeSampling}$**:
+With influence we mean: **$flow_max \cdot \frac{0.180 \cdot 100}{TimeSampling}$**:
 
 We have analysed three times of testing. 
 * TimeSampling of 3s: 6% of influence, 1.8 L/min difference of water
