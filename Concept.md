@@ -27,7 +27,7 @@ Obiouvsly, it makes no sense to place these actuators in the middle of a field, 
 
 ### Events
 
-The main events that we are interested in are certainly water flow changes. We wish to monitor the water flow at the source and also the one at different sites of the system, in order to compare measurements and detect possible changes of flow.
+The main events we are interested in are certainly water flow changes. We wish to monitor the water flow at the source and also to know about current possible leakages as the results of a proper water leakage detection algorithm comparing flow changes at different nodes of the irrigation system.
 
 ### Communication protocol
 
