@@ -48,10 +48,12 @@ The following image shows the test of the Handshake algorithm and it is possible
 
 In the end, about the syncAck algorithm, it is possible to see the same trend of the handshake algorithm but with one less message. There is also here the error of the turbines.<br/>
 
-The following image shows the test of the SyncAck algorithm and it is possible to observ a smaller difference between Source and Son. Here the trend is that the Source is higher than the Son.<br/>
-![s1](./graph/syncAck_test1.png)<br/>
+
+The following image shows the test of the SyncAck algorithm and it is possible to observ a smaller difference between Source and Son. Here the trend is that the Son is higher than the Source.<br/>
+![s2](./graph/syncAck_test2.png)<br/>
+
 The following image shows another the test of the SyncAck algorithm, but here the trend is the opposite. This suggests a problem in the water flow sensor.<br/>
-![s2](./graph/syncAck_test2.png)
+![s1](./graph/syncAck_test1.png)<br/>
 
 ### Water leak detection Algorithm Solutions
 
