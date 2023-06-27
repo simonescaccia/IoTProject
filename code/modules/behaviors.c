@@ -562,7 +562,7 @@ void *_periodic_sending(void *arg) {
     xtimer_ticks32_t last_wakeup;
     bool is_last_wakeup = false;
     /* Starting logic time for the sample generator */
-    int time = 3;
+    int time = 6;
     node_t node = *(node_t *)arg;
 
     while (1) {
