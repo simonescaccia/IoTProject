@@ -68,6 +68,12 @@ Since in the simulation we used a node for each MCU, our tree architecture can b
 
 In our architecture we preferred to focus our attention on things, with computation performed at nodes rather than in the cloud. So, the cloud only receives (from TTN) data about water flow and leakages that are simply displayed in the GUI. For some techical reasons explained in detail in the description of our simulation, we used a simple node communicating with TTN for demonstrating purposes. However, in the designed architecture each node receiving a flow from the father computes the difference between this flow and its own one and sends data to TTN only in case of leakage.
 
+## Network architecture
+
+![network](./images/network.jpg)
+
+The network architecture is focused on checking the actual state of the irrigation system, with a communication between devices based on LoRaWAN and MQTT.
+
 ## Prototype 
 We constructed a real prototype to demonstrate the working principle of the system. It is made up of a linear pipe and two MCUs located at its endopoints, with a water flow sensor for each one, together with a water source and an intermediate valve used to simulate a leakage.
 
@@ -86,20 +92,6 @@ The tap is used to simulate a leakage and it is initially closed. We did not use
 
 ![prototype](./images/prototype.jpg)
 
-## Network architecture
-
-![network](./images/network.jpg)
-
-The network architecture is focused on checking the actual state of the irrigation system, with a communication between devices based on LoRaWAN and MQTT.
-
-![AWS](./images/AWS_architecture.png)
-The AWS architecture above shows our cloud design. In detail, data are generated both from the prototype and the simulation, but sent to AWS through a MQTT-Bridge for the prototype and TTN for the simulation. Data are sent to AWS IoT Core, using also AWS CloudFormation in the case of TTN. With two proper AWS Lambda functions data are stored in two NoSQL DBs, one for the water flow at the source and one for water leakages. With a separate unique Lambda function, data are retrieved form DBs and associated to an API deployed with AWS API Gateway. The website frontend, taken data dynamically from API endpoint, has been deployed with AWS Amplify.
-
-Here it is a demonstration of website content:
-
-![website](./images/website.png)
-
-From the website user can monitor water flow at the source looking at last 10 measurements displayed in the upper graph and checking some statistics about average water flow. A proper alert is shown in case of leakage, with leakages displayed in the lower graph with correct location and quantity. Also here, some statistics can be retrieved.
 
 ## Algorithms
 
@@ -234,3 +226,16 @@ Radio
 * Integration of lora sx127x drivers for p2p communication and loramac for ttn communication.
 * Using real samples instead of simulated ones.
 * Crash of the node when receiving messages with a payload higher than 32 bytes.
+
+## Dashboard
+### AWS Architecture
+![AWS](./images/AWS_architecture.png)
+The AWS architecture above shows our cloud design. In detail, data are generated both from the prototype and the simulation, but sent to AWS through a MQTT-Bridge for the prototype and TTN for the simulation. Data are sent to AWS IoT Core, using also AWS CloudFormation in the case of TTN. With two proper AWS Lambda functions data are stored in two NoSQL DBs, one for the water flow at the source and one for water leakages. With a separate unique Lambda function, data are retrieved form DBs and associated to an API deployed with AWS API Gateway. The website frontend, taken data dynamically from API endpoint, has been deployed with AWS Amplify.
+
+### Website
+Here it is a demonstration of website content:
+
+![website](./images/website.png)
+
+From the website user can monitor water flow at the source looking at last 10 measurements displayed in the upper graph and checking some statistics about average water flow. A proper alert is shown in case of leakage, with leakages displayed in the lower graph with correct location and quantity. Also here, some statistics can be retrieved.
+
