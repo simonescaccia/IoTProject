@@ -96,7 +96,11 @@ We have done another consideration.
 
 The water enter in the first turbine, then it has to flow on the pipeline and arrives in the second turbine. So if the water is too muxh slower than the time of latency, the water of the first turbine taken by the sampling is different from the water of the sampling of the Son. It is important to analyse the speed of the water and the time from the Source to the Son. In particular in our case, the water takes:
 
-* diameter of pipeline: 0.015m * area of circle: 0.00018 $m^{2}$ * water flow of water max (worst case): 30 L/min = 0.5 L/s * distance: 0.9 m 
+* diameter of pipeline: 0.015m
+* area of circle: 0.00018 $m^{2}$
+* water flow of water max (worst case): 30 L/min = 0.5 L/s
+* distance: 0.9 m
+  
 $$speed of water= \frac{0.5 \cdot 10^{-3}}{0.00018} = 2.83 \frac{m}{s}$$ 
 $$time = \frac{2.83}{0.9} = 0.32 s$$
 
