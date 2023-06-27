@@ -77,9 +77,9 @@ To find the error of the algorithm we have to decide the time of testing: now is
 With influence we mean: **$FlowMax \cdot \frac{0.090 \cdot 100}{TimeSampling}$**:
 
 We have analysed three times of testing. 
-* TimeSampling of 3s: 3% of influence, 0.90 L/min difference of water
-* TimeSampling of 5s: 1.8% of influence 0.54 L/min difference of water
-* TimeSampling of 10s: 0.9% of influence 0.27 L/min difference of water
+* TimeSampling of 3s: 3% of influence, 0.90 L/min difference of water flow rate
+* TimeSampling of 5s: 1.8% of influence 0.54 L/min difference of water flow rate
+* TimeSampling of 10s: 0.9% of influence 0.27 L/min difference of water flow rate
 
 So we take 10s of sampling time to limit the possible error. We do not increase more the sampling time because there will be a trade off with the energy.
 
