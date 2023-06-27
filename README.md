@@ -23,5 +23,6 @@ Our project is designed to offer some smart functionalities to an irrigation sys
 ## Video
 
 Video of the Prototype in the environment: [prototype](https://www.youtube.com/watch?v=hoUJ2N8BXHc)
+
 Video of the Simulation on IoT-Lab: [simulation](https://youtu.be/vylREJ1_cT4)
 
