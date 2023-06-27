@@ -26,3 +26,4 @@ Video of the Prototype in the environment: [prototype](https://www.youtube.com/w
 
 Video of the Simulation on IoT-Lab: [simulation](https://youtu.be/vylREJ1_cT4)
 
+Video of the Presentation of the Project: [presentation](https://www.youtube.com/watch?v=7PrMZpjj8rQ)
