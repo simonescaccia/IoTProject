@@ -91,11 +91,8 @@ Now it is important to discuss this values. The 0.54 L/min is the possible diffe
 
 It is important to focus also on the instrumental error.
 
-In the last days, we have also analysed the time of the handshake algorithm.
+In the last days, we have also analysed the time of the handshake algorithm. We have not take the time, but we have done an interesting observation.
 
-![s](./images/handshake_time1.png)<br/>
-
-Here the difference is 0.476 s, but there is interesting observation. <br/>
 Because the Source starts before the testing, the water has to flow on the pipeline and arrives after in the second turbine. So if the water is slower than the time of latency, the water of the first turbine not taken by the sampling of the Source arrives after the end of the sampling of the Son. It is important to analyse the speed of the water and the time from the Source to the Son. In particular:  
 * diameter of pipeline: 0.015m
 * area of circle: 0.00018 $m^{2}$
@@ -106,7 +103,7 @@ $$speed of water=  \frac{0.5 \cdot 10^{-3}}{0.00018} = 2.83 \frac{m}{s}$$
 
 $$time =  \frac{2.83}{0.9} = 0.32 s$$
 
-The difference time is 0.476 s, and so for 0.126 s there is a different water. But this is valid for 0.9 m. Increasing the distance between the two turbines, there will be an higher time and so the observation still holds.
+This is valid for 0.9 m. Teoreticallu, increasing the distance between the two turbines, there will be an higher time and so the observation still holds. It is needed to do test with higher distance to see if this still holds and if the relationship is linear.
 
 With this observation, the algorithmic error is not significant, we can approssimate it to zero.
 
