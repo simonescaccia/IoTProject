@@ -83,8 +83,8 @@ For our prototype, we used the fllowing objects:
 * A 1,5 meters long garden hose (20-25 mm ⌀)
 * A 1/2 inch garden tap
 * A 1/2 inch T-adapter
-* 6 metal adjustable hose clamps (16-25 mm)
-* 2 water flow sensors
+* 6 metal adjustable hose clamps
+* 2 water flow sensors (15-20 mm)
 * 2 ESP32 LoRa MCUs  
 
 We started from a 1,5 meters long garden hose with an inner diameter of 20 mm and an outer one of 25 mm. We cut the garden hose into 4 main segments approximately 35 cm long. We placed two segments at the inner endpoints of each water flow sensor and we joined them using the T-adapter. So we connected the tap to the last free endpoint of the T-adapter and the last two segments to the outer endpoints of water flow sensor. We defined a direction for the flow placing the water flow sensors in the correct flow measurement direction. Finally, we connected the water flow sensors to the MCUs and the MCUs to a battery.
