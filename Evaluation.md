@@ -181,7 +181,7 @@ While the average sleeping power, useful for further considerations, is:
 
 $$P_{sleep} = 0.28 W$$
 
-Also, for this case, we do not consider the small constributions due to the a single on and a single off switching, so:
+Also for this case, we do not consider the small constributions due to the a single on and a single off switching, so:
 
 $$E(y) = P_{listen} \cdot y + P_{on} \cdot t_{on} + P_{off} \cdot t_{off}$$
 $$E(y) \approx P_{listen} \cdot y $$
@@ -194,7 +194,7 @@ So the function to minimize is:
 
 $$f(x) = 1.14 \cdot 10^{-5} \cdot x + \frac{7.8}{x}$$
 
-The minimum of the function, considering the domain of $$x \geq 1$$
+So we wish to find the minimum of the function, considering the domain of $$x \geq 1$$
 because we have to send at least one message per day. Solving the function analytically, we found a global minimum for:
 
 $$x \approx 828$$
