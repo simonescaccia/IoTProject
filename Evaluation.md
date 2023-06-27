@@ -165,10 +165,9 @@ We have decide to take 10s for the sampling and this will be similar to 9s resul
 Finally, for the threshold, we will give this observation:
 1. We did some tests and considering the average, we observed that in a No leakage situation there is a 5% difference between Source and Son, due to the error of a turbine (instrumental error).
 2. We then observed that, based on the changes in the flow before the source (therefore on the stability of the flow rate of the pipeline), there may be an average possible error of 0.9%, due to the algorithmic error.
-3. We have observed that in the handshake this algorithmic error is teoretical less, but for time constraints we have not focus on it.
-4. We have tried to apply the 5% threshold but experimentally we found too many false positives. We tried 7% and 10%. We have judged that 10% is acceptable.
-5. Finally considering that the turbines in a NO leakage situation have an unexpected 5% error; assuming that there is not the same problem for the future system, we will have a threshold of 5%.
-6. Why did it happen? 
+3. We have tried to apply the 5% threshold but experimentally we found too many false positives. We tried 7% and 10%. We have judged that 10% is acceptable.
+4. Finally considering that the turbines in a NO leakage situation have an unexpected 5% error; assuming that there is not the same problem for the future system, we will have a threshold of 5%.
+5. Why did it happen? 
 * First of all we have done many approximations.
 * The standard deviation is high and we have understood it as an unreliability of the mean. 
 * Finally, the conduct of the test affects the result: the position of the cell phone and the turbines varies the times of the messages (and therefore the algorithmic error).
