@@ -38,25 +38,25 @@ The problem of stability of the initial water flow can be seen in the following 
 ![ack](./graph/ack_flow.png) <br/>
 About the Ack algorithm, it is possible to notice that it is good to detect a leakage but it says that the water flow of the Son is always higher than the water flow of the Source, and this can lead to error, so it is not the worst algorithm implemented.<br/>
 
-The following image shows the test of the ack algorithm and it is possible to observ the big difference between Source and Son.
+The following image shows the test of the ack algorithm and it is possible to observ the big difference between Source and Son.<br/>
 ![ack1](./graph/ack_test1.png)<br/>
 
-The following graph shows again the test of the ack algorithm with the same result.
+The following graph shows again the test of the ack algorithm with the same result.<br/>
 ![ack3](./graph/ack_test3.png)<br/>
 
 About the Hanshake algorithm, it is perfect to detect the leakage and the trend of the Son higher than the Source is disappeared. There still is an error of the turbines, that we will face in the next chapter.<br/>
 
-The following image shows the test of the Handshake algorithm and it is possible to observ a smaller difference between Source and Son. But there still is a trend in which the Son is higher than the Source.
+The following image shows the test of the Handshake algorithm and it is possible to observ a smaller difference between Source and Son. But there still is a trend in which the Son is higher than the Source.<br/>
 ![h1](./graph/handshake_test1.png)<br/>
 
-The following graph shows the same observations before.
+The following graph shows the same observations before.<br/>
 ![h2](./graph/handshake_test2.png)<br/>
 
 In the end, about the syncAck algorithm, it is possible to see the same trend of the handshake algorithm but with one less message. There is also here the error of the turbines.<br/>
 
-The following image shows the test of the SyncAck algorithm and it is possible to observ a smaller difference between Source and Son. Here the trend is that the Source is higher than the Son.
+The following image shows the test of the SyncAck algorithm and it is possible to observ a smaller difference between Source and Son. Here the trend is that the Source is higher than the Son.<br/>
 ![s1](./graph/syncAck_test1.png)<br/>
-The following image shows another the test of the SyncAck algorithm, but here the trend is the opposite. This suggests a problem in the water flow sensor.
+The following image shows another the test of the SyncAck algorithm, but here the trend is the opposite. This suggests a problem in the water flow sensor.<br/>
 ![s2](./graph/syncAck_test2.png)<br/>
 
 ### Water leak detection Algorithm Solutions
