@@ -199,7 +199,7 @@ because we have to send at least one message per day. Solving the function analy
 
 $$x \approx 828$$
 
-So the send rate of the father should be 10 messages/day, hence the listen time will be:
+So the send rate of the father should be 828 messages/day, hence the listen time will be:
 
 $$y = \frac{24}{x} = \frac{24}{828} \approx 0.029 \frac{hours}{day} \approx 1.74 \frac{min}{day} \approx 104 \frac{s}{day}$$
 
