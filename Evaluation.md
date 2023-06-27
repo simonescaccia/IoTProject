@@ -50,6 +50,8 @@ In the end, about the syncAck algorithm, it is possible to see the same trend of
 
 The following image shows the test of the SyncAck algorithm and it is possible to observ a smaller difference between Source and Son. Here the trend is that the Source is higher than the Son.<br/>
 ![s1](./graph/syncAck_test1.png)<br/>
+The following image shows another the test of the SyncAck algorithm, but here the trend is the opposite. This suggests a problem in the water flow sensor.<br/>
+![s2](./graph/syncAck_test2.png)
 
 ### Water leak detection Algorithm Solutions
 
