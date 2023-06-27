@@ -68,7 +68,7 @@ We have done some analysis to set a correct threshold in our algorithms to limit
 We have chosen the syncAck as the final algorithm because it uses one message less.
 We have analysed the time of the SyncAck algorithm to understand the error that can be created and to use this values for the calucus of the energy consumption.
 We have analysed that the standard deviation is high and this means that there is a large distribution of the data, in particular this means that the time taken by the messages and the code is fluctuating. Looking at the scheme, it is possible to understand the time of the messages and also the quality of the synchronization of the algorithms.<br/>
-![s](./images/syncAck_time1.png)<br/>
+![s](./images/syncAck_finale_time.png)<br/>
 Here the messages take 0.462 s while the latency of the two samplings is 0.552 s (time in the Son between the end of the test and the arrival of the value of the Source). This means that the Source has ended the test 0.090 s before the Son. So Son and Source have an error of synchronization of 0.090 s. 
 
 <br/>**Difference**<br/>
