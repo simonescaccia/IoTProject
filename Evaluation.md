@@ -246,7 +246,7 @@ $$y = \frac{24}{x} = \frac{24}{828} \approx 0.029 \frac{hours}{day} \approx 1.74
 
 #### Estimation of system duration
 
-To analyse the duration of our system, we must also consider other energy contributions, mainly the measurement, the sleep and the cloud transmission energy consumptions. We considered the daily worst case, so the case of an intermediate node that measures twice and sends data to child 1300 times, listens for 1 minute, receives data from the father once after algorithm execution and sends once to the cloud the difference with father water flow. In our analysis,
+To analyse the duration of our system, we must also consider other energy contributions, mainly the measurement, the sleep and the cloud transmission energy consumptions. We considered the daily worst case, so the case of an intermediate node that measures twice and sends data to child 828 times, listens for 104 seconds, receives data from the father once after algorithm execution and sends once to the cloud the difference with father water flow. In our analysis,
 
 $$E_{cloud} \approx E_{trans} = 1.14 \cdot 10^{-5} Wh$$
 
