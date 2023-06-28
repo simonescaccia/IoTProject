@@ -205,7 +205,7 @@ The transmission time and power are:
 $$P_{trans} = 0.455 W$$ 
 $$t_{trans} = (0.17 - 0.080) s = 0.090 s = 2.5 \cdot 10^{-5} h$$
 
-The effective transmission effectively starts at 0.085 seconds, however, we considered all the interval time where some variation is revealed. In this way we also considered the contribution of the energy for switching on and off the transmission. Hence:
+The transmission effectively starts at 0.085 seconds, however, we considered all the interval time where some variation is revealed. In this way we also considered the contribution of the energy for switching on and off the transmission. Hence:
 
 $$E(x) = (P_{trans} \cdot t_{trans}) \cdot x + (P_{on} \cdot t_{on}) \cdot x +(P_{off} \cdot t_{off}) \cdot x$$
 $$E(x) \approx (P_{trans} \cdot t_{trans}) \cdot x = (0.455 W) \cdot (2.5 \cdot 10^{-5} h) \cdot x = 1.14 \cdot 10^{-5} Wh \cdot x$$
@@ -240,7 +240,7 @@ because we have to send at least one message per day. Solving the function analy
 
 $$x \approx 828$$
 
-So the send rate of the father should be 10 messages/day, hence the listen time will be:
+So the send rate of the father should be 828 messages/day, hence the listen time will be:
 
 $$y = \frac{24}{x} = \frac{24}{828} \approx 0.029 \frac{hours}{day} \approx 1.74 \frac{min}{day} \approx 104 \frac{s}{day}$$
 
