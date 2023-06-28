@@ -33,7 +33,7 @@ The three algorithms proposed in the design phase have been tested.
 
 The test of the Ack algorithm has shown that there is a problem in the code (intially we thought it is caused by the use of threads in the program, after we understood is linked to the water flow sensor) and that the water flow before our system (that we consider always present) is not stable and this issue has to be solved by the synchronization algorithm.<br/>
 
-The problem of stability of the initial water flow can be seen in the following image in which there is a segmentation of the lines of the graph.<br/>
+The problem of stability of the initial water flow can be seen in the following image in which there is a segmentation of the lines of the graph. In x axis there are the samplings (3 s each )which are done one after the other in a small time (5 min max). <br/>
 
 ![ack](./graph/ack_flow.png) <br/>
 About the Ack algorithm, it is possible to notice that it is good to detect a leakage but it says that the water flow of the Son is always higher than the water flow of the Source, and this can lead to error, so it is not the worst algorithm implemented.<br/>
