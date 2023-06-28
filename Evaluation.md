@@ -38,7 +38,7 @@ The problem of stability of the initial water flow can be seen in the following 
 ![ack](./graph/ack_flow.png) <br/>
 About the Ack algorithm, it is possible to notice that it is good to detect a leakage but it says that the water flow of the Son is always higher than the water flow of the Source, and this can lead to error, so it is not the worst algorithm implemented.<br/>
 
-The following image shows the test of the ack algorithm and it is possible to observ the big difference between Source and Son.<br/>
+The following image shows the test of the ack algorithm and it is possible to observ the big difference between Source and Son. Here the samplings are done in a period of a month for each graph.<br/>
 ![ack1](./graph/ack_test1.png)<br/>
 
 About the Hanshake algorithm, it is perfect to detect the leakage and the trend of the Son higher than the Source is disappeared. There still is an error of the turbines, that we will face in the next chapter.<br/>
