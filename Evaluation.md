@@ -277,9 +277,9 @@ Also here the consumption is too huge, because the time of listening is too high
 
 ### Drift rate clock
 
-Starting from the output of the chapter before, we use another approach with node synchronization. We have observed that for these environments, battery of 1000-2000 mAh are used.
+Starting from the output of the chapter before, we use another approach with node synchronization.
 
-The listening time is reduced, in particular we have to synchronize the nodes in pairs and for each node there will be a situation in which it will be the passive one (waiting in listening) and another situation in which it will be active (send the message for starting the test). As before, we consider the worst case, in which a node is both passive and active. We use Deep sleep mode. The drift rate for ESP32 is 1.7 sec per day. Assuming a resynchronization for each day, we need to set a listening time per day such that the drift rate over the day is not a problem. An acceptable solution is 10 seconds/day.
+Now only one message per day is needed, since node are synchronized, and listening time is reduced. In the context of each pair, for each node there will be a situation in which it will be the passive one (waiting in listening) and another situation in which it will be active (send the message for starting the test). As before, we consider the worst case, in which a node is both passive and active. We use Deep sleep mode. The drift rate for ESP32 is 1.7 sec per day. Assuming a resynchronization for each day, we need to set a listening time per day such that the drift rate over the day is not a problem. An acceptable solution is 10 seconds/day.
 
 $$E_{tot} = 2 \cdot E_{measure} + E_{trans}\cdot 1 + 2 \cdot E_{trans} + E_{cloud} + P_{listen} \cdot (2.76 \cdot 10^{-3}h) + P_{deepSleep} \cdot (23.99) h$$
 
