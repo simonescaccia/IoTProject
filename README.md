@@ -6,11 +6,7 @@ Our project is designed to offer some smart functionalities to an irrigation sys
 
 [Concept](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/Concept.md) provides details from the user perspective, while [Design](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/Design.md) provides technical details about the project. Finally, [Evaluation](https://github.com/simonescaccia/Irrigation-Water-Leakage-System/blob/main/Evaluation.md) focuses on performance issues.
 
-## Links
-
-[Concept](https://github.com/simonescaccia/IoTProject/blob/main/Concept.md)\
-[Design](https://github.com/simonescaccia/IoTProject/blob/main/Design.md)\
-[Evaluation](https://github.com/simonescaccia/IoTProject/blob/main/Evaluation.md)
+Look at our [Hackaster.io tutorial](https://www.hackster.io/508104/water-leakage-detection-system-fc7f69).
 
 ## Video
 
